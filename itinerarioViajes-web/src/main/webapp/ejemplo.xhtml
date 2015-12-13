@@ -16,12 +16,29 @@ and open the template in the editor.
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>PrimeFaces</title>
             </f:facet>
+            
+            <style type="text/css" media="all">
+                @import "images/style.css";
+            </style>
         </h:head>
 
 
         <h:body>
-
-            <div> write content</div>
+        
+        <div id="page-container2">
+            
+            <div id="header2">
+    
+            </div>
+            
+            <div id="menu">
+                <div class="padding"> <a href="#">Inicio</a> | <a href="#">Itinerario</a> | <a href="#">Factura</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a> </div>
+            </div>
+  
+  <div id="content">
+    <div class="padding">
+        
+        <div> write content</div>
             <p:dataTable var="sede" value="#{ejemplobean.sede}">
                 <p:column headerText="Codigo">
                     <h:outputText value="#{sede.codigo}" />
@@ -31,6 +48,57 @@ and open the template in the editor.
                     <h:outputText value="#{sede.nombre}" />
                 </p:column>
             </p:dataTable>
+        
+        
+        
+      <h2>Registro Cliente</h2>
+      <table width="439" border="0"> 
+      	<tr ><td>Nombre:</td></tr>
+      	<tr> 
+            <td width="326"><input type="text" value="" name="nombre" maxlength="100" size="80" /></td>
+        </tr>
+        <tr><td>Identificación:</td></tr>
+        <tr> 
+        
+        <td><input type="text" value="" name="identificacion" maxlength="13" size="80"/>
+</td>
+        </tr>
+        <tr><td>Dirección:</td></tr>
+        <tr> 
+        
+        <td><input type="text" value="" name="direccion" maxlength="100" size="80" />
+</td>
+        </tr>
+        <tr><td>Teléfono:</td></tr>
+        <tr> 
+        
+        <td><input type="text" value="" name="telefono" maxlength="10" size="80" />
+</td>
+        </tr>
+        <tr><td>Usuario:</td></tr>
+        <tr> 
+        
+        <td><input type="text" value="" name="usuario" maxlength="20" size="80" />
+</td>
+        </tr>
+        <tr><td>Clave:</td></tr>
+        <tr> 
+        
+        <td><input value="" name="clave" type="password" maxlength="20" size="80" /></td>
+        </tr>
+        <tr><td align="right"><input name="registrar" type="submit" value="Registrar" /></td></tr>
+      </table>
+ 
+     
+      
+      </div>
+    </div>
+  
+   <div id="footer"> Copyright © 2015 <a href="#">SAIV</a> | <a href="#">Contactos</a> </div>
+  
+</div>
+        
+        
         </h:body>
     </f:view>
 
