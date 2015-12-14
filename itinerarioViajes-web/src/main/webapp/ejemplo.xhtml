@@ -39,13 +39,13 @@ and open the template in the editor.
     <div class="padding">
         
         <div> write content</div>
-            <p:dataTable var="sede" value="#{ejemplobean.sede}">
+            <p:dataTable var="empresa" value="#{empresaBean.empresa}">
                 <p:column headerText="Codigo">
-                    <h:outputText value="#{sede.codigo}" />
+                    <h:outputText value="#{empresa.codigo}" />
                 </p:column>
 
                 <p:column headerText="Nombre">
-                    <h:outputText value="#{sede.nombre}" />
+                    <h:outputText value="#{empresa.nombre}" />
                 </p:column>
             </p:dataTable>
         

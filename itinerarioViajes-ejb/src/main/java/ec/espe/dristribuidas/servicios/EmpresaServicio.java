@@ -28,7 +28,7 @@ public class EmpresaServicio {
         return this.empresaDAO.findAll();
     }
     
-    /*public Empresa obtenerPorID(String codigoEmpresa){
+    public Empresa obtenerPorID(String codigoEmpresa){
         return this.empresaDAO.findById(codigoEmpresa, false);
     }
     public void crearEmpresa(Empresa empresa) throws ValidacionException {
@@ -52,5 +52,5 @@ public class EmpresaServicio {
     {
         throw new ValidacionException("la sede "+codigoEmpresa+" esta asociada a un candidado");
     }
-    }*/
+    }
 }
