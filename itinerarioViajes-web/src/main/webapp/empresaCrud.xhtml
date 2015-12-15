@@ -37,9 +37,8 @@ and open the template in the editor.
   
   <div id="content">
     <div class="padding">
-        
-      
-        <div> write content</div>
+
+        <div> Datos de empresas registradas</div>
             <p:dataTable var="empresa" value="#{empresaBean.empresa}">
                 <p:column headerText="Codigo">
                     <h:outputText value="#{empresa.codigo}" />
@@ -48,49 +47,20 @@ and open the template in the editor.
                 <p:column headerText="Nombre">
                     <h:outputText value="#{empresa.nombre}" />
                 </p:column>
+                
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{empresa.telefono}" />
+                </p:column>
+                
+                <p:column headerText="Dirección">
+                    <h:outputText value="#{empresa.direccion}" />
+                </p:column>
+                
+                <p:column headerText="E-mail">
+                    <h:outputText value="#{empresa.correoElectronico}" />
+                </p:column>
             </p:dataTable>
-        
-        
-        
-      <h2>Registro Cliente</h2>
-      <table width="439" border="0"> 
-      	<tr ><td>Nombre:</td></tr>
-      	<tr> 
-            <td width="326"><input type="text" value="" name="nombre" maxlength="100" size="80" /></td>
-        </tr>
-        <tr><td>Identificación:</td></tr>
-        <tr> 
-        
-        <td><input type="text" value="" name="identificacion" maxlength="13" size="80"/>
-</td>
-        </tr>
-        <tr><td>Dirección:</td></tr>
-        <tr> 
-        
-        <td><input type="text" value="" name="direccion" maxlength="100" size="80" />
-</td>
-        </tr>
-        <tr><td>Teléfono:</td></tr>
-        <tr> 
-        
-        <td><input type="text" value="" name="telefono" maxlength="10" size="80" />
-</td>
-        </tr>
-        <tr><td>Usuario:</td></tr>
-        <tr> 
-        
-        <td><input type="text" value="" name="usuario" maxlength="20" size="80" />
-</td>
-        </tr>
-        <tr><td>Clave:</td></tr>
-        <tr> 
-        
-        <td><input value="" name="clave" type="password" maxlength="20" size="80" /></td>
-        </tr>
-        <tr><td align="right"><input name="registrar" type="submit" value="Registrar" /></td></tr>
-      </table>
- 
-     
+
       
       </div>
     </div>
@@ -101,6 +71,17 @@ and open the template in the editor.
         
         
         </h:body>
+        
+               
     </f:view>
 
+    <script type="text/javascript">
+            //<![CDATA[
+            function logout(xhr, status, args) {
+              setTimeout(function() {
+                window.location = 'index.xhtml';
+              }, 500);
+            }
+          //]]>
+          </script>
 </html>
