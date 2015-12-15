@@ -40,11 +40,11 @@ public class EmpresaServicio {
         throw new ValidacionException("El codigo es "+empresa.getCodigo()+" ya existe"); 
         }
     }
-    public void actualiarSede(Empresa empresa){
+    public void actualiarEmpresa(Empresa empresa){
         this.empresaDAO.update(empresa);
     }
     
-    public void eliminarSede(String codigoEmpresa){
+    public void eliminarEmpresa(String codigoEmpresa){
     try{
      Empresa empresaTmp=this.obtenerPorID(codigoEmpresa);
      this.empresaDAO.remove(empresaTmp);
@@ -53,4 +53,6 @@ public class EmpresaServicio {
         throw new ValidacionException("la sede "+codigoEmpresa+" esta asociada a un candidado");
     }
     }
+    
+    
 }

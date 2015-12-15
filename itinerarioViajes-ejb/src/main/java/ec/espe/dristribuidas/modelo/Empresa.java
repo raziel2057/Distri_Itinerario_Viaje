@@ -11,8 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 
 /**
  *
@@ -23,28 +22,19 @@ import javax.validation.constraints.Size;
 public class Empresa implements Serializable {
     
     @Id
-    @NotNull
-    @Size(min = 1, max = 13)
-    @Column(name = "CODIGO_EMPRESA", nullable = false, length = 13)
+    @Column(name = "CODIGO_EMPRESA", nullable = false)
     private String codigo;
     
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "NOMBRE", nullable = false, length = 100)
+    @Column(name = "NOMBRE", nullable = false)
     private String nombre;
     
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "TELEFONO", nullable = false, length = 10)
+    @Column(name = "TELEFONO", nullable = false)
     private String telefono;
     
-    @Size(min = 0, max = 50)
-    @Column(name = "DIRECCION", nullable = true, length = 50)
+    @Column(name = "DIRECCION", nullable = true)
     private String direccion;
     
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "CORREO_ELECTRONICO", nullable = false, length = 10)
+    @Column(name = "CORREO_ELECTRONICO", nullable = false)
     private String correoElectronico;
 
     public String getCodigo() {
@@ -86,6 +76,8 @@ public class Empresa implements Serializable {
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
     }
+
+    
 
     @Override
     public int hashCode() {

@@ -37,9 +37,43 @@ and open the template in the editor.
   
   <div id="content">
     <div class="padding">
+        
+        <p:growl id="mensajes" showDetail="true" life="2000" />
+            <h:form>
+                <p:panel header="Insert" style="clear: right;width:300px">
+                  <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="codigo" value="Código:" />
+                    <p:inputText value="#{empresaBean.codigo}" id="codigo"
+                       required="true" label="codigo" />
+                    
+                    <h:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText value="#{empresaBean.nombre}" id="nombre"
+                       required="true" label="nombre" />
+                    
+                    <h:outputLabel for="telefono" value="Telefono:" />
+                    <p:inputText value="#{empresaBean.telefono}" id="telefono"
+                       required="true" label="telefono" />
+                    
+                    <h:outputLabel for="direccion" value="Dirección:" />
+                    <p:inputText value="#{empresaBean.direccion}" id="direccion"
+                       required="true" label="direccion" />
+                    
+                    <h:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                    <p:inputText value="#{empresaBean.correoElectronico}" id="correoElectronico"
+                       required="true" label="correoElectronico" />
+                    
+                    
+                    
+                    <f:facet name="footer">
+                      <p:commandButton id="insertButton" value="Insertar"
+                                       actionListener="#{empresaBean.insertar()}" update=":mensajes" />
+                    </f:facet>
+                  </h:panelGrid>
+                </p:panel>
+              </h:form>
 
         <div> Datos de empresas registradas</div>
-            <p:dataTable var="empresa" value="#{empresaBean.empresa}">
+            <p:dataTable var="empresa" value="#{empresaBean.empresas}">
                 <p:column headerText="Codigo">
                     <h:outputText value="#{empresa.codigo}" />
                 </p:column>
@@ -75,13 +109,5 @@ and open the template in the editor.
                
     </f:view>
 
-    <script type="text/javascript">
-            //<![CDATA[
-            function logout(xhr, status, args) {
-              setTimeout(function() {
-                window.location = 'index.xhtml';
-              }, 500);
-            }
-          //]]>
-          </script>
+
 </html>

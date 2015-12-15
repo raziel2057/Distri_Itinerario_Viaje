@@ -73,7 +73,7 @@ public class LoginBean {
          FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("estaLogeado", loggedIn);
             if (loggedIn)
-              context.addCallbackParam("view", "ejemplo.xhtml");
+              context.addCallbackParam("view", "faces/empresaCrud.xhtml");
     }
     
     public void logout() {
