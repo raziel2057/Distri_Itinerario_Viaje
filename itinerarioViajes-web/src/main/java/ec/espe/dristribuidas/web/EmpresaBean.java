@@ -28,7 +28,7 @@ public class EmpresaBean implements Serializable {
     @EJB
     private EmpresaServicio empresaservicio;
     private List<Empresa> empresas;
-    private Empresa empresa;
+    private Empresa empresa =  new Empresa();
     private String codigo;
     private String nombre;
     private String telefono;
@@ -97,12 +97,6 @@ public class EmpresaBean implements Serializable {
         boolean insertado = false;
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage message = null;
-        this.empresa =  new Empresa();
-        this.empresa.setCodigo(codigo);
-        this.empresa.setNombre(nombre);
-        this.empresa.setTelefono(telefono);
-        this.empresa.setDireccion(direccion);
-        this.empresa.setCorreoElectronico(correoElectronico);
         try
         {
             empresaservicio.crearEmpresa(this.empresa);
@@ -113,6 +107,46 @@ public class EmpresaBean implements Serializable {
         {
             insertado = false;
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al ingresar la empresa", e.getMessage());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+         context.addCallbackParam("estaInsertado", insertado);
+    }
+    
+    public void actualizar()
+    {
+        boolean insertado = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesMessage message = null;
+        try
+        {
+            empresaservicio.actualiarEmpresa(this.empresa);
+            insertado = true;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Empresa Actualizada: ", this.empresa.getNombre());
+        }
+        catch(RuntimeException e)
+        {
+            insertado = false;
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la empresa", e.getMessage());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+         context.addCallbackParam("estaInsertado", insertado);
+    }
+    
+    public void eliminar()
+    {
+        boolean insertado = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesMessage message = null;
+        try
+        {
+            empresaservicio.eliminarEmpresa(this.empresa.getCodigo());
+            insertado = true;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Empresa Eliminada: ", this.empresa.getNombre());
+        }
+        catch(RuntimeException e)
+        {
+            insertado = false;
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al eliminar la empresa", e.getMessage());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
          context.addCallbackParam("estaInsertado", insertado);
