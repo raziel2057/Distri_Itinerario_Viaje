@@ -92,7 +92,7 @@ h4 {
 	background-color: #cad9de;
 }
 #page-container2 {
-	width: 655px;
+	width: 800px;
 	text-align: left;
 	margin: auto;
 	background-color: #cad9de;
@@ -108,7 +108,7 @@ body {
 }
 
 
-#header {
+#header2 {
 	background: #cad9de url("header.jpg")  center no-repeat;
 	height: 212px;
 	padding: 0 0 0 0px;
@@ -118,9 +118,9 @@ body {
 	background-color: #cad9de;
 }
 
-#header2 {
-	background: #cad9de url("header2.jpg")  center no-repeat;
-	height: 237px;
+#header {
+	background: #cad9de url("header3.jpg")  center no-repeat;
+	height: 200px;
 	padding: 0 0 0 0px;
 	text-align: right;
 	color: #fff;
@@ -128,11 +128,11 @@ body {
 	background-color: #cad9de;
 }
 
-#header a {
+#header2 a {
  color: #000;
 }
 
-#header .text {
+#header2 .text {
  	text-align: right;
 	color: #003647;
 	font-size: 12px;
@@ -140,7 +140,7 @@ body {
 	font-weight: bold;
 }
 
-* html #header .text {
+* html #header2 .text {
  	text-align: right;
 	color: #003647;
 	font-size: 12px;
@@ -148,7 +148,7 @@ body {
 	font-weight: bold;
 }
 
-#header input.button { 
+#header2 input.button { 
 	float: right;
 	background: #003647; 
 	border: none;
@@ -160,22 +160,25 @@ body {
 
 
 #header .padding {
-	padding: 80px 25px 0px 0px;
+	
+        margin-left: 540px;
+        margin-right: 10px;
+        margin-top: 10px;
 }
 
-#header .padding_passwd {
+#header2 .padding_passwd {
 	padding: 20px 25px 0px 0px;
 }
 
-* html #header .padding {
+* html #header2 .padding {
 	padding: 80px 17px 0px 0px;
 }
 
-* html #header .padding_passwd {
+* html #header2 .padding_passwd {
 	padding: 17px 17px 0px 0px;
 }
 
-#header input.text { 
+#header2 input.text { 
 	width: 109px; 
 	height:24px;
 	border: 0;
@@ -184,7 +187,7 @@ body {
 	color: #003647;
 }
 
-* html #header input.text { 
+* html #header2 input.text { 
 	width: 109px; 
 	height:24px;
 	border: 0;
@@ -303,6 +306,7 @@ body {
 	margin-right: 15px;
 	line-height: 18px;
 	padding-left: 10px;
+        
 }
 
 #content .padding {
