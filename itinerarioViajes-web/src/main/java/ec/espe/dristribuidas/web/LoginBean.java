@@ -9,11 +9,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import ec.espe.dristribuidas.servicios.ClienteServicio;
 import ec.espe.dristribuidas.modelo.Cliente;
+import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.event.ActionEvent;
 import javax.faces.application.FacesMessage;
 import org.primefaces.context.RequestContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -22,7 +24,7 @@ import javax.servlet.http.HttpSession;
  */
 @ViewScoped
 @ManagedBean
-public class LoginBean {
+public class LoginBean implements Serializable{
     @EJB
     private ClienteServicio clienteServicio = new ClienteServicio();
     
@@ -52,28 +54,45 @@ public class LoginBean {
       }
 
     
-    public void login(ActionEvent event) {
-        RequestContext context = RequestContext.getCurrentInstance();
+    /*public String login() {
+        //RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance(); 
         FacesMessage message = null;
         
         if(username != null  && password != null) {
             this.cliente = clienteServicio.buscarClientePorUsuario(username);
             if(this.cliente!=null && this.cliente.getUsuario().equals(username)&& this.cliente.getClave().equals(password))
             {
-                loggedIn = true;
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);
+                //loggedIn = true;
+                //message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);
+            ((HttpServletRequest)context.getExternalContext().getRequest()).getSession().setAttribute("cliente", this.cliente);
+            return "empresaCrud";
             }
             else {
-                loggedIn = false;
-                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
+            return "prueba";
+                //loggedIn = false;
+               /// message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
             }
             
         } 
         
-         FacesContext.getCurrentInstance().addMessage(null, message);
+         /*FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("estaLogeado", loggedIn);
             if (loggedIn)
               context.addCallbackParam("view", "faces/empresaCrud.xhtml");
+    }*/
+    
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        this.cliente = clienteServicio.buscarClientePorUsuario(username);
+            if(this.cliente!=null && this.cliente.getUsuario().equals(username)&& this.cliente.getClave().equals(password))
+            {
+            
+            ((HttpServletRequest)context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
+            return "empresaCrud";
+        } else {
+            return "prueba";
+        }
     }
     
     public void logout() {

@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+        
+        <style type="text/css" media="all">
+             @import "images/style.css";
+        </style>
+
+        <h:body>
+
+        <div id="page-container2">
+            <div id="header2" >
+                <div class="padding">
+                    <p:growl id="mensajes" showDetail="true" life="2000" />
+                      <h:form>
+                          <p:panel header="Login" style="clear: right;width:300px">
+                            <h:panelGrid columns="2" cellpadding="5">
+                              <h:outputLabel for="username" value="Usuario:" />
+                              <p:inputText value="#{loginBean.username}" id="username"
+                                 required="true" label="username" />
+                              <h:outputLabel for="password" value="Clave:" />
+                              <p:password value="#{loginBean.password}" id="password" required="true"
+                                 label="password" />
+                              <f:facet name="footer">
+                                <p:commandButton id="loginButton" value="Login"
+                                   actionListener="#{loginBean.login}" update=":mensajes"
+                                   oncomplete="manejarLogin(xhr, status, args)" />
+                              </f:facet>
+                            </h:panelGrid>
+                          </p:panel>
+                        </h:form>
+                </div>
+
+                <script type="text/javascript">
+                    //<![CDATA[
+                    function manejarLogin(xhr, status, args) {
+                      if (!args.validationFailed && args.estaLogeado) {
+                        setTimeout(function() {
+                          window.location = args.view;
+                        }, 500);
+                      }
+                    }
+                  //]]>
+                  </script>
+            </div>
+            <div id="menu">
+              <div class="padding"> <a href="#">Inicio</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a>  </div>
+
+            </div>
+
+            <div id="content">
+              <div class="padding">
+                <h2>Bienvenidos a SAIV</h2>
+                Qué es SAIV?<br />
+                SAIV es una herramienta para la creación y administración de sus itinerarios de viaje dentro del Ecuador.
+
+                <div id="box"> <strong>Contactos:</strong><br/>
+                 <strong>Telfs:</strong> 0995849189 / 022125447
+                <br/>
+                <strong>Dirección:</strong> Sangolquí - La Colina
+                 </div>
+              </div>
+            </div>
+            <br />
+            <div id="footer"> Copyright © 2015 <a href="#">SAIV</a> | <a href="#">Contactos</a> </div>
+          </div>    
+
+        </h:body>
+
+    </f:view>
+</html>
