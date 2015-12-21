@@ -31,7 +31,7 @@ public class EmpresaServicio {
     public Empresa obtenerPorID(String codigoEmpresa){
         return this.empresaDAO.findById(codigoEmpresa, false);
     }
-    public void crearEmpresa(Empresa empresa) throws ValidacionException {
+   public void crearEmpresa(Empresa empresa) throws ValidacionException {
         Empresa empresaTmp=this.obtenerPorID(empresa.getCodigo());
         if(empresaTmp==null){
             this.empresaDAO.insert(empresa);
@@ -39,6 +39,7 @@ public class EmpresaServicio {
         else{
         throw new ValidacionException("El codigo es "+empresa.getCodigo()+" ya existe"); 
         }
+        
     }
     public void actualiarEmpresa(Empresa empresa){
         this.empresaDAO.update(empresa);

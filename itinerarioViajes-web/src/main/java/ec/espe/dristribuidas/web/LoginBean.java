@@ -21,10 +21,11 @@ import javax.servlet.http.HttpSession;
  */
 @ViewScoped
 @ManagedBean
-public class LoginBean implements Serializable{
+public class LoginBean implements Serializable {
+
     @EJB
     private ClienteServicio clienteServicio = new ClienteServicio();
-    
+
     private Cliente cliente;
     private String username;
     private String password;
@@ -45,58 +46,60 @@ public class LoginBean implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public boolean estaLogeado() {
         return loggedIn;
-      }
-
-    
-    /*public String login() {
-        //RequestContext context = RequestContext.getCurrentInstance();
-        FacesContext context = FacesContext.getCurrentInstance(); 
-        FacesMessage message = null;
-        
-        if(username != null  && password != null) {
-            this.cliente = clienteServicio.buscarClientePorUsuario(username);
-            if(this.cliente!=null && this.cliente.getUsuario().equals(username)&& this.cliente.getClave().equals(password))
-            {
-                //loggedIn = true;
-                //message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);
-            ((HttpServletRequest)context.getExternalContext().getRequest()).getSession().setAttribute("cliente", this.cliente);
-            return "empresaCrud";
-            }
-            else {
-            return "prueba";
-                //loggedIn = false;
-               /// message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
-            }
-            
-        } 
-        
-         /*FacesContext.getCurrentInstance().addMessage(null, message);
-            context.addCallbackParam("estaLogeado", loggedIn);
-            if (loggedIn)
-              context.addCallbackParam("view", "faces/empresaCrud.xhtml");
-    }*/
-    
-    public String login() {
-        FacesContext context = FacesContext.getCurrentInstance(); 
-        this.cliente = clienteServicio.buscarClientePorUsuario(username);
-            if(this.cliente!=null && this.cliente.getUsuario().equals(username)&& this.cliente.getClave().equals(password))
-            {
-            
-            ((HttpServletRequest)context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
-            return "empresaCrud";
-        } else {
-            return "prueba";
-        }
     }
-    
+
+    /*public String login() {
+     //RequestContext context = RequestContext.getCurrentInstance();
+     FacesContext context = FacesContext.getCurrentInstance(); 
+     FacesMessage message = null;
+        
+     if(username != null  && password != null) {
+     this.cliente = clienteServicio.buscarClientePorUsuario(username);
+     if(this.cliente!=null && this.cliente.getUsuario().equals(username)&& this.cliente.getClave().equals(password))
+     {
+     //loggedIn = true;
+     //message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);
+     ((HttpServletRequest)context.getExternalContext().getRequest()).getSession().setAttribute("cliente", this.cliente);
+     return "empresaCrud";
+     }
+     else {
+     return "prueba";
+     //loggedIn = false;
+     /// message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
+     }
+            
+     } 
+        
+     /*FacesContext.getCurrentInstance().addMessage(null, message);
+     context.addCallbackParam("estaLogeado", loggedIn);
+     if (loggedIn)
+     context.addCallbackParam("view", "faces/empresaCrud.xhtml");
+     }*/
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage message = null;
+        String direccion="null";
+        this.cliente = clienteServicio.buscarClientePorUsuario(username);
+        if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(password)) {
+            ((HttpServletRequest) context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Bienvenido"));
+            direccion= "inicio?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario y/o password incorrectos"));
+            direccion= "index";
+        }
+        
+        return direccion;
+    }
+
     public void logout() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance() 
-                                            .getExternalContext().getSession(false);
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(false);
         session.invalidate();
         loggedIn = false;
-      }
-    
+    }
+
 }

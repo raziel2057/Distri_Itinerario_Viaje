@@ -19,6 +19,8 @@ import javax.persistence.*;
 @Table(name = "G6_FACTURA")
 public class Factura implements Serializable{
     @Id
+    @SequenceGenerator(name = "G6_FACTURA_SECUENCIA1", sequenceName = "G6_FACTURA_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_FACTURA_SECUENCIA1")
     @Column(name = "CODIGO_FACTURA", nullable = false)
     private Integer codigo;
     

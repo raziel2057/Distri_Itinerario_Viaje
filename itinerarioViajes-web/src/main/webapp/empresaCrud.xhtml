@@ -16,116 +16,117 @@ and open the template in the editor.
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>PrimeFaces</title>
             </f:facet>
-            
+
             <style type="text/css" media="all">
                 @import "images/style.css";
             </style>
         </h:head>
-
-
         <h:body>
-        
-        <div id="page-container2">
-            
-            <div id="header2">
-                <h:form>
-                    <p:commandLink id="logout" actionListener="#{loginBean.logout}"
-                        style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
-                      <h:outputText value="logout" />
-                    </p:commandLink>
-                </h:form>
-    
-            </div>
-            
-            <div id="menu">
-                <div class="padding"> <a href="#">Inicio</a> | <a href="#">Itinerario</a> | <a href="#">Factura</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a> </div>
-            </div>
-  
-  <div id="content">
-    <div class="padding">
-        
-        <p:growl id="mensajes" showDetail="true" life="2000" />
-            <h:form>
-                <p:panel header="Insert" style="clear: right;width:300px">
-                  <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="codigo" value="Código:" />
-                    <p:inputText value="#{empresaBean.empresa.codigo}" id="codigo"
-                       required="true" label="codigo" />
-                    
-                    <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText value="#{empresaBean.empresa.nombre}" id="nombre"
-                       required="true" label="nombre" />
-                    
-                    <h:outputLabel for="telefono" value="Telefono:" />
-                    <p:inputText value="#{empresaBean.empresa.telefono}" id="telefono"
-                       required="true" label="telefono" />
-                    
-                    <h:outputLabel for="direccion" value="Dirección:" />
-                    <p:inputText value="#{empresaBean.empresa.direccion}" id="direccion"
-                       required="true" label="direccion" />
-                    
-                    <h:outputLabel for="correoElectronico" value="Correo Electrónico:" />
-                    <p:inputText value="#{empresaBean.empresa.correoElectronico}" id="correoElectronico"
-                       required="true" label="correoElectronico" />
-                    
-                    
-                    
-                    <f:facet name="footer">
-                      <p:commandButton id="insertButton" value="Insertar"
-                                       actionListener="#{empresaBean.insertar()}" update=":mensajes" />
-                      <p:commandButton id="deleteButton" value="Eliminar"
-                                       actionListener="#{empresaBean.eliminar()}" update=":mensajes" />
-                      <p:commandButton id="updateButton" value="Actualizar"
-                                       actionListener="#{empresaBean.actualizar()}" update=":mensajes" />
-                    </f:facet>
-                  </h:panelGrid>
-                </p:panel>
-              </h:form>
+            <ui:composition template="/plantillas/templateNoLoged.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
 
-        <div> Datos de empresas registradas</div>
-            <p:dataTable var="empresa" value="#{empresaBean.empresas}">
-                <p:column headerText="Codigo">
-                    <h:outputText value="#{empresa.codigo}" />
-                </p:column>
+                <ui:define name="contenidoMenu">
+                    <div class="padding"> 
+                        <a href="inicio.xhtml" >Inicio</a> | 
+                        <a href="empresaCrud.xhtml">Itinerario</a> | 
+                        <a href="empresaCrud.xhtml">Factura</a> | 
+                        <a href="empresaCrud.xhtml">Rutas</a> | 
+                        <a href="empresaCrud.xhtml">Buses</a> | 
+                        <a href="empresaCrud.xhtml">Hospedaje</a> | 
+                        <a href="empresaCrud.xhtml">Contactos</a> | 
+                        <a href="empresaCrud.xhtml">Empresas</a>                       
+                    </div>
+                </ui:define>
 
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{empresa.nombre}" />
-                </p:column>
-                
-                <p:column headerText="Teléfono">
-                    <h:outputText value="#{empresa.telefono}" />
-                </p:column>
-                
-                <p:column headerText="Dirección">
-                    <h:outputText value="#{empresa.direccion}" />
-                </p:column>
-                
-                <p:column headerText="E-mail">
-                    <h:outputText value="#{empresa.correoElectronico}" />
-                </p:column>
-            </p:dataTable>
+                <ui:define name="contenido">
+                    <div class="padding">
 
-      
-      </div>
-    </div>
-  
-   <div id="footer"> Copyright © 2015 <a href="#">SAIV</a> | <a href="#">Contactos</a> </div>
-  
-</div>
-        
-        
-        </h:body>
-        
-               
+                        <div> <h2> Datos de empresas registradas </h2> </div>
+                            
+                        <p:dataTable var="empresa" value="#{empresaBean.empresas}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{empresaBean.empresaSelected}" rowKey="#{empresa.codigo}" >
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{empresa.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{empresa.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Teléfono">
+                                <h:outputText value="#{empresa.telefono}" />
+                            </p:column>
+
+                            <p:column headerText="Dirección">
+                                <h:outputText value="#{empresa.direccion}" />
+                            </p:column>
+
+                            <p:column headerText="E-mail">
+                                <h:outputText value="#{empresa.correoElectronico}" />
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:spacer height="10px" />
+                        <p:commandButton value="Nueva Empresa" actionListener="#{empresaBean.nuevo()}" immediate="true" update="@form"/>
+                        <p:commandButton value="Modificar" actionListener="#{empresaBean.modificar()}" immediate="true" update="@form" disabled="#{empresaBean.empresaSelected eq null}"/>
+                        <p:commandButton value="Eliminar" actionListener="#{empresaBean.eliminar()}" immediate="true" update="@form" disabled="#{empresaBean.empresaSelected eq null}"/>
+                        <p:panel header="Formulario Empresa" style="width: 300px" rendered="#{empresaBean.enNuevo or empresaBean.enModificar or empresaBean.enEliminar}">
+                            <p:panelGrid columns="3">
+                                
+                                <p:outputLabel for="codigo" value="Código:" />
+                                <p:inputText id="codigo" value="#{empresaBean.empresa.codigo}" requiredMessage="Ingrese el codigo"
+                                             required="true" label="codigo" />
+                                <p:message for="codigo" />
+                                
+                                <p:outputLabel for="nombre" value="Nombre:" />
+                                <p:inputText id="nombre" value="#{empresaBean.empresa.nombre}"  requiredMessage="Ingrese el nombre"
+                                             required="true" label="nombre" />
+                                <p:message for="nombre" />
+
+                                <p:outputLabel for="telefono" value="Telefono:" />
+                                <p:inputText id="telefono" value="#{empresaBean.empresa.telefono}" requiredMessage="Ingrese el telefono"
+                                             required="true" label="telefono" />
+                                <p:message for="telefono" />
+
+                                <p:outputLabel for="direccion" value="Dirección:" />
+                                <p:inputText id="direccion" value="#{empresaBean.empresa.direccion}" 
+                                             required="false" label="direccion" />
+                                <p:message for="direccion" />
+
+                                <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                                <p:inputText id="correoElectronico" value="#{empresaBean.empresa.correoElectronico}" requiredMessage="Ingrese el correo electronico"
+                                             required="true" label="correoElectronico" />
+                                <p:message for="correoElectronico" />
+                            </p:panelGrid>
+                            
+                            
+                            <p:commandButton value="Aceptar" actionListener="#{empresaBean.aceptar()}"  update="@form"/>
+                            <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" update="@form" />
+                        </p:panel>
+
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
     </f:view>
 
     <script type="text/javascript">
         //<![CDATA[
         function logout(xhr, status, args) {
-          setTimeout(function() {
-            window.location = 'faces/index.xhtml';
-          }, 500);
+            setTimeout(function () {
+                window.location = 'faces/index.xhtml';
+            }, 500);
         }
-      //]]>
-      </script>
+        //]]>
+    </script>
 </html>

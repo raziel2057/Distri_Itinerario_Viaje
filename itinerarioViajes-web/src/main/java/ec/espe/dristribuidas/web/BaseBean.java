@@ -15,6 +15,7 @@ public class BaseBean implements Serializable{
     
     private boolean enNuevo;
     private boolean enModificar;
+    private boolean enEliminar;
 
     public boolean isEnNuevo() {
         return enNuevo;
@@ -31,13 +32,25 @@ public class BaseBean implements Serializable{
     public void setEnModificar(boolean enModificar) {
         this.enModificar = enModificar;
     }
-    
+
+    public boolean isEnEliminar() {
+        return enEliminar;
+    }
+
+    public void setEnEliminar(boolean enEliminar) {
+        this.enEliminar = enEliminar;
+    }
+
     public void nuevo() {
         this.enNuevo = true;
     }
     
     public void modificar() {
         this.enModificar = true;
+    }
+    
+    public void eliminar() {
+        this.enEliminar = true;
     }
     
     public void cancelar() {
@@ -47,5 +60,6 @@ public class BaseBean implements Serializable{
     public void reset() {
         this.enModificar = false;
         this.enNuevo = false;
+        this.enEliminar=false;
     }
 }

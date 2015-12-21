@@ -19,6 +19,7 @@ import javax.persistence.*;
 @IdClass(DetalleHospedajePK.class)
 public class DetalleHospedaje implements Serializable{
     @Id
+    
     @Column(name = "CODIGO_HOSPEDAJE", nullable = false)
     private Integer codigoHospedaje;
     

@@ -10,9 +10,12 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +27,8 @@ import javax.persistence.Table;
 public class Boleto implements Serializable {
     
     @Id
+    @SequenceGenerator(name = "G6_BOLETO_SECUENCIA1", sequenceName = "G6_BOLETO_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_BOLETO_SECUENCIA1")
     @Column(name = "CODIGO_BOLETO", nullable = false)
     private Integer codigo;
     

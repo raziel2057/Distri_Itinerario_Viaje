@@ -9,7 +9,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -20,6 +23,8 @@ import javax.persistence.Table;
 @Table(name = "G6_LUGAR")
 public class Lugar implements Serializable {
     @Id
+    @SequenceGenerator(name = "G6_LUGAR_SECUENCIA1", sequenceName = "G6_LUGAR_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_LUGAR_SECUENCIA1")
     @Column(name = "CODIGO_LUGAR", nullable = false)
     private Integer codigo;
     @Column(name = "NOMBRE", nullable = false)

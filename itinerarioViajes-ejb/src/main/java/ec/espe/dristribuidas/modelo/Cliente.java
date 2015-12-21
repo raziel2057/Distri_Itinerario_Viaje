@@ -16,7 +16,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "G6_CLIENTE")
 public class Cliente implements Serializable{
+    
     @Id
+    @SequenceGenerator(name = "G6_CLIENTE_SECUENCIA1", sequenceName = "G6_CLIENTE_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_CLIENTE_SECUENCIA1")
     @Column(name = "CODIGO_CLIENTE", nullable = false)
     private Integer codigo;
     
@@ -37,6 +40,9 @@ public class Cliente implements Serializable{
     
     @Column(name = "CLAVE", nullable = false)
     private String clave;
+    
+    @Column(name = "TIPO", nullable = false)
+    private String tipo;
 
     public Integer getCodigo() {
         return codigo;
@@ -93,6 +99,14 @@ public class Cliente implements Serializable{
     public void setClave(String clave) {
         this.clave = clave;
     }
+    
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     @Override
     public int hashCode() {
@@ -121,7 +135,7 @@ public class Cliente implements Serializable{
 
     @Override
     public String toString() {
-        return "Cliente{" + "codigo=" + codigo + ", nombre=" + nombre + ", identificacion=" + identificacion + ", direccion=" + direccion + ", telefono=" + telefono + ", usuario=" + usuario + ", clave=" + clave + '}';
+        return "Cliente{" + "codigo=" + codigo + ", nombre=" + nombre + ", identificacion=" + identificacion + ", direccion=" + direccion + ", telefono=" + telefono + ", usuario=" + usuario + ", clave=" + clave + ", tipo=" + tipo + '}';
     }
     
     

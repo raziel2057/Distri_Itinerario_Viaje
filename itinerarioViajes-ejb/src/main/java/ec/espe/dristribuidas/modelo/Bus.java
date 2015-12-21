@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -32,9 +35,6 @@ public class Bus implements Serializable {
     @JoinColumn(name = "CODIGO_EMPRESA", referencedColumnName = "CODIGO_EMPRESA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
-    
-    @Column(name = "MATRICULA", nullable = false)
-    private String matricula;
     
     @Column(name = "MARCA", nullable = false)
     private String marca;
@@ -62,14 +62,6 @@ public class Bus implements Serializable {
 
     public void setCodigoEmpresa(String codigoEmpresa) {
         this.codigoEmpresa = codigoEmpresa;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
     }
 
     public String getMarca() {
@@ -128,7 +120,7 @@ public class Bus implements Serializable {
 
     @Override
     public String toString() {
-        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", matricula=" + matricula + ", marca=" + marca + ", modelo=" + modelo + ", anioFacbricacion=" + anioFacbricacion + ", estado=" + estado + '}';
+        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", marca=" + marca + ", modelo=" + modelo + ", anioFacbricacion=" + anioFacbricacion + ", estado=" + estado + '}';
     }
     
     
