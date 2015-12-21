@@ -52,6 +52,8 @@ public class InicioBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = null;
         
+        this.cliente = new Cliente();
+        
         ((HttpServletRequest) context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
         return "empresaCrud?faces-redirect=true";
        

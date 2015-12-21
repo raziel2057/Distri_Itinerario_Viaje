@@ -84,16 +84,18 @@ public class LoginBean implements Serializable {
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = null;
+        String direccion="null";
         this.cliente = clienteServicio.buscarClientePorUsuario(username);
         if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(password)) {
             ((HttpServletRequest) context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Bienvenido"));
-            //return "empresaCrud";
-            return "inicio?faces-redirect=true";
+            direccion= "inicio?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario y/o password incorrectos"));
-            return "index";
+            direccion= "index";
         }
+        
+        return direccion;
     }
 
     public void logout() {

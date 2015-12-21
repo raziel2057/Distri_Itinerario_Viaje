@@ -18,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped; 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.RequestContext;
 /**
  *
@@ -25,16 +26,14 @@ import org.primefaces.context.RequestContext;
  */
 @ViewScoped
 @ManagedBean
-public class EmpresaBean implements Serializable {
+public class EmpresaBean extends BaseBean implements Serializable {
     @EJB
     private EmpresaServicio empresaservicio;
     private List<Empresa> empresas;
     private Empresa empresa =  new Empresa();
-    private String codigo;
-    private String nombre;
-    private String telefono;
-    private String direccion;
-    private String correoElectronico;
+    private Empresa empresaSelected;
+
+    
 
     public List<Empresa> getEmpresas()  {
         return empresas;
@@ -52,49 +51,90 @@ public class EmpresaBean implements Serializable {
         this.empresa = empresa;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public Empresa getEmpresaSelected() {
+        
+        return empresaSelected;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
-
-    public void setCorreoElectronico(String correoElctronico) {
-        this.correoElectronico = correoElctronico;
+    public void setEmpresaSelected(Empresa empresaSelected) {
+        this.empresaSelected = empresaSelected;
     }
     
+    @PostConstruct
+    public void inicializar(){
+        empresas = empresaservicio.obtenerTodas();
+    }
     
+    @Override
+    public void nuevo() {
+        super.nuevo();
+        this.empresa = new Empresa();
+    }
     
+    @Override
+    public void modificar() {
+        
+        
+        
+        super.modificar();
+        this.empresa = new Empresa();
+        try {
+            BeanUtils.copyProperties(this.empresa, this.empresaSelected);
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance(); 
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+        }
+    }
     
+    @Override
+    public void eliminar() {
+        super.eliminar();
+        this.empresa = new Empresa();
+        try {
+            BeanUtils.copyProperties(this.empresa, this.empresaSelected);
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance(); 
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+        }
+    }
+    
+    public void aceptar() {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        if (super.isEnNuevo()) {
+            try {
+                //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
+                this.empresaservicio.crearEmpresa(this.empresa);
+                this.empresas.add(0,this.empresa);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: "+this.empresa.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        } else if (super.isEnModificar()){
+            try {
+                this.empresaservicio.actualiarEmpresa(this.empresa);
+                BeanUtils.copyProperties(this.empresaSelected, this.empresa);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: "+this.empresa.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        } else if (super.isEnEliminar()){
+            try {
+                this.empresaservicio.eliminarEmpresa(this.empresa.getCodigo());
+                this.empresas.remove(this.empresa);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: "+this.empresa.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        }
+        this.reset();
+    }
+    
+    public void cancelar() {
+        super.reset();
+    }
+    
+
+    /*
     public void insertar()
     {
         boolean insertado = false;
@@ -154,10 +194,7 @@ public class EmpresaBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
          context.addCallbackParam("estaInsertado", insertado);
     }
+    */
     
-    @PostConstruct
-   public void inicializar(){
-    empresas=empresaservicio.obtenerTodas();
-   }
 
 }

@@ -33,14 +33,25 @@ and open the template in the editor.
                 </ui:define>
 
                 <ui:define name="contenidoMenu">
-                    <div class="padding"> <a href="#">Inicio</a> | <a href="#">Itinerario</a> | <a href="#">Factura</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a> </div>
+                    <div class="padding"> 
+                        <a href="inicio.xhtml" >Inicio</a> | 
+                        <a href="empresaCrud.xhtml">Itinerario</a> | 
+                        <a href="empresaCrud.xhtml">Factura</a> | 
+                        <a href="empresaCrud.xhtml">Rutas</a> | 
+                        <a href="empresaCrud.xhtml">Buses</a> | 
+                        <a href="empresaCrud.xhtml">Hospedaje</a> | 
+                        <a href="empresaCrud.xhtml">Contactos</a> | 
+                        <a href="empresaCrud.xhtml">Empresas</a>                       
+                    </div>
                 </ui:define>
 
                 <ui:define name="contenido">
                     <div class="padding">
-                        
-                        <div> Datos de empresas registradas</div>
-                        <p:dataTable var="empresa" value="#{empresaBean.empresas}">
+
+                        <div> <h2> Datos de empresas registradas </h2> </div>
+                            
+                        <p:dataTable var="empresa" value="#{empresaBean.empresas}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{empresaBean.empresaSelected}" rowKey="#{empresa.codigo}" >
                             <p:column headerText="Codigo">
                                 <h:outputText value="#{empresa.codigo}" />
                             </p:column>
@@ -61,10 +72,48 @@ and open the template in the editor.
                                 <h:outputText value="#{empresa.correoElectronico}" />
                             </p:column>
                         </p:dataTable>
-                        
-                        <p:commandButton id="insertButton" value="Insertar nueva empresa"/>
+
+                        <p:spacer height="10px" />
+                        <p:commandButton value="Nueva Empresa" actionListener="#{empresaBean.nuevo()}" immediate="true" update="@form"/>
+                        <p:commandButton value="Modificar" actionListener="#{empresaBean.modificar()}" immediate="true" update="@form" disabled="#{empresaBean.empresaSelected eq null}"/>
+                        <p:commandButton value="Eliminar" actionListener="#{empresaBean.eliminar()}" immediate="true" update="@form" disabled="#{empresaBean.empresaSelected eq null}"/>
+                        <p:panel header="Formulario Empresa" style="width: 300px" rendered="#{empresaBean.enNuevo or empresaBean.enModificar or empresaBean.enEliminar}">
+                            <p:panelGrid columns="3">
+                                
+                                <p:outputLabel for="codigo" value="Código:" />
+                                <p:inputText id="codigo" value="#{empresaBean.empresa.codigo}" requiredMessage="Ingrese el codigo"
+                                             required="true" label="codigo" />
+                                <p:message for="codigo" />
+                                
+                                <p:outputLabel for="nombre" value="Nombre:" />
+                                <p:inputText id="nombre" value="#{empresaBean.empresa.nombre}"  requiredMessage="Ingrese el nombre"
+                                             required="true" label="nombre" />
+                                <p:message for="nombre" />
+
+                                <p:outputLabel for="telefono" value="Telefono:" />
+                                <p:inputText id="telefono" value="#{empresaBean.empresa.telefono}" requiredMessage="Ingrese el telefono"
+                                             required="true" label="telefono" />
+                                <p:message for="telefono" />
+
+                                <p:outputLabel for="direccion" value="Dirección:" />
+                                <p:inputText id="direccion" value="#{empresaBean.empresa.direccion}" 
+                                             required="false" label="direccion" />
+                                <p:message for="direccion" />
+
+                                <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                                <p:inputText id="correoElectronico" value="#{empresaBean.empresa.correoElectronico}" requiredMessage="Ingrese el correo electronico"
+                                             required="true" label="correoElectronico" />
+                                <p:message for="correoElectronico" />
+                            </p:panelGrid>
+                            
+                            
+                            <p:commandButton value="Aceptar" actionListener="#{empresaBean.aceptar()}"  update="@form"/>
+                            <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" update="@form" />
+                        </p:panel>
+
+
                     </div>
-                    
+
                 </ui:define>        
             </ui:composition>
 
