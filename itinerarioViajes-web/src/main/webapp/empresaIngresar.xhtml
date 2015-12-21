@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+
+            <style type="text/css" media="all">
+                @import "images/style.css";
+            </style>
+        </h:head>
+        <h:body>
+            <ui:composition template="/plantillas/templateNoLoged.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="contenidoMenu">
+                    <div class="padding"> <a href="#">Inicio</a> | <a href="#">Itinerario</a> | <a href="#">Factura</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a> </div>
+                </ui:define>
+
+                <ui:define name="contenido">
+
+                    <div class="padding">
+                        
+                        <p:growl id="mensajes" showDetail="true" life="2000" />
+                        <h:form>
+                            <p:panel header="Insert" style="clear: right;width:300px">
+                                <h:panelGrid columns="2" cellpadding="5">
+
+                                    <h:outputLabel for="codigo" value="Código:" />
+                                    <p:inputText value="#{empresaBean.empresa.codigo}" id="codigo"
+                                                 required="true" label="codigo" />
+
+                                    <h:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText value="#{empresaBean.empresa.nombre}" id="nombre"
+                                                 required="true" label="nombre" />
+
+                                    <h:outputLabel for="telefono" value="Telefono:" />
+                                    <p:inputText value="#{empresaBean.empresa.telefono}" id="telefono"
+                                                 required="true" label="telefono" />
+
+                                    <h:outputLabel for="direccion" value="Dirección:" />
+                                    <p:inputText value="#{empresaBean.empresa.direccion}" id="direccion"
+                                                 required="true" label="direccion" />
+
+                                    <h:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                                    <p:inputText value="#{empresaBean.empresa.correoElectronico}" id="correoElectronico"
+                                                 required="true" label="correoElectronico" />
+                                    <f:facet name="footer">
+                                        <p:commandButton id="deleteButton" value="Eliminar"
+                                                         actionListener="#{empresaBean.eliminar()}" update=":mensajes" />
+                                        <p:commandButton id="updateButton" value="Actualizar"
+                                                         actionListener="#{empresaBean.actualizar()}" update=":mensajes" />
+                                    </f:facet>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </div>
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        function logout(xhr, status, args) {
+            setTimeout(function () {
+                window.location = 'faces/index.xhtml';
+            }, 500);
+        }
+        //]]>
+    </script>
+</html>

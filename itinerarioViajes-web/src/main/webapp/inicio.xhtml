@@ -14,7 +14,7 @@ and open the template in the editor.
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>PrimeFaces</title>
+                <title>Inicio</title>
             </f:facet>
 
             <style type="text/css" media="all">
@@ -33,37 +33,22 @@ and open the template in the editor.
                 </ui:define>
 
                 <ui:define name="contenidoMenu">
-                    <div class="padding"> <a href="#">Inicio</a> | <a href="#">Itinerario</a> | <a href="#">Factura</a> | <a href="#">Rutas</a> | <a href="#">Buses</a> | <a href="#">Hospedaje</a> | <a href="#">Contactos</a> </div>
+                    <div class="padding"> 
+                        <a href="#" >Inicio</a> | 
+                        <a href="#">Itinerario</a> | 
+                        <a href="#">Factura</a> | 
+                        <a href="#">Rutas</a> | 
+                        <a href="#">Buses</a> | 
+                        <a href="#">Hospedaje</a> | 
+                        
+                        <a href="#">Contactos</a> 
+                        <p:commandButton value="Empresas" action="#{inicioBean.login()}"/>
+                    </div>
                 </ui:define>
 
                 <ui:define name="contenido">
-                    <div class="padding">
-                        
-                        <div> Datos de empresas registradas</div>
-                        <p:dataTable var="empresa" value="#{empresaBean.empresas}">
-                            <p:column headerText="Codigo">
-                                <h:outputText value="#{empresa.codigo}" />
-                            </p:column>
-
-                            <p:column headerText="Nombre">
-                                <h:outputText value="#{empresa.nombre}" />
-                            </p:column>
-
-                            <p:column headerText="Teléfono">
-                                <h:outputText value="#{empresa.telefono}" />
-                            </p:column>
-
-                            <p:column headerText="Dirección">
-                                <h:outputText value="#{empresa.direccion}" />
-                            </p:column>
-
-                            <p:column headerText="E-mail">
-                                <h:outputText value="#{empresa.correoElectronico}" />
-                            </p:column>
-                        </p:dataTable>
-                        
-                        <p:commandButton id="insertButton" value="Insertar nueva empresa"/>
-                    </div>
+                    <img src="images/Bienvenido.jpg" alt="Bienvenido" width="800" height="400"/>
+                    
                     
                 </ui:define>        
             </ui:composition>

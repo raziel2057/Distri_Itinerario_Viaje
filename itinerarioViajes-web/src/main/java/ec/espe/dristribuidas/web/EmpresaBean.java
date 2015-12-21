@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped; 
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 /**
  *
@@ -90,6 +91,8 @@ public class EmpresaBean implements Serializable {
     public void setCorreoElectronico(String correoElctronico) {
         this.correoElectronico = correoElctronico;
     }
+    
+    
     
     
     public void insertar()
