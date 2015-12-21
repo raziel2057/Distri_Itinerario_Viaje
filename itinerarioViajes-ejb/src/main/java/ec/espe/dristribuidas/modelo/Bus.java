@@ -36,9 +36,6 @@ public class Bus implements Serializable {
     @ManyToOne(optional = false)
     private Empresa empresa;
     
-    @Column(name = "MATRICULA", nullable = false)
-    private String matricula;
-    
     @Column(name = "MARCA", nullable = false)
     private String marca;
     
@@ -65,14 +62,6 @@ public class Bus implements Serializable {
 
     public void setCodigoEmpresa(String codigoEmpresa) {
         this.codigoEmpresa = codigoEmpresa;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
     }
 
     public String getMarca() {
@@ -131,7 +120,7 @@ public class Bus implements Serializable {
 
     @Override
     public String toString() {
-        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", matricula=" + matricula + ", marca=" + marca + ", modelo=" + modelo + ", anioFacbricacion=" + anioFacbricacion + ", estado=" + estado + '}';
+        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", marca=" + marca + ", modelo=" + modelo + ", anioFacbricacion=" + anioFacbricacion + ", estado=" + estado + '}';
     }
     
     
