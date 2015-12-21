@@ -16,7 +16,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "G6_CLIENTE")
 public class Cliente implements Serializable{
+    
     @Id
+    @SequenceGenerator(name = "G6_CLIENTE_SECUENCIA1", sequenceName = "G6_CLIENTE_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_CLIENTE_SECUENCIA1")
     @Column(name = "CODIGO_CLIENTE", nullable = false)
     private Integer codigo;
     

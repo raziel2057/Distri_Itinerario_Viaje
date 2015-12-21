@@ -19,6 +19,8 @@ import javax.persistence.*;
 @Table(name = "G6_ITINERARIO")
 public class Itinerario implements Serializable {
     @Id
+    @SequenceGenerator(name = "G6_ITINERARIO_SECUENCIA1", sequenceName = "G6_ITINERARIO_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_ITINERARIO_SECUENCIA1")
     @Column(name = "CODIGO_ITINERARIO", nullable = false)
     private Integer codigo;
     

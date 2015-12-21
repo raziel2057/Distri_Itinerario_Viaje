@@ -18,6 +18,8 @@ import javax.persistence.*;
 @Table(name = "G6_HOSPEDAJE")
 public class Hospedaje implements Serializable{
     @Id
+    @SequenceGenerator(name = "G6_HOSPEDAJE_SECUENCIA1", sequenceName = "G6_HOSPEDAJE_SECUENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_HOSPEDAJE_SECUENCIA1")
     @Column(name = "CODIGO_HOSPEDAJE", nullable = false)
     private Integer codigo;
     
