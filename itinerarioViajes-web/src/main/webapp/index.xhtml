@@ -16,8 +16,84 @@
                         <p:outputLabel for="clave" value="Clave:" />
                         <p:password id="clave" value="#{loginBean.password}" required="true" />
                     </h:panelGrid>
+                    <p:commandButton value="Registrarse" actionListener="#{clienteBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
                     <p:commandButton value="Aceptar" action="#{loginBean.login()}"/>
                 </p:panel>
+                
+                <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
+       
+                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
+                                                 required="true" label="nombre" >
+                                    <p:ajax event="keyup"
+                                            listener="#{clienteBean.validateNombre}"
+                                                update="messageNombre" />
+                                    </p:inputText>
+                                    <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="identificacion" value="Identificación:" />
+                                    <p:inputText id="identificacion" value="#{clienteBean.cliente.identificacion}" requiredMessage="Ingrese la identificación"
+                                                 required="true" label="identificacion" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateIdentificacion}"
+                                                update="messageIdentificacion" />
+                                    </p:inputText>
+                                    <p:messages id="messageIdentificacion" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="direccion" value="Dirección:" />
+                                    <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" 
+                                                 required="false" label="direccion" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateDireccion()}"
+                                                update="messageDireccion" />
+                                    </p:inputText>
+                                    <p:messages id="messageDireccion" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="telefono" value="Teléfono:" />
+                                    <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" requiredMessage="Ingrese el teléfono"
+                                                 required="true" label="telefono" >
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateTelefono}"
+                                                update="messageTelefono" />
+                                    </p:inputText>
+                                    <p:messages id="messageTelefono" showDetail="true" showSummary="true"/>
+                                    
+                                    <p:outputLabel for="user" value="Usuario:" />
+                                    <p:inputText id="user" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
+                                                 required="true" label="user"> 
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateUsuario}"
+                                                update="messageUsuario" />
+                                    </p:inputText>
+                                    <p:messages id="messageUsuario" showDetail="true" showSummary="true"/>
+                                        
+                                    <p:outputLabel for="pass" value="Clave:" />
+                                    <p:password id="pass" value="#{clienteBean.cliente.clave}" requiredMessage="Ingrese la Clave"
+                                                 required="true" label="pass">  
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateClave}"
+                                                update="messageClave" />
+                                    </p:password>
+                                    <p:messages id="messageClave" showDetail="true" showSummary="true"/>
+                                    
+                                    <p:outputLabel for="tipo" value="Tipo:" />
+                                    <p:selectOneMenu id="tipo" value="#{clienteBean.cliente.tipo}" style="width:125px" requiredMessage="Seleccione el Tipo de Cliente  "
+                                                 required="true" label="tipo">
+                                        <f:selectItem itemLabel="Cliente" itemValue="R" />
+                                        <f:selectItem itemLabel="Administrador" itemValue="A" />
+                                        
+                                    </p:selectOneMenu>
+                                    <p:message for="tipo" />
+                                    
+                                    <p:spacer />
+                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}"  update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                
             </ui:define>
             <ui:define name="contenido">
                 <h2>Bienvenidos a SAIV</h2>
@@ -29,6 +105,7 @@
                 <br/>
                 <strong>Dirección:</strong> Sangolquí - La Colina
                  </div>
+                
             </ui:define>
         </ui:composition>
     </h:body>

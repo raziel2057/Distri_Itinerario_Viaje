@@ -126,4 +126,10 @@ public class LugarBean extends BaseBean implements Serializable {
         }
         this.cancelar();
     }
+    
+        public void cancelar() {
+        super.reset();
+        this.lugar = null;
+        this.lugarSelected = null;
+    }
 }
