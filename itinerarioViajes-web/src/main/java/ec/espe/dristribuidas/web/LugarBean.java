@@ -25,7 +25,7 @@ import org.apache.commons.beanutils.BeanUtils;
 @ViewScoped
 @ManagedBean
 public class LugarBean extends BaseBean implements Serializable {
-    
+
     @EJB
     private LugarServicio lugarServicio;
     private List<Lugar> lugares;
@@ -57,32 +57,31 @@ public class LugarBean extends BaseBean implements Serializable {
     }
 
     @PostConstruct
-    public void inicializar(){
+    public void inicializar() {
         lugares = lugarServicio.obtenerTodas();
-        
+
     }
-    
+
     @Override
     public void nuevo() {
         super.nuevo();
         this.lugar = new Lugar();
     }
-    
-    
+
     @Override
     public void modificar() {
 
         super.modificar();
         this.lugar = new Lugar();
         try {
-            BeanUtils.copyProperties(this.lugar,this.lugarSelected);
-            
+            BeanUtils.copyProperties(this.lugar, this.lugarSelected);
+
         } catch (Exception e) {
-            FacesContext context = FacesContext.getCurrentInstance(); 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
     }
-    
+
     @Override
     public void eliminar() {
         super.eliminar();
@@ -90,44 +89,44 @@ public class LugarBean extends BaseBean implements Serializable {
         try {
             BeanUtils.copyProperties(this.lugar, this.lugarSelected);
         } catch (Exception e) {
-            FacesContext context = FacesContext.getCurrentInstance(); 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
     }
-    
+
     public void aceptar() {
-        FacesContext context = FacesContext.getCurrentInstance(); 
+        FacesContext context = FacesContext.getCurrentInstance();
         if (super.isEnNuevo()) {
             try {
                 //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
-                
+
                 this.lugarServicio.crearLugar(this.lugar);
-                this.lugares.add(0,this.lugar);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el lugar: "+this.lugar.getNombre(), null));
+                this.lugares.add(0, this.lugar);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el lugar: " + this.lugar.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
-        } else if (super.isEnModificar()){
+            }
+        } else if (super.isEnModificar()) {
             try {
                 this.lugarServicio.actualiarLugar(this.lugar);
                 BeanUtils.copyProperties(this.lugarSelected, this.lugar);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el lugar: "+this.lugar.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el lugar: " + this.lugar.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
-        } else if (super.isEnEliminar()){
+            }
+        } else if (super.isEnEliminar()) {
             try {
                 this.lugarServicio.eliminarLugar(this.lugar.getCodigo());
                 this.lugares.remove(this.lugar);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el lugar: "+this.lugar.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el lugar: " + this.lugar.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
+            }
         }
         this.cancelar();
     }
-    
-        public void cancelar() {
+
+    public void cancelar() {
         super.reset();
         this.lugar = null;
         this.lugarSelected = null;

@@ -61,7 +61,7 @@
                                     <p:messages id="messageTelefono" showDetail="true" showSummary="true"/>
                                     
                                     <p:outputLabel for="user" value="Usuario:" />
-                                    <p:inputText id="user" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
+                                    <p:inputText id="user" placeholder="Usuario" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
                                                  required="true" label="user"> 
                                         <p:ajax event="keyup"
                                                 listener="#{clienteBean.validateUsuario}"
@@ -70,7 +70,7 @@
                                     <p:messages id="messageUsuario" showDetail="true" showSummary="true"/>
                                         
                                     <p:outputLabel for="pass" value="Clave:" />
-                                    <p:password id="pass" value="#{clienteBean.cliente.clave}" requiredMessage="Ingrese la Clave"
+                                    <p:password id="pass" feedback="true" value="#{clienteBean.cliente.clave}" requiredMessage="Ingrese la Clave"
                                                  required="true" label="pass">  
                                         <p:ajax event="keyup"
                                                 listener="#{clienteBean.validateClave}"
