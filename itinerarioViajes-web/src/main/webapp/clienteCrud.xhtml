@@ -13,7 +13,7 @@ and open the template in the editor.
     <f:view contentType="text/html">
 
         <h:body>
-            <ui:composition template="/plantillas/templateNoLoged.xhtml">
+            <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
                 <ui:define name="contenidoHeader">
                     <h:form>
                         <p:commandLink id="logout" actionListener="#{loginBean.logout}"
@@ -23,18 +23,6 @@ and open the template in the editor.
                     </h:form>
                 </ui:define>
 
-                <ui:define name="contenidoMenu">
-                    <div class="padding"> 
-                        <a href="inicio.xhtml" >Inicio</a> | 
-                        <a href="empresaCrud.xhtml">Itinerario</a> | 
-                        <a href="clienteCrud.xhtml">Clientes</a> | 
-                        <a href="empresaCrud.xhtml">Rutas</a> | 
-                        <a href="empresaCrud.xhtml">Buses</a> | 
-                        <a href="empresaCrud.xhtml">Hospedaje</a> | 
-                        <a href="empresaCrud.xhtml">Contactos</a> | 
-                        <a href="empresaCrud.xhtml">Empresas</a>                       
-                    </div>
-                </ui:define>
 
                 <ui:define name="contenido">
                     <div class="padding">
@@ -83,11 +71,6 @@ and open the template in the editor.
                             <p:outputPanel id="carDetail" style="text-align:center;">
                                 <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
        
-                                    <p:outputLabel for="codigo" value="Código:" />
-                                    <p:inputText id="codigo"  value="#{clienteBean.cliente.codigo}" requiredMessage="Ingrese el codigo"
-                                                 required="false" label="codigo" readonly="#{clienteBean.enModificar or clienteBean.enEliminar}" />
-                                    <p:message for="codigo" />
-
                                     <p:outputLabel for="nombre" value="Nombre:" />
                                     <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
                                                  required="true" label="nombre" />

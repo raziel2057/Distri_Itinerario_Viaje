@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Datos de Lugares registrados </h2> </div>
+                            
+                        <p:dataTable var="cliente" value="#{lugarBean.lugares}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{lugarBean.lugarSelected}" rowKey="#{lugar.codigo}" >
+                            <p:ajax event="rowSelect"  update="@form"/>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{lugar.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{lugar.nombre}" />
+                            </p:column>
+
+                        </p:dataTable>
+                        
+                        <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty lugarBean.lugar}" columnClasses="label,value">
+       
+                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText id="nombre" value="#{lugarBean.lugar.nombre}"  requiredMessage="Ingrese el nombre"
+                                                 required="true" label="nombre" />
+                                    <p:message for="nombre" />
+
+                                    <p:spacer />
+                                    <p:commandButton value="Guardar" actionListener="#{lugarBean.aceptar()}"  update="@form" disabled="#{lugarBean.lugar eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{lugarBean.cancelar()}" immediate="true" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                        
+                        
+                         <p:spacer height="10px" />
+                         <p:commandButton value="Nuevo Cliente" actionListener="#{lugarBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                         <p:commandButton value="Actualizar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.modificar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                         <p:commandButton value="Eliminar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.eliminar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                        
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+    
+</html>
