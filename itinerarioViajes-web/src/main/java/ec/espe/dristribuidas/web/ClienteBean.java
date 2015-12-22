@@ -106,6 +106,7 @@ public class ClienteBean extends BaseBean implements Serializable {
         if (super.isEnNuevo()) {
             try {
                 //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
+                
                 this.clienteServicio.crearCliente(this.cliente);
                 this.clientes.add(0,this.cliente);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: "+this.cliente.getNombre(), null));
