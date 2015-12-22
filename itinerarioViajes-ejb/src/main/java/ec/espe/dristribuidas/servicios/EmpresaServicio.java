@@ -31,6 +31,7 @@ public class EmpresaServicio {
     public Empresa obtenerPorID(String codigoEmpresa){
         return this.empresaDAO.findById(codigoEmpresa, false);
     }
+    
    public void crearEmpresa(Empresa empresa) throws ValidacionException {
         Empresa empresaTmp=this.obtenerPorID(empresa.getCodigo());
         if(empresaTmp==null){

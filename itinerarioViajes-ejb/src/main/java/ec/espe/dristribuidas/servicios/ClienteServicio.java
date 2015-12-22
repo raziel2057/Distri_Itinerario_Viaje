@@ -18,60 +18,52 @@ import javax.ejb.Stateless;
  * @author RAUL
  */
 @LocalBean
-@Stateless 
-
+@Stateless
 public class ClienteServicio {
+
     @EJB
     private ClienteDAO clienteDAO;
-    
-    public Cliente buscarClientePorUsuario(String usuario)
-    {
+
+    public Cliente buscarClientePorUsuario(String usuario) {
         List<Cliente> clientes;
         Cliente cliente;
         Cliente clienteTmp = new Cliente();
         clienteTmp.setUsuario(usuario);
         clientes = this.clienteDAO.find(clienteTmp);
-        if(clientes.size()==1)
-        {
+        if (clientes.size() == 1) {
             cliente = clientes.get(0);
-        }
-        else
-        {
+        } else {
             cliente = null;
         }
-        
+
         return cliente;
     }
-    
-    public List<Cliente> obtenerTodas(){
+
+    public List<Cliente> obtenerTodas() {
         return this.clienteDAO.findAll();
     }
-    
-    public Cliente obtenerPorID(Integer codigoCliente){
+
+    public Cliente obtenerPorID(Integer codigoCliente) {
         return this.clienteDAO.findById(codigoCliente, false);
     }
-   public void crearCliente(Cliente cliente) throws ValidacionException {
-        Cliente clienteTmp=this.obtenerPorID(cliente.getCodigo());
-        if(clienteTmp==null){
-            this.clienteDAO.insert(cliente);
-        }
-        else{
-        throw new ValidacionException("El codigo es "+cliente.getCodigo()+" ya existe"); 
-        }
-        
+
+    public void crearCliente(Cliente cliente) throws ValidacionException {
+
+        this.clienteDAO.insert(cliente);
+
     }
-    public void actualiarCliente(Cliente cliente){
+
+    public void actualiarCliente(Cliente cliente) {
         this.clienteDAO.update(cliente);
     }
-    
-    public void eliminarCliente(Integer codigoCliente){
-    try{
-     Cliente clienteTmp=this.obtenerPorID(codigoCliente);
-     this.clienteDAO.remove(clienteTmp);
-    }catch(Exception e)
-    {
-        throw new ValidacionException("El cliente "+codigoCliente+" esta asociada otra tabla");
-    }
+
+    public void eliminarCliente(Integer codigoCliente) {
+        try {
+            Cliente clienteTmp = this.obtenerPorID(codigoCliente);
+            this.clienteDAO.remove(clienteTmp);
+        } catch (Exception e) {
+            throw new ValidacionException("El cliente " + codigoCliente + " esta asociada otra tabla");
+        }
     }
 
 }
