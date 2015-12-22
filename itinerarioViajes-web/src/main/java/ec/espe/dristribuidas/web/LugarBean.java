@@ -5,7 +5,6 @@
  */
 package ec.espe.dristribuidas.web;
 
-import ec.espe.dristribuidas.modelo.Cliente;
 import java.io.Serializable;
 import ec.espe.dristribuidas.modelo.Lugar;
 import ec.espe.dristribuidas.servicios.LugarServicio;
@@ -31,6 +30,8 @@ public class LugarBean extends BaseBean implements Serializable {
     private List<Lugar> lugares;
     private Lugar lugar;
     private Lugar lugarSelected;
+
+    ValidacionesInputBean validacion = new ValidacionesInputBean();
 
     public List<Lugar> getLugares() {
         return lugares;
@@ -97,22 +98,32 @@ public class LugarBean extends BaseBean implements Serializable {
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (super.isEnNuevo()) {
-            try {
-                //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
+            if (validarLugar()) {
+                try {
+                    //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
 
-                this.lugarServicio.crearLugar(this.lugar);
-                this.lugares.add(0, this.lugar);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el lugar: " + this.lugar.getNombre(), null));
-            } catch (Exception e) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                    this.lugarServicio.crearLugar(this.lugar);
+                    this.lugares.add(0, this.lugar);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el lugar: " + this.lugar.getNombre(), null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede ingresar el lugar ya que contiene datos erroneos ", null));
             }
         } else if (super.isEnModificar()) {
-            try {
-                this.lugarServicio.actualiarLugar(this.lugar);
-                BeanUtils.copyProperties(this.lugarSelected, this.lugar);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el lugar: " + this.lugar.getNombre(), null));
-            } catch (Exception e) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            if (validarLugar()) {
+                try {
+                    this.lugarServicio.actualiarLugar(this.lugar);
+                    BeanUtils.copyProperties(this.lugarSelected, this.lugar);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el lugar: " + this.lugar.getNombre(), null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede actualizar el lugar ya que contiene datos erroneos ", null));
             }
         } else if (super.isEnEliminar()) {
             try {
@@ -131,4 +142,25 @@ public class LugarBean extends BaseBean implements Serializable {
         this.lugar = null;
         this.lugarSelected = null;
     }
+
+    public void validateNombre() {
+
+        String resultado = validacion.validateTextoSoloLetras(lugar.getNombre(), 50);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public boolean validarLugar() {
+
+        if (validacion.validateTextoSoloLetras(lugar.getNombre(), 50) == "se") {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }
