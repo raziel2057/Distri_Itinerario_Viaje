@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author H200
+ * @author RAUL
  */
 public class BaseBean implements Serializable{
     

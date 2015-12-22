@@ -30,9 +30,9 @@ public class EmpresaBean extends BaseBean implements Serializable {
     @EJB
     private EmpresaServicio empresaservicio;
     private List<Empresa> empresas;
-    private Empresa empresa =  new Empresa();
+    private Empresa empresa;
     private Empresa empresaSelected;
-
+    
     
 
     public List<Empresa> getEmpresas()  {
@@ -63,6 +63,7 @@ public class EmpresaBean extends BaseBean implements Serializable {
     @PostConstruct
     public void inicializar(){
         empresas = empresaservicio.obtenerTodas();
+        //empresaSelected = new Empresa();
     }
     
     @Override
@@ -71,15 +72,15 @@ public class EmpresaBean extends BaseBean implements Serializable {
         this.empresa = new Empresa();
     }
     
+    
     @Override
     public void modificar() {
-        
-        
-        
+
         super.modificar();
         this.empresa = new Empresa();
         try {
-            BeanUtils.copyProperties(this.empresa, this.empresaSelected);
+            BeanUtils.copyProperties(this.empresa,this.empresaSelected);
+            
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance(); 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
@@ -126,75 +127,20 @@ public class EmpresaBean extends BaseBean implements Serializable {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             } 
         }
-        this.reset();
+        this.cancelar();
     }
+    
+    
+ 
+    
     
     public void cancelar() {
         super.reset();
+        this.empresa = null;
+        this.empresaSelected = null;
     }
     
-
-    /*
-    public void insertar()
-    {
-        boolean insertado = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        FacesMessage message = null;
-        try
-        {
-            empresaservicio.crearEmpresa(this.empresa);
-            insertado = true;
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Empresa Insertada: ", this.empresa.getNombre());
-        }
-        catch(RuntimeException e)
-        {
-            insertado = false;
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al ingresar la empresa", e.getMessage());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, message);
-         context.addCallbackParam("estaInsertado", insertado);
-    }
     
-    public void actualizar()
-    {
-        boolean insertado = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        FacesMessage message = null;
-        try
-        {
-            empresaservicio.actualiarEmpresa(this.empresa);
-            insertado = true;
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Empresa Actualizada: ", this.empresa.getNombre());
-        }
-        catch(RuntimeException e)
-        {
-            insertado = false;
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la empresa", e.getMessage());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, message);
-         context.addCallbackParam("estaInsertado", insertado);
-    }
-    
-    public void eliminar()
-    {
-        boolean insertado = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        FacesMessage message = null;
-        try
-        {
-            empresaservicio.eliminarEmpresa(this.empresa.getCodigo());
-            insertado = true;
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Empresa Eliminada: ", this.empresa.getNombre());
-        }
-        catch(RuntimeException e)
-        {
-            insertado = false;
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al eliminar la empresa", e.getMessage());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, message);
-         context.addCallbackParam("estaInsertado", insertado);
-    }
-    */
     
 
 }
