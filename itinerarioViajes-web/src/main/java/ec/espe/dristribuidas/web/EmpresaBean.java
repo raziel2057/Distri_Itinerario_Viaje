@@ -100,17 +100,24 @@ public class EmpresaBean extends BaseBean implements Serializable {
 
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
-        if (validarEmpresa()) {
-            if (super.isEnNuevo()) {
+
+        if (super.isEnNuevo()) {
+            if (validarEmpresa()) {
                 try {
-                    //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
+
                     this.empresaservicio.crearEmpresa(this.empresa);
                     this.empresas.add(0, this.empresa);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.empresa.getNombre(), null));
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
-            } else if (super.isEnModificar()) {
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede ingresar la empresa ya que contiene datos erroneos ", null));
+            }
+
+        } else if (super.isEnModificar()) {
+            if (validarEmpresa()) {
                 try {
                     this.empresaservicio.actualiarEmpresa(this.empresa);
                     BeanUtils.copyProperties(this.empresaSelected, this.empresa);
@@ -118,17 +125,20 @@ public class EmpresaBean extends BaseBean implements Serializable {
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
-            } else if (super.isEnEliminar()) {
-                try {
-                    this.empresaservicio.eliminarEmpresa(this.empresa.getCodigo());
-                    this.empresas.remove(this.empresa);
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: " + this.empresa.getNombre(), null));
-                } catch (Exception e) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede actualizar la empresa ya que contiene datos erroneos ", null));
             }
-            this.cancelar();
+        } else if (super.isEnEliminar()) {
+            try {
+                this.empresaservicio.eliminarEmpresa(this.empresa.getCodigo());
+                this.empresas.remove(this.empresa);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: " + this.empresa.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            }
         }
+        this.cancelar();
 
     }
 
@@ -147,60 +157,54 @@ public class EmpresaBean extends BaseBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
+
     public void validateCodigo() {
 
-        String resultado = validacion.validateNumeroEntero(empresa.getCodigo(),13);
+        String resultado = validacion.validateNumeroEntero(empresa.getCodigo(), 13);
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
+
     public void validateNombre() {
 
-        String resultado = validacion.validateTextoSoloLetras(empresa.getNombre(),100);
+        String resultado = validacion.validateTextoSoloLetras(empresa.getNombre(), 100);
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
-     public void validateTelefono() {
 
-        String resultado = validacion.validateNumeroEntero(empresa.getTelefono(),10);
+    public void validateTelefono() {
+
+        String resultado = validacion.validateNumeroEntero(empresa.getTelefono(), 10);
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
+
     public void validateDireccion() {
 
-        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(),50);
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(), 50);
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
 
     public boolean validarEmpresa() {
 
-        validateCodigo();
-        validateDireccion();
-        validateEmail();
-        validateNombre();
-        validateTelefono();
-        if (validacion.validateEmail(empresa.getCorreoElectronico()) == "se" &&
-            validacion.validateNumeroEntero(empresa.getCodigo(),13) == "se" &&
-            validacion.validateTextoSoloLetras(empresa.getNombre(),100) == "se" &&
-            validacion.validateNumeroEntero(empresa.getTelefono(),10) =="se" &&
-            validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(),50) =="se") {
+        if (validacion.validateEmail(empresa.getCorreoElectronico()) == "se"
+                && validacion.validateNumeroEntero(empresa.getCodigo(), 13) == "se"
+                && validacion.validateTextoSoloLetras(empresa.getNombre(), 100) == "se"
+                && validacion.validateNumeroEntero(empresa.getTelefono(), 10) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(), 50) == "se") {
             return true;
         } else {
             return false;
