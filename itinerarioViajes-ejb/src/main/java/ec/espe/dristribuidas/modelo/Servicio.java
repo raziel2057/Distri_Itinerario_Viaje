@@ -30,7 +30,7 @@ public class Servicio implements Serializable {
     @SequenceGenerator(name = "G6_SERVICIO_SECUENCIA1", sequenceName = "G6_SERVICIO_SECUENCIA", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "G6_SERVICIO_SECUENCIA1")
     @Column(name = "CODIGO_SERVICIO", nullable = false)
-    private Integer codigoServicio;
+    private Integer codigo;
     
     @Column(name = "CODIGO_BUS", nullable = false)
     private String codigoBus;
@@ -45,12 +45,12 @@ public class Servicio implements Serializable {
     @Column(name = "COSTO", nullable = false)
     private BigDecimal costo;
 
-    public Integer getCodigoServicio() {
-        return codigoServicio;
+    public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setCodigoServicio(Integer codigoServicio) {
-        this.codigoServicio = codigoServicio;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
     public String getCodigoBus() {
@@ -80,7 +80,7 @@ public class Servicio implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.codigoServicio);
+        hash = 97 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -93,7 +93,7 @@ public class Servicio implements Serializable {
             return false;
         }
         final Servicio other = (Servicio) obj;
-        if (!Objects.equals(this.codigoServicio, other.codigoServicio)) {
+        if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
         return true;
@@ -101,7 +101,7 @@ public class Servicio implements Serializable {
 
     @Override
     public String toString() {
-        return "Servicio{" + "codigoServicio=" + codigoServicio + ", codigoBus=" + codigoBus + ", nombre=" + nombre + ", costo=" + costo + '}';
+        return "Servicio{" + "codigoServicio=" + codigo + ", codigoBus=" + codigoBus + ", nombre=" + nombre + ", costo=" + costo + '}';
     }
     
     
