@@ -61,8 +61,13 @@ and open the template in the editor.
        
                                     <p:outputLabel for="codigo" value="Código:" />
                                     <p:inputText id="codigo" value="#{empresaBean.empresa.codigo}" requiredMessage="Ingrese el codigo"
-                                                 required="true" label="codigo" readonly="#{empresaBean.enModificar or empresaBean.enEliminar}" />
-                                    <p:message for="codigo" />
+                                                 required="true" label="codigo" readonly="#{empresaBean.enModificar or empresaBean.enEliminar}">
+                                        <p:ajax event="blur"
+                                                listener="#{empresaBean.validateCodigo()}"
+                                                update="messageCodigo" />
+                                    </p:inputText>
+                                    <p:messages id="messageCodigo" showDetail="true" showSummary="true"/>
+                                    
 
                                     <p:outputLabel for="nombre" value="Nombre:" />
                                     <p:inputText id="nombre" value="#{empresaBean.empresa.nombre}"  requiredMessage="Ingrese el nombre"

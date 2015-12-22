@@ -49,7 +49,7 @@ public class ValidacionesInputBean {
 
         String retorno;
         if (texto.matches(validator)) {
-            if (texto.length() <= longitudMaxima && texto.length() > 0 ) {
+            if (texto.length() <= longitudMaxima ) {
                 retorno = "se"; //Sin error.
             } else {
                 retorno = "La longitud del texto excede el limite de "+longitudMaxima;
@@ -68,7 +68,7 @@ public class ValidacionesInputBean {
 
         String retorno;
         if (texto.matches(validator)) {
-            if (texto.length() <= longitudMaxima && texto.length() > 0 ) {
+            if (texto.length() <= longitudMaxima ) {
                 retorno = "se"; //Sin error.
             } else {
                 retorno = "La longitud del texto excede el limite de "+longitudMaxima;
@@ -102,7 +102,7 @@ public class ValidacionesInputBean {
 
         String retorno;
         if (numero.matches(validator)) {
-            if (numero.length() <= longitudMaxima && numero.length() > 0 ) {
+            if (numero.length() <= longitudMaxima) {
                 retorno = "se"; //Sin error.
             } else {
                 retorno = "La longitud del numero excede el limite de "+longitudMaxima;
@@ -121,7 +121,7 @@ public class ValidacionesInputBean {
 
         String retorno;
         if (numero.matches(validator)) {
-            if (numero.length() <= longitudMaxima && numero.length() > 0 ) {
+            if (numero.length() <= longitudMaxima) {
                 retorno = "se"; //Sin error.
             } else {
                 retorno = "La longitud del texto excede el limite de "+longitudMaxima;
