@@ -45,9 +45,15 @@ and open the template in the editor.
                             <p:panel header="Insert" style="clear: right;width:300px">
                                 <h:panelGrid columns="2" cellpadding="5">
 
+                                    <!--
                                     <h:outputLabel for="codigo" value="Código:" />
                                     <p:inputText value="#{empresaBean.empresa.codigo}" id="codigo"
-                                                 required="true" label="codigo" />
+                                                 required="true" requiredMessage="Ingrese el codigo" label="codigo" size="13">
+                                        <f:validateLength minimum="13" maximum="13"/>
+                                        <p:ajax update="msgcodigo" event="keyup" />
+                                    </p:inputText>
+                                    <p:watermark for="codigo" value="Enter codigo" /> 
+                                    <p:message for="codigo" id="msgcodigo" display="icon" />
 
                                     <h:outputLabel for="nombre" value="Nombre:" />
                                     <p:inputText value="#{empresaBean.empresa.nombre}" id="nombre"
@@ -61,14 +67,23 @@ and open the template in the editor.
                                     <p:inputText value="#{empresaBean.empresa.direccion}" id="direccion"
                                                  required="true" label="direccion" />
 
-                                    <h:outputLabel for="correoElectronico" value="Correo Electrónico:" />
-                                    <p:inputText value="#{empresaBean.empresa.correoElectronico}" id="correoElectronico"
-                                                 required="true" label="correoElectronico" />
+                                    -->
+                                    <p:outputLabel  for="correoElectronico" value="Correo Electrónico:" />
+                                    <p:inputText value="#{empresaIngresarBean.emailAddress}" id="correoElectronico"
+                                                 required="true" label="correoElectronico" >
+                                        <p:ajax event="blur"
+                                                listener="#{empresaIngresarBean.validateEmail}"
+                                                update="messages" />
+                                    </p:inputText>
+                                    <p:messages id="messages"  showDetail="true" showSummary="true"/>
+                                    
+                                    <p:outputLabel  for="nombre" value="Nombre:" />
+                                    <p:inputText value="#{empresaIngresarBean.emailAddress}" id="nombre"
+                                                 required="true" label="Nombre" />
+                                     
                                     <f:facet name="footer">
-                                        <p:commandButton id="deleteButton" value="Eliminar"
-                                                         actionListener="#{empresaBean.eliminar()}" update=":mensajes"/>
-                                        <p:commandButton id="updateButton" value="Actualizar"
-                                                         actionListener="#{empresaBean.actualizar()}" update=":mensajes"/>
+                                        <p:commandButton update="messages" value="Submit"
+                                                         actionListener="#{empresaIngresarBean.process}" />
                                     </f:facet>
                                 </h:panelGrid>
                             </p:panel>
