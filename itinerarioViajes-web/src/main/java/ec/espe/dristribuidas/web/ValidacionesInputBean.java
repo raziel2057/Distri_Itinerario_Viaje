@@ -55,7 +55,7 @@ public class ValidacionesInputBean {
                 retorno = "La longitud del texto excede el limite de "+longitudMaxima;
             }
         } else {
-            retorno = "Texto no válidos";
+            retorno = "Texto no válido";
         }
 
         return retorno;

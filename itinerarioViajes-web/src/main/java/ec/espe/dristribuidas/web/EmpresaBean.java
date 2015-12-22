@@ -129,6 +129,7 @@ public class EmpresaBean extends BaseBean implements Serializable {
             }
             this.cancelar();
         }
+
     }
 
     public void cancelar() {
@@ -156,11 +157,50 @@ public class EmpresaBean extends BaseBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
+    
+    public void validateNombre() {
+
+        String resultado = validacion.validateTextoSoloLetras(empresa.getNombre(),100);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+    
+     public void validateTelefono() {
+
+        String resultado = validacion.validateNumeroEntero(empresa.getTelefono(),10);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+    
+    public void validateDireccion() {
+
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(),50);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+    
 
     public boolean validarEmpresa() {
 
+        validateCodigo();
+        validateDireccion();
+        validateEmail();
+        validateNombre();
+        validateTelefono();
         if (validacion.validateEmail(empresa.getCorreoElectronico()) == "se" &&
-            validacion.validateNumeroEntero(empresa.getCodigo(),13) == "se") {
+            validacion.validateNumeroEntero(empresa.getCodigo(),13) == "se" &&
+            validacion.validateTextoSoloLetras(empresa.getNombre(),100) == "se" &&
+            validacion.validateNumeroEntero(empresa.getTelefono(),10) =="se" &&
+            validacion.validateTextoLetrasNumerosCaracteresEspeciales(empresa.getDireccion(),50) =="se") {
             return true;
         } else {
             return false;

@@ -134,9 +134,6 @@ public class ClienteBean extends BaseBean implements Serializable {
     }
     
     
- 
-    
-    
     public void cancelar() {
         super.reset();
         this.cliente = null;
