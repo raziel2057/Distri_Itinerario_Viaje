@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateNoLoged.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="contenidoMenu">
+                    <div class="padding"> 
+                        <a href="inicio.xhtml" >Inicio</a> | 
+                        <a href="empresaCrud.xhtml">Itinerario</a> | 
+                        <a href="clienteCrud.xhtml">Clientes</a> | 
+                        <a href="empresaCrud.xhtml">Rutas</a> | 
+                        <a href="empresaCrud.xhtml">Buses</a> | 
+                        <a href="empresaCrud.xhtml">Hospedaje</a> | 
+                        <a href="empresaCrud.xhtml">Contactos</a> | 
+                        <a href="empresaCrud.xhtml">Empresas</a>                       
+                    </div>
+                </ui:define>
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Datos de Clientes registrados </h2> </div>
+                            
+                        <p:dataTable var="cliente" value="#{clienteBean.clientes}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{clienteBean.clienteSelected}" rowKey="#{cliente.codigo}" >
+                            <p:ajax event="rowSelect"  update="@form"/>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{cliente.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Identificación">
+                                <h:outputText value="#{cliente.identificacion}" />
+                            </p:column>
+
+                            <p:column headerText="Dirección">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+
+                            <p:column headerText="Teléfono">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>
+                            
+                            <p:column headerText="Usuario">
+                                <h:outputText value="#{cliente.usuario}" />
+                            </p:column>
+                            
+                            <p:column headerText="Clave">
+                                <h:outputText value="#{cliente.clave}" />
+                            </p:column>
+                            
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{cliente.tipo eq 'A' ?'Administrador':'Cliente'}" />
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                        
+                        <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
+       
+                                    <p:outputLabel for="codigo" value="Código:" />
+                                    <p:inputText id="codigo"  value="#{clienteBean.cliente.codigo}" requiredMessage="Ingrese el codigo"
+                                                 required="false" label="codigo" readonly="#{clienteBean.enModificar or clienteBean.enEliminar}" />
+                                    <p:message for="codigo" />
+
+                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
+                                                 required="true" label="nombre" />
+                                    <p:message for="nombre" />
+
+                                    <p:outputLabel for="identificacion" value="Identificación:" />
+                                    <p:inputText id="identificacion" value="#{clienteBean.cliente.identificacion}" requiredMessage="Ingrese la identificación"
+                                                 required="true" label="identificacion" />
+                                    <p:message for="identificacion" />
+
+                                    <p:outputLabel for="direccion" value="Dirección:" />
+                                    <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" 
+                                                 required="false" label="direccion" />
+                                    <p:message for="direccion" />
+
+                                    <p:outputLabel for="telefono" value="Teléfono:" />
+                                    <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" requiredMessage="Ingrese el teléfono"
+                                                 required="true" label="telefono" />
+                                    <p:message for="telefono" />
+                                    
+                                    <p:outputLabel for="usuario" value="Usuario:" />
+                                    <p:inputText id="usuario" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
+                                                 required="true" label="usuario" />
+                                    <p:message for="usuario" />
+                                    
+                                    <p:outputLabel for="clave" value="Clave:" />
+                                    <p:inputText id="clave" value="#{clienteBean.cliente.clave}" requiredMessage="Ingrese la Clave"
+                                                 required="true" label="clave" />
+                                    <p:message for="clave" />
+                                    
+                                    <p:outputLabel for="tipo" value="Tipo:" />
+                                    <p:inputText id="tipo" value="#{clienteBean.cliente.tipo}" requiredMessage="Ingrese el Tipo de Cliente  "
+                                                 required="true" label="tipo" />
+                                    <p:message for="tipo" />
+                                    
+                                    <p:spacer />
+                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}"  update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                        
+                        
+                         <p:spacer height="10px" />
+                         <p:commandButton value="Nuevo Cliente" actionListener="#{clienteBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                         <p:commandButton value="Actualizar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.modificar()}" disabled="#{clienteBean.clienteSelected eq null}" />
+                         <p:commandButton value="Eliminar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.eliminar()}" disabled="#{clienteBean.clienteSelected eq null}" />
+                        
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+    
+</html>
