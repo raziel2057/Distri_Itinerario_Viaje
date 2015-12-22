@@ -24,11 +24,14 @@ import org.apache.commons.beanutils.BeanUtils;
 @ViewScoped
 @ManagedBean
 public class ClienteBean extends BaseBean implements Serializable {
+
     @EJB
     private ClienteServicio clienteServicio;
     private List<Cliente> clientes;
     private Cliente cliente;
     private Cliente clienteSelected;
+
+    ValidacionesInputBean validacion = new ValidacionesInputBean();
 
     public ClienteServicio getClienteServicio() {
         return clienteServicio;
@@ -61,34 +64,33 @@ public class ClienteBean extends BaseBean implements Serializable {
     public void setClienteSelected(Cliente clienteSelected) {
         this.clienteSelected = clienteSelected;
     }
-    
+
     @PostConstruct
-    public void inicializar(){
+    public void inicializar() {
         clientes = clienteServicio.obtenerTodas();
-        
+
     }
-    
+
     @Override
     public void nuevo() {
         super.nuevo();
         this.cliente = new Cliente();
     }
-    
-    
+
     @Override
     public void modificar() {
 
         super.modificar();
         this.cliente = new Cliente();
         try {
-            BeanUtils.copyProperties(this.cliente,this.clienteSelected);
-            
+            BeanUtils.copyProperties(this.cliente, this.clienteSelected);
+
         } catch (Exception e) {
-            FacesContext context = FacesContext.getCurrentInstance(); 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
     }
-    
+
     @Override
     public void eliminar() {
         super.eliminar();
@@ -96,48 +98,129 @@ public class ClienteBean extends BaseBean implements Serializable {
         try {
             BeanUtils.copyProperties(this.cliente, this.clienteSelected);
         } catch (Exception e) {
-            FacesContext context = FacesContext.getCurrentInstance(); 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
     }
-    
+
     public void aceptar() {
-        FacesContext context = FacesContext.getCurrentInstance(); 
+        FacesContext context = FacesContext.getCurrentInstance();
         if (super.isEnNuevo()) {
-            try {
-                //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
-                
-                this.clienteServicio.crearCliente(this.cliente);
-                this.clientes.add(0,this.cliente);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: "+this.cliente.getNombre(), null));
-            } catch (Exception e) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
-        } else if (super.isEnModificar()){
-            try {
-                this.clienteServicio.actualiarCliente(this.cliente);
-                BeanUtils.copyProperties(this.clienteSelected, this.cliente);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: "+this.cliente.getNombre(), null));
-            } catch (Exception e) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
-        } else if (super.isEnEliminar()){
+            if (validarCliente()) {
+                try {
+                    this.clienteServicio.crearCliente(this.cliente);
+                    this.clientes.add(0, this.cliente);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.cliente.getNombre(), null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede ingresar el cliente ya que contiene datos erroneos ", null));
+            }
+        } else if (super.isEnModificar()) {
+            if (validarCliente()) {
+                try {
+                    this.clienteServicio.actualiarCliente(this.cliente);
+                    BeanUtils.copyProperties(this.clienteSelected, this.cliente);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: " + this.cliente.getNombre(), null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede actualizar el cliente ya que contiene datos erroneos ", null));
+            }
+        } else if (super.isEnEliminar()) {
             try {
                 this.clienteServicio.eliminarCliente(this.cliente.getCodigo());
                 this.clientes.remove(this.cliente);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: "+this.cliente.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: " + this.cliente.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            } 
+            }
         }
         this.cancelar();
     }
-    
-    
+
     public void cancelar() {
         super.reset();
         this.cliente = null;
         this.clienteSelected = null;
     }
-    
+
+    public void validateNombre() {
+
+        String resultado = validacion.validateTextoSoloLetras(cliente.getNombre(), 100);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public void validateIdentificacion() {
+
+        String resultado = validacion.validateNumeroEntero(cliente.getIdentificacion(), 13);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public void validateDireccion() {
+
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public void validateTelefono() {
+
+        String resultado = validacion.validateNumeroEntero(cliente.getTelefono(), 10);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public void validateUsuario() {
+
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public void validateClave() {
+
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 20);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+
+    public boolean validarCliente() {
+
+        if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) == "se"
+                && validacion.validateNumeroEntero(cliente.getIdentificacion(), 13) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) == "se"
+                && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 20) == "se") {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
