@@ -81,8 +81,14 @@ and open the template in the editor.
 
                                     <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
                                     <p:inputText id="correoElectronico" value="#{empresaBean.empresa.correoElectronico}" requiredMessage="Ingrese el correo electronico"
-                                                 required="true" label="correoElectronico" />
-                                    <p:message for="correoElectronico" />
+                                                 required="true" label="correoElectronico" >
+                                        <p:ajax event="blur"
+                                                listener="#{empresaBean.validateEmail}"
+                                                update="messageCorreoElectronico" />
+                                    </p:inputText>
+                                    <p:messages id="messageCorreoElectronico" showDetail="true" showSummary="true"/>
+                                    
+                                    
                                     <p:spacer />
                                     <p:commandButton value="Guardar" actionListener="#{empresaBean.aceptar()}"  update="@form" disabled="#{empresaBean.empresa eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" immediate="true" update="@form" />

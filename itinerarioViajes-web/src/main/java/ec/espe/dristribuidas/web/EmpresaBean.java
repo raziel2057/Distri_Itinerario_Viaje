@@ -33,6 +33,7 @@ public class EmpresaBean extends BaseBean implements Serializable {
     private Empresa empresa;
     private Empresa empresaSelected;
     
+    ValidacionesInputBean validacion = new ValidacionesInputBean();
     
 
     public List<Empresa> getEmpresas()  {
@@ -130,14 +131,20 @@ public class EmpresaBean extends BaseBean implements Serializable {
         this.cancelar();
     }
     
-    
- 
-    
-    
     public void cancelar() {
         super.reset();
         this.empresa = null;
         this.empresaSelected = null;
+    }
+    
+    public void validateEmail() {
+
+        String resultado = validacion.validateEmail(empresa.getCorreoElectronico());
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
     }
     
     

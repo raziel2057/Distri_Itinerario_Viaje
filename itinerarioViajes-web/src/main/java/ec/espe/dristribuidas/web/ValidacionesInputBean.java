@@ -30,7 +30,7 @@ public class ValidacionesInputBean {
         String retorno;
 
         if (correo.matches(validator)) {
-            if (correo.length() == LONGITUD_CORREO) {
+            if (correo.length() <= LONGITUD_CORREO) {
                 retorno = "se"; //Sin error.
             } else {
                 retorno = "La longitud del correo excede el limite de "+LONGITUD_CORREO;

@@ -29,7 +29,7 @@ and open the template in the editor.
 
                         <div> <h2> Datos de Lugares registrados </h2> </div>
                             
-                        <p:dataTable var="cliente" value="#{lugarBean.lugares}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                        <p:dataTable var="lugar" value="#{lugarBean.lugares}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
                                      selectionMode="single" selection="#{lugarBean.lugarSelected}" rowKey="#{lugar.codigo}" >
                             <p:ajax event="rowSelect"  update="@form"/>
                             <p:column headerText="Codigo">
@@ -42,11 +42,11 @@ and open the template in the editor.
 
                         </p:dataTable>
                         
-                        <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                        <p:dialog  header="Lugar" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
                             <p:outputPanel id="carDetail" style="text-align:center;">
                                 <p:panelGrid  columns="3" rendered="#{not empty lugarBean.lugar}" columnClasses="label,value">
        
-                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:outputLabel for="nombre" value="Nombre del lugar:" />
                                     <p:inputText id="nombre" value="#{lugarBean.lugar.nombre}"  requiredMessage="Ingrese el nombre"
                                                  required="true" label="nombre" />
                                     <p:message for="nombre" />
@@ -60,9 +60,9 @@ and open the template in the editor.
                         
                         
                          <p:spacer height="10px" />
-                         <p:commandButton value="Nuevo Cliente" actionListener="#{lugarBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
-                         <p:commandButton value="Actualizar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.modificar()}" disabled="#{lugarBean.lugarSelected eq null}" />
-                         <p:commandButton value="Eliminar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.eliminar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                         <p:commandButton value="Nuevo Lugar" actionListener="#{lugarBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                         <p:commandButton value="Actualizar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.modificar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                         <p:commandButton value="Eliminar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.eliminar()}" disabled="#{lugarBean.lugarSelected eq null}" />
                         
 
                     </div>
