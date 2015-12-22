@@ -102,8 +102,12 @@ and open the template in the editor.
                                     <p:message for="clave" />
                                     
                                     <p:outputLabel for="tipo" value="Tipo:" />
-                                    <p:inputText id="tipo" value="#{clienteBean.cliente.tipo}" requiredMessage="Ingrese el Tipo de Cliente  "
-                                                 required="true" label="tipo" />
+                                    <p:selectOneMenu id="tipo" value="#{clienteBean.cliente.tipo}" style="width:125px" requiredMessage="Ingrese el Tipo de Cliente  "
+                                                 required="true" label="tipo">
+                                        <f:selectItem itemLabel="Cliente" itemValue="R" />
+                                        <f:selectItem itemLabel="Administrador" itemValue="A" />
+                                        
+                                    </p:selectOneMenu>
                                     <p:message for="tipo" />
                                     
                                     <p:spacer />
