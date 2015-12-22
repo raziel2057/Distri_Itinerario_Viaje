@@ -79,6 +79,62 @@ and open the template in the editor.
                             
                         </p:dataTable>
                         
+                        <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
+       
+                                    <p:outputLabel for="codigo" value="Código:" />
+                                    <p:inputText id="codigo"  value="#{clienteBean.cliente.codigo}" requiredMessage="Ingrese el codigo"
+                                                 required="false" label="codigo" readonly="#{clienteBean.enModificar or clienteBean.enEliminar}" />
+                                    <p:message for="codigo" />
+
+                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
+                                                 required="true" label="nombre" />
+                                    <p:message for="nombre" />
+
+                                    <p:outputLabel for="identificacion" value="Identificación:" />
+                                    <p:inputText id="identificacion" value="#{clienteBean.cliente.identificacion}" requiredMessage="Ingrese la identificación"
+                                                 required="true" label="identificacion" />
+                                    <p:message for="identificacion" />
+
+                                    <p:outputLabel for="direccion" value="Dirección:" />
+                                    <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" 
+                                                 required="false" label="direccion" />
+                                    <p:message for="direccion" />
+
+                                    <p:outputLabel for="telefono" value="Teléfono:" />
+                                    <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" requiredMessage="Ingrese el teléfono"
+                                                 required="true" label="telefono" />
+                                    <p:message for="telefono" />
+                                    
+                                    <p:outputLabel for="usuario" value="Usuario:" />
+                                    <p:inputText id="usuario" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
+                                                 required="true" label="usuario" />
+                                    <p:message for="usuario" />
+                                    
+                                    <p:outputLabel for="clave" value="Clave:" />
+                                    <p:inputText id="clave" value="#{clienteBean.cliente.clave}" requiredMessage="Ingrese la Clave"
+                                                 required="true" label="clave" />
+                                    <p:message for="clave" />
+                                    
+                                    <p:outputLabel for="tipo" value="Tipo:" />
+                                    <p:inputText id="tipo" value="#{clienteBean.cliente.tipo}" requiredMessage="Ingrese el Tipo de Cliente  "
+                                                 required="true" label="tipo" />
+                                    <p:message for="tipo" />
+                                    
+                                    <p:spacer />
+                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}"  update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                        
+                        
+                         <p:spacer height="10px" />
+                         <p:commandButton value="Nuevo Cliente" actionListener="#{clienteBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                         <p:commandButton value="Actualizar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.modificar()}" disabled="#{clienteBean.clienteSelected eq null}" />
+                         <p:commandButton value="Eliminar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.eliminar()}" disabled="#{clienteBean.clienteSelected eq null}" />
                         
 
                     </div>

@@ -101,5 +101,45 @@ public class ClienteBean extends BaseBean implements Serializable {
         }
     }
     
+    public void aceptar() {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        if (super.isEnNuevo()) {
+            try {
+                //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
+                this.clienteServicio.crearCliente(this.cliente);
+                this.clientes.add(0,this.cliente);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: "+this.cliente.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        } else if (super.isEnModificar()){
+            try {
+                this.clienteServicio.actualiarCliente(this.cliente);
+                BeanUtils.copyProperties(this.clienteSelected, this.cliente);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: "+this.cliente.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        } else if (super.isEnEliminar()){
+            try {
+                this.clienteServicio.eliminarCliente(this.cliente.getCodigo());
+                this.clientes.remove(this.cliente);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: "+this.cliente.getNombre(), null));
+            } catch (Exception e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            } 
+        }
+        this.cancelar();
+    }
+    
+    
+ 
+    
+    
+    public void cancelar() {
+        super.reset();
+        this.cliente = null;
+        this.clienteSelected = null;
+    }
     
 }
