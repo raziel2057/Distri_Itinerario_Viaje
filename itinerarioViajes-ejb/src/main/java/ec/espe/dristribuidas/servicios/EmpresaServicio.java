@@ -51,7 +51,7 @@ public class EmpresaServicio {
      this.empresaDAO.remove(empresaTmp);
     }catch(Exception e)
     {
-        throw new ValidacionException("la sede "+codigoEmpresa+" esta asociada a un candidado");
+        throw new ValidacionException("la empresa "+codigoEmpresa+" esta asociada a un bus");
     }
     }
     

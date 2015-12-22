@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateNoLoged.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="contenidoMenu">
+                    <div class="padding"> 
+                        <a href="inicio.xhtml" >Inicio</a> | 
+                        <a href="empresaCrud.xhtml">Itinerario</a> | 
+                        <a href="clienteCrud.xhtml">Clientes</a> | 
+                        <a href="empresaCrud.xhtml">Rutas</a> | 
+                        <a href="empresaCrud.xhtml">Buses</a> | 
+                        <a href="empresaCrud.xhtml">Hospedaje</a> | 
+                        <a href="empresaCrud.xhtml">Contactos</a> | 
+                        <a href="empresaCrud.xhtml">Empresas</a>                       
+                    </div>
+                </ui:define>
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Datos de Clientes registrados </h2> </div>
+                            
+                        <p:dataTable var="cliente" value="#{clienteBean.clientes}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{clienteBean.clienteSelected}" rowKey="#{cliente.codigo}" >
+                            <p:ajax event="rowSelect"  update="@form"/>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{cliente.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Identificación">
+                                <h:outputText value="#{cliente.identificacion}" />
+                            </p:column>
+
+                            <p:column headerText="Dirección">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+
+                            <p:column headerText="Teléfono">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>
+                            
+                            <p:column headerText="Usuario">
+                                <h:outputText value="#{cliente.usuario}" />
+                            </p:column>
+                            
+                            <p:column headerText="Clave">
+                                <h:outputText value="#{cliente.clave}" />
+                            </p:column>
+                            
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{cliente.tipo eq 'A' ?'Administrador':'Cliente'}" />
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                        
+                        
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+    
+</html>

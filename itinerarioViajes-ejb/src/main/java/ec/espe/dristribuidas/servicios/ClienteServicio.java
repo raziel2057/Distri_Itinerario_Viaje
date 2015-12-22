@@ -6,6 +6,7 @@
 package ec.espe.dristribuidas.servicios;
 
 import ec.espe.dristribuidas.dao.ClienteDAO;
+import ec.espe.dristribuidas.exception.ValidacionException;
 import ec.espe.dristribuidas.modelo.Cliente;
 import java.util.List;
 import javax.ejb.EJB;
@@ -40,6 +41,37 @@ public class ClienteServicio {
         }
         
         return cliente;
+    }
+    
+    public List<Cliente> obtenerTodas(){
+        return this.clienteDAO.findAll();
+    }
+    
+    public Cliente obtenerPorID(Integer codigoCliente){
+        return this.clienteDAO.findById(codigoCliente, false);
+    }
+   public void crearCliente(Cliente cliente) throws ValidacionException {
+        Cliente clienteTmp=this.obtenerPorID(cliente.getCodigo());
+        if(clienteTmp==null){
+            this.clienteDAO.insert(cliente);
+        }
+        else{
+        throw new ValidacionException("El codigo es "+cliente.getCodigo()+" ya existe"); 
+        }
+        
+    }
+    public void actualiarCliente(Cliente cliente){
+        this.clienteDAO.update(cliente);
+    }
+    
+    public void eliminarCliente(Integer codigoCliente){
+    try{
+     Cliente clienteTmp=this.obtenerPorID(codigoCliente);
+     this.clienteDAO.remove(clienteTmp);
+    }catch(Exception e)
+    {
+        throw new ValidacionException("El cliente "+codigoCliente+" esta asociada otra tabla");
+    }
     }
 
 }

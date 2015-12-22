@@ -11,16 +11,7 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <f:view contentType="text/html">
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>PrimeFaces</title>
-            </f:facet>
-
-            <style type="text/css" media="all">
-                @import "images/style.css";
-            </style>
-        </h:head>
+        
         <h:body>
             <ui:composition template="/plantillas/templateNoLoged.xhtml">
                 <ui:define name="contenidoHeader">
@@ -36,7 +27,7 @@ and open the template in the editor.
                     <div class="padding"> 
                         <a href="inicio.xhtml" >Inicio</a> | 
                         <a href="empresaCrud.xhtml">Itinerario</a> | 
-                        <a href="empresaCrud.xhtml">Factura</a> | 
+                        <a href="clienteCrud.xhtml">Clientes</a> | 
                         <a href="empresaCrud.xhtml">Rutas</a> | 
                         <a href="empresaCrud.xhtml">Buses</a> | 
                         <a href="empresaCrud.xhtml">Hospedaje</a> | 
