@@ -134,4 +134,10 @@ public class ServicioBean extends BaseBean implements Serializable {
         this.cancelar();
     }
     
+    public void cancelar() {
+        super.reset();
+        this.servicio = null;
+        this.servicioSelected = null;
+    }
+    
 }
