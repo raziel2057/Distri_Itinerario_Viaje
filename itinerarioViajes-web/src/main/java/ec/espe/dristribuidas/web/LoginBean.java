@@ -15,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -84,7 +85,7 @@ public class LoginBean implements Serializable {
         FacesMessage message = null;
         String direccion="null";
         this.cliente = clienteServicio.buscarClientePorUsuario(username);
-        if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(password)) {
+        if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(DigestUtils.md5Hex(password) )) {
             ((HttpServletRequest) context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Bienvenido"));
             direccion= "inicio?faces-redirect=true";

@@ -16,6 +16,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -105,9 +106,12 @@ public class ClienteBean extends BaseBean implements Serializable {
 
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
+        
         if (super.isEnNuevo()) {
             if (validarCliente()) {
                 try {
+                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave()) ;
+                    this.cliente.setClave(claveEncriptada);
                     this.clienteServicio.crearCliente(this.cliente);
                     this.clientes.add(0, this.cliente);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.cliente.getNombre(), null));
@@ -121,6 +125,7 @@ public class ClienteBean extends BaseBean implements Serializable {
         } else if (super.isEnModificar()) {
             if (validarCliente()) {
                 try {
+                    
                     this.clienteServicio.actualiarCliente(this.cliente);
                     BeanUtils.copyProperties(this.clienteSelected, this.cliente);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: " + this.cliente.getNombre(), null));
@@ -201,7 +206,7 @@ public class ClienteBean extends BaseBean implements Serializable {
 
     public void validateClave() {
 
-        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 20);
+        String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32);
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -216,7 +221,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) == "se"
                 && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
-                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 20) == "se") {
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) == "se") {
             return true;
         } else {
             return false;
