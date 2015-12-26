@@ -56,8 +56,8 @@ and open the template in the editor.
                                     <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
 
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{lugarBean.aceptar()}"  update="@form" disabled="#{lugarBean.lugar eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{lugarBean.cancelar()}" immediate="true" update="@form" />
+                                    <p:commandButton value="Guardar" actionListener="#{lugarBean.aceptar()}"  immediate="true" update="@form" disabled="#{lugarBean.lugar eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{lugarBean.cancelar()}" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

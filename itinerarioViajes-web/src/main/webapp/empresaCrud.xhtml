@@ -107,8 +107,8 @@ and open the template in the editor.
 
 
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{empresaBean.aceptar()}"  update="@form" disabled="#{empresaBean.empresa eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" immediate="true" update="@form" />
+                                    <p:commandButton value="Guardar" actionListener="#{empresaBean.aceptar()}" immediate="true"  update="@form" disabled="#{empresaBean.empresa eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

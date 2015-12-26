@@ -9,6 +9,7 @@
     <h:body>
         <ui:composition template="/plantillas/templateNoLoged.xhtml">
             <ui:define name="contenidoHeader">
+                
                 <p:panel header="Inicio de Sesión">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="usuario" value="Usuario:" />
@@ -17,8 +18,21 @@
                         <p:password id="clave" value="#{loginBean.password}" required="true" />
                     </h:panelGrid>
                     <p:commandButton value="Registrarse" actionListener="#{clienteBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
-                    <p:commandButton value="Aceptar" action="#{loginBean.login()}"/>
+                    <p:commandButton id="loginButton" value="Aceptar" actionListener="#{loginBean.login()}" update="@form"
+             oncomplete="manejarLogin(xhr, status, args)"/>
                 </p:panel>
+                
+                 <script type="text/javascript">
+                    //<![CDATA[
+                    function manejarLogin(xhr, status, args) {
+                      if (!args.validationFailed && args.estaLogeado) {
+                        setTimeout(function() {
+                          window.location = args.view;
+                        }, 500);
+                      }
+                    }
+                  //]]>
+                  </script>
                 
                 <p:dialog  header="Cliente" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
                             <p:outputPanel id="carDetail" style="text-align:center;">
@@ -78,17 +92,8 @@
                                     </p:password>
                                     <p:messages id="messageClave" showDetail="true" showSummary="true"/>
                                     
-                                    <p:outputLabel for="tipo" value="Tipo:" />
-                                    <p:selectOneMenu id="tipo" value="#{clienteBean.cliente.tipo}" style="width:125px" requiredMessage="Seleccione el Tipo de Cliente  "
-                                                 required="true" label="tipo">
-                                        <f:selectItem itemLabel="Cliente" itemValue="R" />
-                                        <f:selectItem itemLabel="Administrador" itemValue="A" />
-                                        
-                                    </p:selectOneMenu>
-                                    <p:message for="tipo" />
-                                    
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}"  update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.resgistroCliente()}"  update="@form" disabled="#{clienteBean.cliente eq null}" action="index.xhtml?faces-redirect=true"/>
                                     <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
@@ -109,4 +114,7 @@
             </ui:define>
         </ui:composition>
     </h:body>
+    
+   
+    
 </html>

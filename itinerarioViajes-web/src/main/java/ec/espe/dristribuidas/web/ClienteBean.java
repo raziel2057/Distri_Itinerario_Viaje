@@ -147,6 +147,28 @@ public class ClienteBean extends BaseBean implements Serializable {
         }
         this.cancelar();
     }
+    
+    public void resgistroCliente()
+    {
+       FacesContext context = FacesContext.getCurrentInstance(); 
+       if (super.isEnNuevo()) {
+            if (validarCliente()) {
+                try {
+                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave()) ;
+                    this.cliente.setClave(claveEncriptada);
+                    this.cliente.setTipo("R");
+                    this.clienteServicio.crearCliente(this.cliente);
+                    this.clientes.add(0, this.cliente);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.cliente.getNombre(), null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede ingresar el cliente ya que contiene datos erroneos ", null));
+            }
+        }
+    }
 
     public void cancelar() {
         super.reset();

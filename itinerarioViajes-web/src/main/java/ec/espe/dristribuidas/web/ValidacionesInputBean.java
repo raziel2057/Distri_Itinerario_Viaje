@@ -45,7 +45,8 @@ public class ValidacionesInputBean {
     public String validateTextoSoloLetras(String texto, int longitudMaxima) { //Incluye letras en mayúscula, minúcula, espacios
         // Reqular expression pattern to validate the format submitted
 
-        String validator = "^\\p{L}+(?: \\p{L}+)*$";
+        //String validator = "^\\p{L}+(?: \\p{L}+)*$";
+        String validator = "^[a-zA-Z ]*$";
 
         String retorno;
         if (texto.matches(validator)) {
@@ -64,7 +65,7 @@ public class ValidacionesInputBean {
     public String validateTextoLetrasNumerosCaracteresEspeciales(String texto, int longitudMaxima) { 
         // Reqular expression pattern to validate the format submitted
 
-        String validator = "^[a-zA-Z0-9]*$";
+        String validator = "^[a-zA-Z0-9 -]*$";
 
         String retorno;
         if (texto.matches(validator)) {
