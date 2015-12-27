@@ -50,7 +50,7 @@ public class ClienteServicio {
     public void crearCliente(Cliente cliente) throws ValidacionException {
 
         this.clienteDAO.insert(cliente);
-
+        this.clienteDAO.flush();
     }
 
     public void actualiarCliente(Cliente cliente) {

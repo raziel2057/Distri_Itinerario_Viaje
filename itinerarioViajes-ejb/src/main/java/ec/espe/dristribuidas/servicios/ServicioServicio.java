@@ -34,6 +34,7 @@ public class ServicioServicio {
 
     public void crearServicio(Servicio servicio) throws ValidacionException {
         this.servicioDAO.insert(servicio);
+        this.servicioDAO.flush();
     }
 
     public void actualiarServicio(Servicio servicio){

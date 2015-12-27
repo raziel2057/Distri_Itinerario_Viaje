@@ -36,6 +36,7 @@ public class EmpresaServicio {
         Empresa empresaTmp=this.obtenerPorID(empresa.getCodigo());
         if(empresaTmp==null){
             this.empresaDAO.insert(empresa);
+            this.empresaDAO.flush();
         }
         else{
         throw new ValidacionException("El codigo es "+empresa.getCodigo()+" ya existe"); 

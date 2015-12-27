@@ -9,11 +9,13 @@ package ec.espe.dristribuidas.servicios;
  *
  * @author ale
  */
+import ec.espe.dristribuidas.common.dao.Order;
 import ec.espe.dristribuidas.dao.ClienteDAO;
 import ec.espe.dristribuidas.dao.LugarDAO;
 import ec.espe.dristribuidas.exception.ValidacionException;
 import ec.espe.dristribuidas.modelo.Cliente;
 import ec.espe.dristribuidas.modelo.Lugar;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -31,6 +33,12 @@ public class LugarServicio {
         return this.lugarDAO.findAll();
     }
     
+    public List<Lugar> obtenerTodasDesc(){
+        List<Lugar> lugaresDesc = this.lugarDAO.findAll();
+       Collections.reverse(lugaresDesc);
+        return lugaresDesc; 
+    }
+    
     public Lugar obtenerPorID(Integer codigoLugar){
         return this.lugarDAO.findById(codigoLugar, false);
     }
@@ -38,6 +46,7 @@ public class LugarServicio {
 
     public void crearLugar(Lugar lugar) throws ValidacionException {
         this.lugarDAO.insert(lugar);
+        this.lugarDAO.flush();
     }
 
     public void actualiarLugar(Lugar lugar){

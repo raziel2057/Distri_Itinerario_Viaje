@@ -59,7 +59,7 @@ public class LugarBean extends BaseBean implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        lugares = lugarServicio.obtenerTodas();
+        lugares = lugarServicio.obtenerTodasDesc();
 
     }
 
