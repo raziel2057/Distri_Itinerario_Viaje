@@ -16,10 +16,20 @@ and open the template in the editor.
             <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
                 <ui:define name="contenidoHeader">
                     <h:form>
+                        <h:outputText value="#{loginBean.username}"/>
                         <p:commandLink id="logout" actionListener="#{loginBean.logout}"
                                        style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
-                            <h:outputText value="logout" />
+                            <h:outputText value="#{ loginBean.loggedIn  ? loginBean.username.concat(', logout'):'logout'}" />
                         </p:commandLink>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            function logout(xhr, status, args) {
+                                setTimeout(function () {
+                                    window.location = 'faces/index.xhtml';
+                                }, 500);
+                            }
+                            //]]>
+                        </script>
                     </h:form>
                 </ui:define>
 
@@ -132,13 +142,5 @@ and open the template in the editor.
         </h:body>       
     </f:view>
 
-    <script type="text/javascript">
-        //<![CDATA[
-        function logout(xhr, status, args) {
-            setTimeout(function () {
-                window.location = 'faces/index.xhtml';
-            }, 500);
-        }
-        //]]>
-    </script>
+    
 </html>
