@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Datos de Rutas registrados </h2> </div>
+                            
+                        <p:dataTable var="ruta" value="#{rutaBean.rutas}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{rutaBean.rutaSelected}" rowKey="#{ruta.codigo}" >
+                            <p:ajax event="rowSelect"  update="@form"/>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{ruta.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{ruta.nombre}" />
+                            </p:column>
+                            
+                            <p:column headerText="Codigo lugar salida">
+                                <h:outputText value="#{ruta.codigoLugarSalida}" />
+                            </p:column>
+                            
+                            <p:column headerText="Codigo lugar llegada">
+                                <h:outputText value="#{ruta.codigoLugarLlegada}" />
+                            </p:column>
+                            
+                            <p:column headerText="Codigo lugar llegada">
+                                <h:outputText value="#{ruta.codigoLugarLlegada}" />
+                            </p:column>
+                            
+                            <p:column headerText="Costo">
+                                <h:outputText value="#{ruta.costo}" />
+                            </p:column>
+                            
+                            <p:column headerText="Tiempo (en horas)">
+                                <h:outputText value="#{ruta.tiempoHoras}" />
+                            </p:column>
+                            
+                            <p:column headerText="KM">
+                                <h:outputText value="#{ruta.kilometros}" />
+                            </p:column>
+                            
+                        </p:dataTable>
+                        
+                        <p:dialog  header="Lugar" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty lugarBean.lugar}" columnClasses="label,value">
+       
+                                    <p:outputLabel for="nombre" value="Nombre:" />
+                                    <p:inputText id="nombre" value="#{rutaBean.ruta.nombre}"  requiredMessage="Ingrese el nombre"
+                                                 required="true" label="nombre" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{rutaBean.validateNombre}"
+                                                update="messageNombre" />
+                                    </p:inputText>
+                                    <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
+                                    
+                                    <p:outputLabel for="codigoLugarLlegada" value="Codigo lugar llegada:" />
+                                    <p:selectOneMenu id="codigoLugarLlegada" value="#{rutaBean.ruta.codigoLugarLlegada}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de llegada "
+                                                 required="true">
+                                        <f:selectItem itemLabel="Cliente" itemValue="R" />
+                                        <f:selectItem itemLabel="Administrador" itemValue="A" />
+                                        
+                                    </p:selectOneMenu>
+                                    <p:message for="codigoLugarLlegada" />
+                                    
+                                    
+
+                                    <p:spacer />
+                                    <p:commandButton value="Guardar" actionListener="#{rutaBean.aceptar()}"  immediate="true" update="@form" disabled="#{rutaBean.ruta eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{rutaBean.cancelar()}" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                        
+                        
+                         <p:spacer height="10px" />
+                         <p:commandButton value="Nuevo Lugar" actionListener="#{lugarBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                         <p:commandButton value="Actualizar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.modificar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                         <p:commandButton value="Eliminar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.eliminar()}" disabled="#{lugarBean.lugarSelected eq null}" />
+                        
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+    
+</html>

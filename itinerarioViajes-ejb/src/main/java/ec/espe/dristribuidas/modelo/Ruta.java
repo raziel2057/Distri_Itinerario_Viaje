@@ -55,12 +55,15 @@ public class Ruta implements Serializable {
     
     @Column(name = "TIEMPO_HORAS", nullable = false)
     private BigDecimal tiempoHoras;
+    
+    @Column(name = "KILOMETROS", nullable = false)
+    private BigDecimal kilometros;
 
-    public Integer getCodigoRuta() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigoRuta(Integer codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -103,6 +106,16 @@ public class Ruta implements Serializable {
     public void setTiempoHoras(BigDecimal tiempoHoras) {
         this.tiempoHoras = tiempoHoras;
     }
+
+    public BigDecimal getKilometros() {
+        return kilometros;
+    }
+
+    public void setKilometros(BigDecimal kilometros) {
+        this.kilometros = kilometros;
+    }
+    
+    
 
     @Override
     public int hashCode() {
