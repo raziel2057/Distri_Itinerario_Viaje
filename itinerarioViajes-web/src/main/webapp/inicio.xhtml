@@ -23,14 +23,7 @@ and open the template in the editor.
         </h:head>
         <h:body>
             <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
-                <ui:define name="contenidoHeader">
-                    <h:form>
-                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
-                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
-                            <h:outputText value="logout" />
-                        </p:commandLink>
-                    </h:form>
-                </ui:define>
+                
 
 
                 <ui:define name="contenido">
@@ -43,13 +36,5 @@ and open the template in the editor.
         </h:body>       
     </f:view>
 
-    <script type="text/javascript">
-        //<![CDATA[
-        function logout(xhr, status, args) {
-            setTimeout(function () {
-                window.location = 'faces/index.xhtml';
-            }, 500);
-        }
-        //]]>
-    </script>
+    
 </html>

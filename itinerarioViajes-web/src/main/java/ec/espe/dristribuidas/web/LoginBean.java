@@ -12,6 +12,7 @@ import ec.espe.dristribuidas.modelo.Cliente;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,7 @@ import org.primefaces.context.RequestContext;
  *
  * @author RAUL
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean
 public class LoginBean implements Serializable {
 
@@ -53,6 +54,16 @@ public class LoginBean implements Serializable {
     public boolean estaLogeado() {
         return loggedIn;
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+    
+    
 
     /*public String login() {
      //RequestContext context = RequestContext.getCurrentInstance();
@@ -103,7 +114,9 @@ public class LoginBean implements Serializable {
         }
         
          FacesContext.getCurrentInstance().addMessage(null, msg);
+            //context.addCallbackParam("usuario", this.cliente.getUsuario());
             context.addCallbackParam("estaLogeado", loggedIn);
+            
             if (loggedIn)
               context.addCallbackParam("view", "faces/inicio.xhtml");
         
@@ -111,9 +124,12 @@ public class LoginBean implements Serializable {
     }
 
     public void logout() {
+        FacesMessage msg = null;
+         msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Adios", this.username);
+         FacesContext.getCurrentInstance().addMessage(null, msg);
        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
-   
+        
         loggedIn = false;
     }
 

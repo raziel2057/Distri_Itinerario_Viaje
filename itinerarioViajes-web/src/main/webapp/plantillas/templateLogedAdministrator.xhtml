@@ -25,9 +25,22 @@ and open the template in the editor.
                     <div class="padding">
                         <h:form>
                             <p:growl id="growl" showDetail="true" life="3000"  />    
-                            <ui:insert name="contenidoHeader">
-                                Header
-                            </ui:insert>
+                           
+                                
+                                <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                               style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                                    <h:outputText value="#{ loginBean.loggedIn  ? loginBean.username.concat(', logout'):'logout'}" />
+                                </p:commandLink>
+                                <script type="text/javascript">
+                                    //<![CDATA[
+                                    function logout(xhr, status, args) {
+                                        setTimeout(function () {
+                                            window.location = 'faces/index.xhtml';
+                                        }, 500);
+                                    }
+                                    //]]>
+                                </script>
+                          
                         </h:form>
                     </div>   
                 </div>
