@@ -102,6 +102,8 @@ public class Correo {
             MimeMultipart multiParte = new MimeMultipart();
             multiParte.addBodyPart(texto);
             multiParte.addBodyPart(adjunto);
+            
+            
 
             // Se compone el correo, dando to, from, subject y el
             // contenido.
