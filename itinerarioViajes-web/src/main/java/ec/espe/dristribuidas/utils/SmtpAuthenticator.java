@@ -14,19 +14,23 @@ import javax.mail.PasswordAuthentication;
  */
 public class SmtpAuthenticator extends Authenticator {
 
+    private String Username;
+    private String PassWord;
+    
     public SmtpAuthenticator() {
 
         super();
+        Username = "saiv.informacion@gmail.com";
+        PassWord = "saiv2015";
     }
 
     @Override
     public PasswordAuthentication getPasswordAuthentication() {
-        String username = "user";
-        String password = "password";
-        if ((username != null) && (username.length() > 0) && (password != null)
-                && (password.length() > 0)) {
 
-            return new PasswordAuthentication(username, password);
+        if ((Username != null) && (Username.length() > 0) && (PassWord != null)
+                && (PassWord.length() > 0)) {
+
+            return new PasswordAuthentication(Username, PassWord);
         }
 
         return null;

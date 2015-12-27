@@ -24,15 +24,24 @@ import javax.mail.internet.MimeMultipart;
  */
 public class Correo {
 
-    public void EnviarCorreoSinArchivoAdjunto(final String Username, final String PassWord, 
-            String To, String Subject, String TextoCorreo) {
+    private String Username;
+
+    public Correo() {
+
+        Username = "saiv.informacion@gmail.com";
+    }
+
+    public void EnviarCorreoSinArchivoAdjunto(String To, String Subject, String TextoCorreo) {
         //Ejemplo de envio
-        //Username: "saiv.informacion@gmail.com"
-        //PassWord: "saiv2015"
         //To: "aledennis.93@gmail.com"
         //Subject: "Titulo correo"
         //TextoCorreo: "Esto es una prueba"
-        
+
+        //Si se necesita que tenga formato el texto
+        //Cambiar message.setText(TextoCorreo);
+        //por
+        //message.setContent(TextoCorreo,"text/html" );
+        //el texto debe venir en html: "<h1>El mensaje de nuestro primer correo HTML</h1>"
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -41,7 +50,7 @@ public class Correo {
         props.put("mail.smtp.port", "587");
 
         SmtpAuthenticator authentication = new SmtpAuthenticator();
-        Session session = Session.getInstance(props,authentication);
+        Session session = Session.getInstance(props, authentication);
 
         try {
 
@@ -59,13 +68,10 @@ public class Correo {
             throw new RuntimeException(e);
         }
     }
-    
-    public void EnviarCorreoConArchivoAdjunto(final String Username, final String PassWord, 
-                                            String To, String Subject, String TextoCorreo, 
-                                            String PathArchivo, String NombreArchivo) {
+
+    public void EnviarCorreoConArchivoAdjunto(String To, String Subject, String TextoCorreo,
+            String PathArchivo, String NombreArchivo) {
         //Ejemplo de envio
-        //Username: "saiv.informacion@gmail.com"
-        //PassWord: "saiv2015"
         //To: "aledennis.93@gmail.com"
         //Subject: "Titulo correo"
         //TextoCorreo: "Esto es una prueba"
@@ -79,7 +85,7 @@ public class Correo {
         props.put("mail.smtp.port", "587");
 
         SmtpAuthenticator authentication = new SmtpAuthenticator();
-        Session session = Session.getInstance(props,authentication);
+        Session session = Session.getInstance(props, authentication);
 
         try {
             // Se compone la parte del texto
@@ -89,7 +95,7 @@ public class Correo {
             // Se compone el adjunto con la imagen
             BodyPart adjunto = new MimeBodyPart();
             adjunto.setDataHandler(
-                new DataHandler(new FileDataSource(PathArchivo)));
+                    new DataHandler(new FileDataSource(PathArchivo)));
             adjunto.setFileName(NombreArchivo);
 
             // Una MultiParte para agrupar texto e imagen.
@@ -108,7 +114,7 @@ public class Correo {
 
             // Se envia el correo.
             Transport.send(message);
-           System.out.println("Su mensaje ha sido enviado");
+            System.out.println("Su mensaje ha sido enviado");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
