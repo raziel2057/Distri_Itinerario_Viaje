@@ -7,8 +7,10 @@ package ec.espe.dristribuidas.web;
 
 import ec.espe.dristribuidas.modelo.Lugar;
 import ec.espe.dristribuidas.modelo.Ruta;
+import ec.espe.dristribuidas.servicios.LugarServicio;
 import ec.espe.dristribuidas.servicios.RutaServicio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.apache.commons.beanutils.BeanUtils;
 
 /**
@@ -31,6 +34,11 @@ public class RutaBean extends BaseBean implements Serializable {
     private List<Ruta> rutas;
     private Ruta ruta;
     private Ruta rutaSelected;
+    private LugarServicio lugarServicio;
+    private List<Lugar> lugares;
+    private List<SelectItem> listaLugares;
+    private Lugar lugarSalida;
+    private Lugar lugarDestino;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
@@ -66,9 +74,59 @@ public class RutaBean extends BaseBean implements Serializable {
         this.rutaSelected = rutaSelected;
     }
 
+    public List<Lugar> getLugares() {
+        return lugares;
+    }
+
+    public void setLugares(List<Lugar> lugares) {
+        this.lugares = lugares;
+    }
+
+    public Lugar getLugarSalida() {
+        return lugarSalida;
+    }
+
+    public void setLugarSalida(Lugar lugarSalida) {
+        this.lugarSalida = lugarSalida;
+    }
+
+    public Lugar getLugarDestino() {
+        return lugarDestino;
+    }
+
+    public void setLugarDestino(Lugar lugarDestino) {
+        this.lugarDestino = lugarDestino;
+    }
+
+    public List<SelectItem> getListaLugares() {
+        return listaLugares;
+    }
+
+    public void setListaLugares(List<SelectItem> listaLugares) {
+        this.listaLugares = listaLugares;
+    }
+
     @PostConstruct
     public void inicializar() {
         rutas = rutaServicio.obtenerTodas();
+
+        lugares = new ArrayList<Lugar>();
+
+        Lugar lugaraux2 = new Lugar();
+        lugaraux2.setCodigo(1);
+        lugaraux2.setNombre("Quito");
+        lugares.add(lugaraux2);
+
+        Lugar lugaraux = new Lugar();
+        lugaraux.setCodigo(2);
+        lugaraux.setNombre("Ambato");
+        lugares.add(lugaraux);
+
+        listaLugares = new ArrayList<SelectItem>();
+
+        for (Lugar lugare : lugares) {
+            listaLugares.add(new SelectItem(lugare.getCodigo(), lugare.getNombre()));
+        }
 
     }
 
@@ -191,18 +249,27 @@ public class RutaBean extends BaseBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
+    
+    public void validateCodigoSalidaLlegada() {
+
+        if(this.ruta.getCodigoLugarSalida()==this.ruta.getCodigoLugarDestino()){
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El lugar de salida no puede ser el mismo que el de llegada"));
+        }
+    }
 
     public boolean validarRuta() {
 
-        if (validacion.validateTextoSoloLetras(ruta.getNombre(), 50) == "se"
-                && validacion.validateNumeroDecimal(this.ruta.getCosto().toString(), 6) == "se"
-                && validacion.validateNumeroDecimal(this.ruta.getTiempoHoras().toString(), 5) == "se"
-                && validacion.validateNumeroDecimal(this.ruta.getKilometros().toString(), 10) == "se") {
-            return true;
-        } else {
-            return false;
-        }
-
+        /*
+         if (validacion.validateTextoSoloLetras(ruta.getNombre(), 50) == "se"
+         && validacion.validateNumeroDecimal(this.ruta.getCosto().toString(), 6) == "se"
+         && validacion.validateNumeroDecimal(this.ruta.getTiempoHoras().toString(), 5) == "se"
+         && validacion.validateNumeroDecimal(this.ruta.getKilometros().toString(), 10) == "se") {
+         return true;
+         } else {
+         return false;
+         }*/
+        return true;
     }
 
 }

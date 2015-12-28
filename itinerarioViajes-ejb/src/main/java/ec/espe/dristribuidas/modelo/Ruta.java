@@ -40,12 +40,12 @@ public class Ruta implements Serializable {
     @ManyToOne(optional = false)
     private Lugar lugarSalida;
     
-    @Column(name = "CODIGO_LUGAR_LLEGADA", nullable = false)
-    private Integer codigoLugarLlegada;
+    @Column(name = "CODIGO_LUGAR_DESTINO", nullable = false)
+    private Integer codigoLugarDestino;
     
-    @JoinColumn(name = "CODIGO_LUGAR_LLEGADA", referencedColumnName = "CODIGO_LUGAR", insertable = false, updatable = false)
+    @JoinColumn(name = "CODIGO_LUGAR_DESTINO", referencedColumnName = "CODIGO_LUGAR", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Lugar lugarLlegada;
+    private Lugar lugarDestino;
     
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;
@@ -75,12 +75,12 @@ public class Ruta implements Serializable {
         this.codigoLugarSalida = codigoLugarSalida;
     }
 
-    public Integer getCodigoLugarLlegada() {
-        return codigoLugarLlegada;
+    public Integer getCodigoLugarDestino() {
+        return codigoLugarDestino;
     }
 
-    public void setCodigoLugarLlegada(Integer codigoLugarLlegada) {
-        this.codigoLugarLlegada = codigoLugarLlegada;
+    public void setCodigoLugarDestino(Integer codigoLugarDestino) {
+        this.codigoLugarDestino = codigoLugarDestino;
     }
 
     public String getNombre() {
@@ -141,7 +141,7 @@ public class Ruta implements Serializable {
 
     @Override
     public String toString() {
-        return "Ruta{" + "codigo=" + codigo + ", codigoLugarSalida=" + codigoLugarSalida + ", codigoLugarLlegada=" + codigoLugarLlegada + ", nombre=" + nombre + ", costo=" + costo + ", tiempoHoras=" + tiempoHoras + '}';
+        return "Ruta{" + "codigo=" + codigo + ", codigoLugarSalida=" + codigoLugarSalida + ", codigoLugarLlegada=" + codigoLugarDestino + ", nombre=" + nombre + ", costo=" + costo + ", tiempoHoras=" + tiempoHoras + '}';
     } 
     
     

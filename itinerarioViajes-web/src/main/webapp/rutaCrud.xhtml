@@ -28,7 +28,7 @@ and open the template in the editor.
                     <div class="padding">
 
                         <div> <h2> Datos de Rutas registrados </h2> </div>
-                            
+
                         <p:dataTable var="ruta" value="#{rutaBean.rutas}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
                                      selectionMode="single" selection="#{rutaBean.rutaSelected}" rowKey="#{ruta.codigo}" >
                             <p:ajax event="rowSelect"  update="@form"/>
@@ -39,37 +39,33 @@ and open the template in the editor.
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{ruta.nombre}" />
                             </p:column>
-                            
+
                             <p:column headerText="Codigo lugar salida">
                                 <h:outputText value="#{ruta.codigoLugarSalida}" />
                             </p:column>
-                            
-                            <p:column headerText="Codigo lugar llegada">
-                                <h:outputText value="#{ruta.codigoLugarLlegada}" />
+
+                            <p:column headerText="Codigo lugar destino">
+                                <h:outputText value="#{ruta.codigoLugarDestino}" />
                             </p:column>
-                            
-                            <p:column headerText="Codigo lugar llegada">
-                                <h:outputText value="#{ruta.codigoLugarLlegada}" />
-                            </p:column>
-                            
+
                             <p:column headerText="Costo">
                                 <h:outputText value="#{ruta.costo}" />
                             </p:column>
-                            
+
                             <p:column headerText="Tiempo (en horas)">
                                 <h:outputText value="#{ruta.tiempoHoras}" />
                             </p:column>
-                            
+
                             <p:column headerText="KM">
                                 <h:outputText value="#{ruta.kilometros}" />
                             </p:column>
-                            
+
                         </p:dataTable>
-                        
-                        <p:dialog  header="Lugar" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+
+                        <p:dialog  header="Ruta" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
                             <p:outputPanel id="carDetail" style="text-align:center;">
-                                <p:panelGrid  columns="3" rendered="#{not empty lugarBean.lugar}" columnClasses="label,value">
-       
+                                <p:panelGrid  columns="3" rendered="#{not empty rutaBean.ruta}" columnClasses="label,value">
+
                                     <p:outputLabel for="nombre" value="Nombre:" />
                                     <p:inputText id="nombre" value="#{rutaBean.ruta.nombre}"  requiredMessage="Ingrese el nombre"
                                                  required="true" label="nombre" > 
@@ -78,31 +74,67 @@ and open the template in the editor.
                                                 update="messageNombre" />
                                     </p:inputText>
                                     <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
-                                    
-                                    <p:outputLabel for="codigoLugarLlegada" value="Codigo lugar llegada:" />
-                                    <p:selectOneMenu id="codigoLugarLlegada" value="#{rutaBean.ruta.codigoLugarLlegada}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de llegada "
-                                                 required="true">
-                                        <f:selectItem itemLabel="Cliente" itemValue="R" />
-                                        <f:selectItem itemLabel="Administrador" itemValue="A" />
-                                        
+
+
+                                    <p:outputLabel for="codigoLugarSalida" value="Codigo lugar salida:" />
+                                    <p:selectOneMenu id="codigoLugarSalida" value="#{rutaBean.ruta.codigoLugarSalida}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de salida "
+                                                     required="true">
+                                        <f:selectItems value="#{rutaBean.listaLugares}" /> 
+                                        <p:ajax event="valueChange" update="messagCodigoS"
+                                                listener="#{rutaBean.validateCodigoSalidaLlegada()}" />
                                     </p:selectOneMenu>
-                                    <p:message for="codigoLugarLlegada" />
-                                    
-                                    
+                                    <p:messages id="messagCodigoS" showDetail="true" showSummary="true"/>
+
+
+                                    <p:outputLabel for="codigoLugarDestino" value="Codigo lugar destino:" />
+                                    <p:selectOneMenu id="codigoLugarDestino" value="#{rutaBean.ruta.codigoLugarDestino}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de destino "
+                                                     required="true">
+                                        <f:selectItems value="#{rutaBean.listaLugares}" /> 
+                                        <p:ajax event="valueChange" update="messagCodigoD"
+                                                listener="#{rutaBean.validateCodigoSalidaLlegada()}" />
+                                    </p:selectOneMenu>
+                                    <p:messages id="messagCodigoD" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="costo" value="Costo:" />
+                                    <p:inputText id="costo" value="#{rutaBean.ruta.costo}"  requiredMessage="Ingrese el costo"
+                                                 required="true" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{rutaBean.validateCosto}"
+                                                update="messagCosto" />
+                                    </p:inputText>
+                                    <p:messages id="messagCosto" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="tiempoHoras" value="Tiempo (en horas):" />
+                                    <p:inputText id="tiempoHoras" value="#{rutaBean.ruta.tiempoHoras}"  requiredMessage="Ingrese el tiempo"
+                                                 required="true" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{rutaBean.validateTiempoHoras}"
+                                                update="messagTiempo" />
+                                    </p:inputText>
+                                    <p:messages id="messagTiempo" showDetail="true" showSummary="true"/>
+
+                                    <p:outputLabel for="kilometros" value="# Kilometros que cubre:" />
+                                    <p:inputText id="kilometros" value="#{rutaBean.ruta.kilometros}"  requiredMessage="Ingrese los kilometros"
+                                                 required="true" > 
+                                        <p:ajax event="keyup"
+                                                listener="#{rutaBean.validateKilometros}"
+                                                update="messagKM" />
+                                    </p:inputText>
+                                    <p:messages id="messagKM" showDetail="true" showSummary="true"/>
 
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{rutaBean.aceptar()}"  immediate="true" update="@form" disabled="#{rutaBean.ruta eq null}"/>
+                                    <p:commandButton value="Guardar" actionListener="#{rutaBean.aceptar()}"  immediate="false" update="@form" disabled="#{rutaBean.ruta eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{rutaBean.cancelar()}" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>
-                        
-                        
-                         <p:spacer height="10px" />
-                         <p:commandButton value="Nuevo Lugar" actionListener="#{lugarBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
-                         <p:commandButton value="Actualizar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.modificar()}" disabled="#{lugarBean.lugarSelected eq null}" />
-                         <p:commandButton value="Eliminar Lugar" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{lugarBean.eliminar()}" disabled="#{lugarBean.lugarSelected eq null}" />
-                        
+
+
+                        <p:spacer height="10px" />
+                        <p:commandButton value="Nueva Ruta" actionListener="#{rutaBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                        <p:commandButton value="Actualizar Ruta" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{rutaBean.modificar()}" disabled="#{rutaBean.rutaSelected eq null}" />
+                        <p:commandButton value="Eliminar Ruta" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{rutaBean.eliminar()}" disabled="#{rutaBean.rutaSelected eq null}" />
+
 
                     </div>
 
@@ -112,5 +144,5 @@ and open the template in the editor.
         </h:body>       
     </f:view>
 
-    
+
 </html>

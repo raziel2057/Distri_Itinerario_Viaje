@@ -33,6 +33,7 @@ public class LugarServicio {
         return this.lugarDAO.findAll();
     }
     
+    
     public List<Lugar> obtenerTodasDesc(){
         List<Lugar> lugaresDesc = this.lugarDAO.findAll();
        Collections.reverse(lugaresDesc);
