@@ -125,7 +125,7 @@ public class ValidacionesInputBean {
             if (numero.length() <= longitudMaxima) {
                 retorno = "se"; //Sin error.
             } else {
-                retorno = "La longitud del texto excede el limite de "+longitudMaxima;
+                retorno = "La longitud del numero excede el limite de "+longitudMaxima;
             }
         } else {
             retorno = "Numero no valido";

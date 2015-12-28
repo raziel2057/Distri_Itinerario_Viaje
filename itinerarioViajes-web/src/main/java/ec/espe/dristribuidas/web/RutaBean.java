@@ -37,8 +37,6 @@ public class RutaBean extends BaseBean implements Serializable {
     private LugarServicio lugarServicio;
     private List<Lugar> lugares;
     private List<SelectItem> listaLugares;
-    private Lugar lugarSalida;
-    private Lugar lugarDestino;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
@@ -82,22 +80,6 @@ public class RutaBean extends BaseBean implements Serializable {
         this.lugares = lugares;
     }
 
-    public Lugar getLugarSalida() {
-        return lugarSalida;
-    }
-
-    public void setLugarSalida(Lugar lugarSalida) {
-        this.lugarSalida = lugarSalida;
-    }
-
-    public Lugar getLugarDestino() {
-        return lugarDestino;
-    }
-
-    public void setLugarDestino(Lugar lugarDestino) {
-        this.lugarDestino = lugarDestino;
-    }
-
     public List<SelectItem> getListaLugares() {
         return listaLugares;
     }
@@ -109,19 +91,22 @@ public class RutaBean extends BaseBean implements Serializable {
     @PostConstruct
     public void inicializar() {
         rutas = rutaServicio.obtenerTodas();
+        
+        //lugares = lugarServicio.obtenerTodas();
 
-        lugares = new ArrayList<Lugar>();
+        // Comenta esto   /*
+         lugares = new ArrayList<Lugar>();
 
-        Lugar lugaraux2 = new Lugar();
-        lugaraux2.setCodigo(1);
-        lugaraux2.setNombre("Quito");
-        lugares.add(lugaraux2);
+         Lugar lugaraux2 = new Lugar();
+         lugaraux2.setCodigo(1);
+         lugaraux2.setNombre("Quito");
+         lugares.add(lugaraux2);
 
-        Lugar lugaraux = new Lugar();
-        lugaraux.setCodigo(2);
-        lugaraux.setNombre("Ambato");
-        lugares.add(lugaraux);
-
+         Lugar lugaraux = new Lugar();
+         lugaraux.setCodigo(2);
+         lugaraux.setNombre("Ambato");
+         lugares.add(lugaraux);
+        //   */
         listaLugares = new ArrayList<SelectItem>();
 
         for (Lugar lugare : lugares) {
@@ -249,27 +234,28 @@ public class RutaBean extends BaseBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
+
     public void validateCodigoSalidaLlegada() {
 
-        if(this.ruta.getCodigoLugarSalida()==this.ruta.getCodigoLugarDestino()){
-             FacesContext.getCurrentInstance().addMessage(null,
+        if (this.ruta.getCodigoLugarSalida() == this.ruta.getCodigoLugarDestino()) {
+            FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El lugar de salida no puede ser el mismo que el de llegada"));
         }
     }
 
     public boolean validarRuta() {
 
-        /*
-         if (validacion.validateTextoSoloLetras(ruta.getNombre(), 50) == "se"
-         && validacion.validateNumeroDecimal(this.ruta.getCosto().toString(), 6) == "se"
-         && validacion.validateNumeroDecimal(this.ruta.getTiempoHoras().toString(), 5) == "se"
-         && validacion.validateNumeroDecimal(this.ruta.getKilometros().toString(), 10) == "se") {
-         return true;
-         } else {
-         return false;
-         }*/
-        return true;
+        validateCodigoSalidaLlegada();
+
+        if (validacion.validateTextoSoloLetras(ruta.getNombre(), 50) == "se"
+                && validacion.validateNumeroDecimal(this.ruta.getCosto().toString(), 6) == "se"
+                && validacion.validateNumeroDecimal(this.ruta.getTiempoHoras().toString(), 5) == "se"
+                && validacion.validateNumeroDecimal(this.ruta.getKilometros().toString(), 10) == "se"
+                && this.ruta.getCodigoLugarSalida() != this.ruta.getCodigoLugarDestino()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

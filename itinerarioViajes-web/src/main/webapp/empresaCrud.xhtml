@@ -76,7 +76,7 @@ and open the template in the editor.
                                                 listener="#{empresaBean.validateCodigo}"
                                                 update="messageCodigo" />
                                     </p:inputText>
-                                    <p:messages id="messageCodigo" showDetail="true" showSummary="true"/>
+                                    <p:messages id="messageCodigo" showDetail="true" showSummary="true" style="width:300px;height: 20px "/>
 
 
                                     <p:outputLabel for="nombre" value="Nombre:" />
@@ -86,7 +86,7 @@ and open the template in the editor.
                                                 listener="#{empresaBean.validateNombre}"
                                                 update="messageNombre" />
                                     </p:inputText>
-                                    <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
+                                    <p:messages id="messageNombre" showDetail="true" showSummary="true" style="width:300px;height: 20px "/>
 
                                     <p:outputLabel for="telefono" value="Telefono:" />
                                     <p:inputText id="telefono" value="#{empresaBean.empresa.telefono}" requiredMessage="Ingrese el telefono"
@@ -95,7 +95,7 @@ and open the template in the editor.
                                                 listener="#{empresaBean.validateTelefono}"
                                                 update="messageTelefono" />
                                     </p:inputText>
-                                    <p:messages id="messageTelefono" showDetail="true" showSummary="true"/>
+                                    <p:messages id="messageTelefono" showDetail="true" showSummary="true" style="width:300px;height: 20px "/>
 
                                     <p:outputLabel for="direccion" value="Dirección:" />
                                     <p:inputText id="direccion" value="#{empresaBean.empresa.direccion}" 
@@ -104,19 +104,21 @@ and open the template in the editor.
                                                 listener="#{empresaBean.validateDireccion()}"
                                                 update="messageDireccion" />
                                     </p:inputText>
-                                    <p:messages id="messageDireccion" showDetail="true" showSummary="true"/>
+                                    <p:messages id="messageDireccion" showDetail="true" showSummary="true" style="width:300px;height: 20px "/>
 
                                     <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
                                     <p:inputText id="correoElectronico" value="#{empresaBean.empresa.correoElectronico}" requiredMessage="Ingrese el correo electronico"
                                                  required="true" label="correoElectronico" >
                                         <p:ajax event="keyup"
                                                 listener="#{empresaBean.validateEmail}"
-                                                update="messageCorreoElectronico" />
+                                                update="messageCorreoElectronico" 
+                                                />
                                     </p:inputText>
-                                    <p:messages id="messageCorreoElectronico" showDetail="true" showSummary="true"/>
+                                    <p:messages id="messageCorreoElectronico" showDetail="true" showSummary="true"  style="width:300px;height: 20px "/>
 
 
                                     <p:spacer />
+                                    
                                     <p:commandButton value="Guardar" actionListener="#{empresaBean.aceptar()}" immediate="false"  update="@form" disabled="#{empresaBean.empresa eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{empresaBean.cancelar()}" update="@form" />
                                 </p:panelGrid>
@@ -128,11 +130,6 @@ and open the template in the editor.
                         <p:commandButton value="Nueva Empresa" actionListener="#{empresaBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('empDialog').show()" />
                         <p:commandButton value="Actualizar Empresa" update="@form" oncomplete="PF('empDialog').show()" icon="ui-icon-search" title="View" actionListener="#{empresaBean.modificar()}" disabled="#{empresaBean.empresaSelected eq null}" />
                         <p:commandButton value="Eliminar Empresa" update="@form" oncomplete="PF('empDialog').show()" icon="ui-icon-search" title="View" actionListener="#{empresaBean.eliminar()}" disabled="#{empresaBean.empresaSelected eq null}" />
-
-
-
-
-
 
                     </div>
 
