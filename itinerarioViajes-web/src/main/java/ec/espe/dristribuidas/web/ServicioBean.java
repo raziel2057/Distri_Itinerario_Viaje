@@ -110,7 +110,7 @@ public class ServicioBean extends BaseBean implements Serializable {
                 
                 this.servicioServicio.crearServicio(this.servicio);
                 this.servicios.add(0,this.servicio);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el lugar: "+this.servicio.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el servicio: "+this.servicio.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             } 
@@ -118,7 +118,7 @@ public class ServicioBean extends BaseBean implements Serializable {
             try {
                 this.servicioServicio.actualiarServicio(this.servicio);
                 BeanUtils.copyProperties(this.servicioSelected, this.servicio);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el lugar: "+this.servicio.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el servicio: "+this.servicio.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             } 
@@ -126,7 +126,7 @@ public class ServicioBean extends BaseBean implements Serializable {
             try {
                 this.servicioServicio.eliminarServicio(this.servicio.getCodigo());
                 this.servicios.remove(this.servicio);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el lugar: "+this.servicio.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el servicio: "+this.servicio.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             } 

@@ -128,7 +128,7 @@ and open the template in the editor.
                                     <p:message for="tipo" />
                                     
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}" immediate="true" update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                                    <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptar()}" immediate="false" update="@form" disabled="#{clienteBean.cliente eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}"  update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>

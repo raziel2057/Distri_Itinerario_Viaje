@@ -96,6 +96,14 @@ public class Bus implements Serializable {
         this.estado = estado;
     }
 
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
