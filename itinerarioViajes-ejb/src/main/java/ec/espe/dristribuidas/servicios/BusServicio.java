@@ -34,8 +34,16 @@ public class BusServicio {
 
 
     public void crearBus(Bus bus) throws ValidacionException {
-        this.busDao.insert(bus);
-        this.busDao.flush();
+        ;
+        
+        Bus busTmp=this.obtenerPorID(bus.getCodigo());
+        if(busTmp==null){
+            this.busDao.insert(bus);
+            this.busDao.flush();
+        }
+        else{
+        throw new ValidacionException("El codigo es "+bus.getCodigo()+" ya existe"); 
+        }
     }
 
     public void actualiarBus(Bus bus){

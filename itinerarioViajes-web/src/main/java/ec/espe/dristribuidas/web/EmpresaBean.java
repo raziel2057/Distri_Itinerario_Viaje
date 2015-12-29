@@ -59,6 +59,8 @@ public class EmpresaBean extends BaseBean implements Serializable {
     public void setEmpresaSelected(Empresa empresaSelected) {
         this.empresaSelected = empresaSelected;
     }
+    
+    
 
     @PostConstruct
     public void inicializar() {

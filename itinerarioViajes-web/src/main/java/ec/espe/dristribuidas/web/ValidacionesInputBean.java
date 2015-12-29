@@ -9,10 +9,7 @@ package ec.espe.dristribuidas.web;
  *
  * @author ale
  */
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+
 
 public class ValidacionesInputBean {
 
@@ -66,6 +63,25 @@ public class ValidacionesInputBean {
         // Reqular expression pattern to validate the format submitted
 
         String validator = "^[a-zA-Z0-9 -]*$";
+
+        String retorno;
+        if (texto.matches(validator)) {
+            if (texto.length() <= longitudMaxima ) {
+                retorno = "se"; //Sin error.
+            } else {
+                retorno = "La longitud del texto excede el limite de "+longitudMaxima;
+            }
+        } else {
+            retorno = "Texto no válidos";
+        }
+
+        return retorno;
+    }
+    
+    public String validateTextoLetrasNumeros(String texto, int longitudMaxima) { 
+        // Reqular expression pattern to validate the format submitted
+
+        String validator = "^[a-zA-Z0-9]*$";
 
         String retorno;
         if (texto.matches(validator)) {
