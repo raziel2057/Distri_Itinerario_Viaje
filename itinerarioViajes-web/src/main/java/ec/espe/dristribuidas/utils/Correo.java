@@ -59,7 +59,8 @@ public class Correo {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(To));
             message.setSubject(Subject);
-            message.setText(TextoCorreo);
+            //message.setText(TextoCorreo);
+            message.setContent(TextoCorreo,"text/html; charset=utf-8");
 
             Transport.send(message);
             System.out.println("Su mensaje ha sido enviado");

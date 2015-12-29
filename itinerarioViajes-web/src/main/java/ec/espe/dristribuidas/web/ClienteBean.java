@@ -7,6 +7,8 @@ package ec.espe.dristribuidas.web;
 
 import ec.espe.dristribuidas.modelo.Cliente;
 import ec.espe.dristribuidas.servicios.ClienteServicio;
+import ec.espe.dristribuidas.utils.Correo;
+import ec.espe.dristribuidas.utils.RandomString;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -166,13 +168,29 @@ public class ClienteBean extends BaseBean implements Serializable {
     public void resgistroCliente() {
         FacesContext context = FacesContext.getCurrentInstance();
         
+        Correo correo = new Correo();
+        
         if (super.isEnNuevo()) {
             if (validarClienteSinClave()) {
                 try {
-                    String claveEncriptada = DigestUtils.md5Hex("12345");
+                    
+                    RandomString randomString = new RandomString(5); //Clave de 5 caracteres
+                    String claveTemporal=randomString.nextString();
+                    String claveEncriptada = DigestUtils.md5Hex(claveTemporal);
                     this.cliente.setClave(claveEncriptada);
                     this.cliente.setTipo("R");
                     this.clienteServicio.crearCliente(this.cliente);
+                    
+                    //Enviar el correo de comprobacion
+                    String subject="Activicación de cuenta SAIV";
+                    
+                    String cuerpo="<h2>Activicación de cuenta SAIV</h2>"+
+                            "<h4>Felicidades usuario "+this.cliente.getUsuario()+", su cuenta ha sido activada. Se le ha asignado la siguiente clave automaticamente: "+claveTemporal+" </h4>"+
+                            "<h4>Por favor ingrese con el usuario que registró  y esta clave. Posteriormente diríjase a la pestaña de "+
+                            "Actualizar datos y cambie su clave</h4>";
+                       
+                    correo.EnviarCorreoSinArchivoAdjunto(this.cliente.getCorreoElectronico(), subject, cuerpo);
+
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el cliente: " + this.cliente.getNombre(), null));
                     enRegistro=true;
                 } catch (Exception e) {
