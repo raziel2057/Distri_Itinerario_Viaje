@@ -51,7 +51,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
     private List<SelectItem> listaBuses;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
-    
+
     private Date fechaMinimaFrecuencia;
 
     public List<Frecuencia> getFrecuencias() {
@@ -117,8 +117,6 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
     public void setFechaMinimaFrecuencia(Date fechaMinimaFrecuencia) {
         this.fechaMinimaFrecuencia = fechaMinimaFrecuencia;
     }
-    
-    
 
     @PostConstruct
     public void inicializar() {
@@ -132,19 +130,19 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         for (Ruta rut : rutas) {
             listaRutas.add(new SelectItem(rut.getCodigo(), rut.getNombre()));
         }
-        
+
         //Cargar buses
         buses = busServicio.obtenerTodas();
         listaBuses = new ArrayList<SelectItem>();
 
         for (Bus bu : buses) {
-            listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo()+" - "+bu.getCodigoEmpresa()));
+            listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + bu.getCodigoEmpresa()));
         }
-        
-        fechaMinimaFrecuencia=new Date();
+
+        fechaMinimaFrecuencia = new Date();
 
     }
-    
+
     @Override
     public void nuevo() {
         super.nuevo();
@@ -176,7 +174,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
     }
-    
+
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (super.isEnNuevo()) {
@@ -211,7 +209,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             try {
                 this.frecuenciaServicio.eliminarFrecuencia(this.frecuencia.getCodigo());
                 this.rutas.remove(this.frecuencia);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la frecuencia " , null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la frecuencia ", null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             }
@@ -224,27 +222,41 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         this.frecuencia = null;
         this.frecuenciaSelected = null;
     }
-    
+
     public void validateFechaSalida() {
 
-
-        if (this.frecuencia.getFechaSalida().after(this.frecuencia.getFechaLlegada())) {
+        if(this.frecuencia.getFechaSalida().after(this.frecuencia.getFechaLlegada())){
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
+        }
+        else if (!this.frecuencia.getFechaSalida().equals(this.frecuencia.getFechaLlegada())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
         }
     }
-    
+
     public void validateFechaLlegada() {
 
-
         if (this.frecuencia.getFechaLlegada().before(this.frecuencia.getFechaSalida())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
+        }
+        else if (!this.frecuencia.getFechaSalida().equals(this.frecuencia.getFechaLlegada())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
         }
     }
 
     private boolean validarFrecuencia() {
-        return this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida());
+
+        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
+            return true;
+        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 }

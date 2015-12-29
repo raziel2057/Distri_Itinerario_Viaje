@@ -29,14 +29,15 @@ and open the template in the editor.
 
                         <div> <h2> Datos de Frecuencias registradas </h2> </div>
 
-                        <p:dataTable var="ruta" value="#{frecuenciaBean.frecuencias}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                        <p:dataTable var="frecuencia" value="#{frecuenciaBean.frecuencias}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
                                      selectionMode="single" selection="#{frecuenciaBean.frecuenciaSelected}" rowKey="#{frecuencia.codigo}" >
                             <p:ajax event="rowSelect"  update="@form"/>
+
                             <p:column headerText="Codigo">
                                 <h:outputText value="#{frecuencia.codigo}" />
                             </p:column>
 
-                            <p:column headerText="Codigo bus">
+                            <p:column headerText="Codigo Bus">
                                 <h:outputText value="#{frecuencia.codigoBus}" />
                             </p:column>
 
@@ -44,14 +45,17 @@ and open the template in the editor.
                                 <h:outputText value="#{frecuencia.codigoRuta}" />
                             </p:column>
 
-                            <p:column headerText="Fecha salida">
-                                <h:outputText value="#{frecuencia.fechaSalida}" />
+                            <p:column headerText="Fecha de salida">
+                                <h:outputText value="#{frecuencia.fechaSalida}">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Fecha llegada">
-                                <h:outputText value="#{frecuencia.fechaLlegada}" />
+                            <p:column headerText="Fecha de llegada">
+                                <h:outputText value="#{frecuencia.fechaLlegada}">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </h:outputText>
                             </p:column>
-
 
                         </p:dataTable>
 
@@ -75,16 +79,20 @@ and open the template in the editor.
 
                                     <p:outputLabel for="fechaSalida" value="Fecha salida:" />
                                     <p:calendar id="fechaSalida" value="#{frecuenciaBean.frecuencia.fechaSalida}" pattern="dd-MM-yyyy" mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="6/1/2017" >
-                                    <p:ajax event="keyup"
-                                                listener="#{rutaBean.validateNombre}"
-                                                update="messageNombre" />
-                                    </p:calendar>p:calendar/>
-                                    <p:messages for="fechaSalida"/>
-                                    
+                                        <p:ajax event="dateSelect"
+                                                listener="#{frecuenciaBean.validateFechaSalida()}"
+                                                update="messageFechaSalida" />
+                                    </p:calendar>
+                                    <p:messages id="messageFechaSalida" showDetail="true" showSummary="true"/>
+
                                     <p:outputLabel for="fechaLlegada" value="Fecha llegada" />
-                                    <p:calendar id="fechaLlegada" value="#{frecuenciaBean.frecuencia.fechaLlegada}" pattern="dd-MM-yyyy" mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="6/1/2017" />
-                                    <p:messages for="fechaLlegada"/>
-                                    
+                                    <p:calendar id="fechaLlegada" value="#{frecuenciaBean.frecuencia.fechaLlegada}" pattern="dd-MM-yyyy" mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="6/1/2017"> 
+                                        <p:ajax event="dateSelect"
+                                                listener="#{frecuenciaBean.validateFechaLlegada()}"
+                                                update="messageFechaLlegada" />
+                                    </p:calendar>
+                                    <p:messages id="messageFechaLlegada" showDetail="true" showSummary="true"/>
+
                                     <p:spacer />
                                     <p:commandButton value="Aceptar" actionListener="#{frecuenciaBean.aceptar()}"  immediate="false" update="@form" disabled="#{frecuenciaBean.frecuencia eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{frecuenciaBean.cancelar()}" update="@form" />
