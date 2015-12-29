@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
+                <ui:define name="contenidoHeader">
+                    <h:form>
+                        <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                       style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                            <h:outputText value="logout" />
+                        </p:commandLink>
+                    </h:form>
+                </ui:define>
+
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Datos de Frecuencias registradas </h2> </div>
+
+                        <p:dataTable var="ruta" value="#{frecuenciaBean.frecuencias}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                     selectionMode="single" selection="#{frecuenciaBean.frecuenciaSelected}" rowKey="#{frecuencia.codigo}" >
+                            <p:ajax event="rowSelect"  update="@form"/>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{frecuencia.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Codigo bus">
+                                <h:outputText value="#{frecuencia.codigoBus}" />
+                            </p:column>
+
+                            <p:column headerText="Codigo ruta">
+                                <h:outputText value="#{frecuencia.codigoRuta}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha salida">
+                                <h:outputText value="#{frecuencia.fechaSalida}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha llegada">
+                                <h:outputText value="#{frecuencia.fechaLlegada}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                        <p:dialog  header="Frecuencia" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail" style="text-align:center;">
+                                <p:panelGrid  columns="3" rendered="#{not empty frecuenciaBean.frecuencia}" columnClasses="label,value">
+
+                                    <p:outputLabel for="codigoBus" value="Bus:" />
+                                    <p:selectOneMenu id="codigoBus" value="#{frecuenciaBean.frecuencia.codigoBus}" style="width:125px" requiredMessage="Seleccione el codigo del bus "
+                                                     required="true">
+                                        <f:selectItems value="#{frecuenciaBean.listaBuses}" /> 
+                                    </p:selectOneMenu>
+                                    <p:messages for="codigoBus"/>
+
+                                    <p:outputLabel for="codigoRuta" value="Ruta:" />
+                                    <p:selectOneMenu id="codigoRuta" value="#{frecuenciaBean.frecuencia.codigoRuta}" style="width:125px" requiredMessage="Seleccione el codigo de la ruta "
+                                                     required="true">
+                                        <f:selectItems value="#{frecuenciaBean.listaRutas}" /> 
+                                    </p:selectOneMenu>
+                                    <p:messages for="codigoRuta"/>
+
+                                    <p:outputLabel for="fechaSalida" value="Fecha salida:" />
+                                    <p:calendar id="fechaSalida" value="#{frecuenciaBean.frecuencia.fechaSalida}" pattern="dd-MM-yyyy" mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="6/1/2017" >
+                                    <p:ajax event="keyup"
+                                                listener="#{rutaBean.validateNombre}"
+                                                update="messageNombre" />
+                                    </p:calendar>p:calendar/>
+                                    <p:messages for="fechaSalida"/>
+                                    
+                                    <p:outputLabel for="fechaLlegada" value="Fecha llegada" />
+                                    <p:calendar id="fechaLlegada" value="#{frecuenciaBean.frecuencia.fechaLlegada}" pattern="dd-MM-yyyy" mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="6/1/2017" />
+                                    <p:messages for="fechaLlegada"/>
+                                    
+                                    <p:spacer />
+                                    <p:commandButton value="Aceptar" actionListener="#{frecuenciaBean.aceptar()}"  immediate="false" update="@form" disabled="#{frecuenciaBean.frecuencia eq null}"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{frecuenciaBean.cancelar()}" update="@form" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+                        <p:spacer height="10px" />
+                        <p:commandButton value="Nueva Frecuencia" actionListener="#{frecuenciaBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                        <p:commandButton value="Actualizar Frecuencia" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{frecuenciaBean.modificar()}" disabled="#{frecuenciaBean.frecuenciaSelected eq null}" />
+                        <p:commandButton value="Eliminar Frecuencia" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{frecuenciaBean.eliminar()}" disabled="#{frecuenciaBean.frecuenciaSelected eq null}" />
+
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+
+</html>

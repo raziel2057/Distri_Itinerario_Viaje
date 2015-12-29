@@ -40,14 +40,6 @@ and open the template in the editor.
                                 <h:outputText value="#{ruta.nombre}" />
                             </p:column>
 
-                            <p:column headerText="Codigo lugar salida">
-                                <h:outputText value="#{ruta.codigoLugarSalida}" />
-                            </p:column>
-
-                            <p:column headerText="Codigo lugar destino">
-                                <h:outputText value="#{ruta.codigoLugarDestino}" />
-                            </p:column>
-
                             <p:column headerText="Costo">
                                 <h:outputText value="#{ruta.costo}" />
                             </p:column>
@@ -76,7 +68,7 @@ and open the template in the editor.
                                     <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
 
 
-                                    <p:outputLabel for="codigoLugarSalida" value="Codigo lugar salida:" />
+                                    <p:outputLabel for="codigoLugarSalida" value="Lugar salida:" />
                                     <p:selectOneMenu id="codigoLugarSalida" value="#{rutaBean.ruta.codigoLugarSalida}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de salida "
                                                      required="true">
                                         <f:selectItems value="#{rutaBean.listaLugares}" /> 
@@ -86,7 +78,7 @@ and open the template in the editor.
                                     <p:messages id="messagCodigoS" showDetail="true" showSummary="true"/>
 
 
-                                    <p:outputLabel for="codigoLugarDestino" value="Codigo lugar destino:" />
+                                    <p:outputLabel for="codigoLugarDestino" value="Lugar destino:" />
                                     <p:selectOneMenu id="codigoLugarDestino" value="#{rutaBean.ruta.codigoLugarDestino}" style="width:125px" requiredMessage="Seleccione el codigo de lugar de destino "
                                                      required="true">
                                         <f:selectItems value="#{rutaBean.listaLugares}" /> 
