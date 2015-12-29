@@ -33,6 +33,9 @@ public class ClienteBean extends BaseBean implements Serializable {
     private Cliente clienteSelected;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
+    
+    //Para el nuevocliente
+    private boolean enRegistro;
 
     public ClienteServicio getClienteServicio() {
         return clienteServicio;
@@ -66,9 +69,20 @@ public class ClienteBean extends BaseBean implements Serializable {
         this.clienteSelected = clienteSelected;
     }
 
+    public boolean isEnRegistro() {
+        return enRegistro;
+    }
+
+    public void setEnRegistro(boolean enRegistro) {
+        this.enRegistro = enRegistro;
+    }
+    
+    
+
     @PostConstruct
     public void inicializar() {
         clientes = clienteServicio.obtenerTodas();
+        enRegistro=false;
 
     }
 
@@ -106,11 +120,11 @@ public class ClienteBean extends BaseBean implements Serializable {
 
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         if (super.isEnNuevo()) {
             if (validarCliente()) {
                 try {
-                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave()) ;
+                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave());
                     this.cliente.setClave(claveEncriptada);
                     this.clienteServicio.crearCliente(this.cliente);
                     this.clientes.add(0, this.cliente);
@@ -125,7 +139,7 @@ public class ClienteBean extends BaseBean implements Serializable {
         } else if (super.isEnModificar()) {
             if (validarCliente()) {
                 try {
-                    
+
                     this.clienteServicio.actualiarCliente(this.cliente);
                     BeanUtils.copyProperties(this.clienteSelected, this.cliente);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: " + this.cliente.getNombre(), null));
@@ -147,31 +161,32 @@ public class ClienteBean extends BaseBean implements Serializable {
         }
         this.cancelar();
     }
-    
-    public void resgistroCliente()
-    {
-       FacesContext context = FacesContext.getCurrentInstance(); 
-       if (super.isEnNuevo()) {
-            if (validarCliente()) {
+
+
+    public void resgistroCliente() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        if (super.isEnNuevo()) {
+            if (validarClienteSinClave()) {
                 try {
-                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave()) ;
+                    String claveEncriptada = DigestUtils.md5Hex("12345");
                     this.cliente.setClave(claveEncriptada);
                     this.cliente.setTipo("R");
                     this.clienteServicio.crearCliente(this.cliente);
-                    this.clientes.add(0, this.cliente);
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.cliente.getNombre(), null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el cliente: " + this.cliente.getNombre(), null));
+                    enRegistro=true;
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
             } else {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "No se puede ingresar el cliente ya que contiene datos erroneos ", null));
+                        "No se puede registrar el cliente ya que contiene datos erroneos ", null));
             }
+        } else {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "No esta en nuevo", null));
         }
-        else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "No esta en nuevo", null));
-            }
+
     }
 
     public void cancelar() {
@@ -227,6 +242,9 @@ public class ClienteBean extends BaseBean implements Serializable {
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        } else if (clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nombre de usuario ya esta registrado"));
         }
     }
 
@@ -239,7 +257,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
     }
-    
+
     public void validateEmail() {
 
         String resultado = validacion.validateEmail(cliente.getCorreoElectronico());
@@ -257,7 +275,25 @@ public class ClienteBean extends BaseBean implements Serializable {
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) == "se"
                 && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
-                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) == "se") {
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) == "se"
+                && validacion.validateEmail(cliente.getCorreoElectronico()) == "se"
+                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean validarClienteSinClave() {
+
+        if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) == "se"
+                && validacion.validateNumeroEntero(cliente.getIdentificacion(), 13) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) == "se"
+                && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
+                && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
+                && validacion.validateEmail(cliente.getCorreoElectronico()) == "se"
+                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) == null){
             return true;
         } else {
             return false;

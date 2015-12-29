@@ -54,6 +54,10 @@ public class LoginBean implements Serializable {
         return loggedIn;
     }
 
+ 
+    
+    
+
     /*public String login() {
      //RequestContext context = RequestContext.getCurrentInstance();
      FacesContext context = FacesContext.getCurrentInstance(); 
