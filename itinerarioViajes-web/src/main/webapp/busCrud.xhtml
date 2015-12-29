@@ -25,12 +25,30 @@ and open the template in the editor.
                         <p:dataTable var="bus" value="#{busBean.buses}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
                                      selectionMode="single" selection="#{busBean.busSelected}" rowKey="#{bus.codigo}" >
                             <p:ajax event="rowSelect"  update="@form"/>
-                            <p:column headerText="Codigo">
+                            <p:column headerText="Placa">
                                 <h:outputText value="#{bus.codigo}" />
                             </p:column>
 
                             <p:column headerText="Empresa">
                                 <h:outputText value="#{bus.empresa.nombre}" />
+                            </p:column>
+                            
+                            <p:column headerText="Marca">
+                                <h:outputText value="#{bus.marca}" />
+                            </p:column>
+                            
+                            <p:column headerText="Modelo">
+                                <h:outputText value="#{bus.modelo}" />
+                            </p:column>
+                            
+                            <p:column headerText="Año">
+                                <h:outputText value="#{bus.anioFacbricacion}" />
+                            </p:column>
+                            
+                            <p:column headerText="Estado">
+                                <h:outputText value="#{bus.estado eq 'A'?'Activo':
+                                                       bus.estado eq 'R' ? 'Reparación':
+                                                       bus.estado eq 'M' ? 'Mantenimiento': 'Inactivo'  }" />
                             </p:column>
 
                         </p:dataTable>

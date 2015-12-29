@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -99,19 +100,30 @@ public class BusBean extends BaseBean implements Serializable{
     
      @PostConstruct
     public void inicializar(){
+        //buses.clear();
         buses = busServicio.obtenerTodas();
-        
+        Empresa empresaTmp;
+        for(int i=0; i< buses.size();i++)
+        {
+            empresaTmp = empresaServicio.obtenerPorID(buses.get(i).getCodigoEmpresa());
+            
+            try {
+                //BeanUtils.copyProperties(this.buses.get(i).getEmpresa(), empresaTmp);
+                this.buses.get(i).setEmpresa(empresaTmp);
+            } catch (Exception e) {
+                FacesContext context = FacesContext.getCurrentInstance(); 
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            }
+            empresaTmp=null;
+        }
         Calendar c = Calendar.getInstance();
         anios = new ArrayList<String>();
         Integer annio = c.get(Calendar.YEAR);
          System.out.println(annio+""+(annio-25));
         for(int i =annio; i>=(annio-25);i--)
         {
-            
             anios.add(i+"");
-            System.out.println(i+""+anios.get(0));
         }
-        // System.out.println(buses.get(0).getEmpresa().getNombre());
         
     }
     
@@ -128,9 +140,10 @@ public class BusBean extends BaseBean implements Serializable{
 
         super.modificar();
         this.bus = new Bus();
-        this.empresa = new Empresa();
+        
         try {
             BeanUtils.copyProperties(this.bus,this.busSelected);
+            //this.empresa =
             
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance(); 
@@ -160,7 +173,9 @@ public class BusBean extends BaseBean implements Serializable{
                 this.busServicio.crearBus(this.bus);
                 this.empresa = empresaServicio.obtenerPorID(this.bus.getCodigoEmpresa());
                 this.bus.setEmpresa(this.empresa);
-                this.buses.add(0,this.bus);
+                //this.buses.add(0,this.bus);
+                this.inicializar();
+                Collections.reverse(this.buses);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el bus: "+this.bus.getCodigo(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -169,6 +184,7 @@ public class BusBean extends BaseBean implements Serializable{
             try {
                 this.busServicio.actualiarBus(this.bus);
                 BeanUtils.copyProperties(this.busSelected, this.bus);
+                this.inicializar();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el bus: "+this.bus.getCodigo(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -176,12 +192,14 @@ public class BusBean extends BaseBean implements Serializable{
         } else if (super.isEnEliminar()){
             try {
                 this.busServicio.eliminarBus(this.bus.getCodigo());
-                this.buses.remove(this.bus);
+                //this.buses.remove(this.bus);
+                this.inicializar();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el bus: "+this.bus.getCodigo(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             } 
         }
+        
         this.cancelar();
     }
     
