@@ -57,12 +57,12 @@ public class Frecuencia implements Serializable {
     @Column(name = "FECHA_LLEGADA", nullable = false)
     private java.util.Date fechaLlegada;
 
-    public Integer getCodigoFrecuencia() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigoFrecuencia(Integer codigoFrecuencia) {
-        this.codigo = codigoFrecuencia;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
     public String getCodigoBus() {

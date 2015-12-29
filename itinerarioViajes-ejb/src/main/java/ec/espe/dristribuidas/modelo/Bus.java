@@ -43,7 +43,7 @@ public class Bus implements Serializable {
     private String modelo;
     
     @Column(name = "ANIO_FABRICACION", nullable = false)
-    private String anioFacbricacion;
+    private String anioFabricacion;
     
     @Column(name = "ESTADO", nullable = false)
     private String estado;
@@ -81,11 +81,11 @@ public class Bus implements Serializable {
     }
 
     public String getAnioFacbricacion() {
-        return anioFacbricacion;
+        return anioFabricacion;
     }
 
-    public void setAnioFacbricacion(String anioFacbricacion) {
-        this.anioFacbricacion = anioFacbricacion;
+    public void setAnioFacbricacion(String anioFabricacion) {
+        this.anioFabricacion = anioFabricacion;
     }
 
     public String getEstado() {
@@ -128,7 +128,7 @@ public class Bus implements Serializable {
 
     @Override
     public String toString() {
-        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", marca=" + marca + ", modelo=" + modelo + ", anioFacbricacion=" + anioFacbricacion + ", estado=" + estado + '}';
+        return "Bus{" + "codigo=" + codigo + ", codigoEmpresa=" + codigoEmpresa + ", marca=" + marca + ", modelo=" + modelo + ", anioFabricacion=" + anioFabricacion + ", estado=" + estado + '}';
     }
     
     
