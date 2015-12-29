@@ -173,7 +173,6 @@ public class ClienteBean extends BaseBean implements Serializable {
         if (super.isEnNuevo()) {
             if (validarClienteSinClave()) {
                 try {
-                    
                     RandomString randomString = new RandomString(5); //Clave de 5 caracteres
                     String claveTemporal=randomString.nextString();
                     String claveEncriptada = DigestUtils.md5Hex(claveTemporal);

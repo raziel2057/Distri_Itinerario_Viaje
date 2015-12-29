@@ -54,10 +54,6 @@ public class LoginBean implements Serializable {
         return loggedIn;
     }
 
- 
-    
-    
-
     /*public String login() {
      //RequestContext context = RequestContext.getCurrentInstance();
      FacesContext context = FacesContext.getCurrentInstance(); 
@@ -91,33 +87,41 @@ public class LoginBean implements Serializable {
         FacesMessage msg = null;
         //String direccion="null";
         this.cliente = clienteServicio.buscarClientePorUsuario(username);
-        if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(DigestUtils.md5Hex(password) )) {
+        if (this.cliente != null && this.cliente.getUsuario().equals(username) && this.cliente.getClave().equals(DigestUtils.md5Hex(password))) {
             //((HttpServletRequest) context.getExternalContext().getRequest()).getSession().setAttribute("usuario", this.cliente);
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Bienvenido"));
             //direccion= "inicio?faces-redirect=true";
             loggedIn = true;
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", username);
+
         } else {
             //FacesContext.getCurrentInstance().addMessage(null, 
-              //      new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario y/o password incorrectos"));
+            //      new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario y/o password incorrectos"));
             //direccion= "index";
             loggedIn = false;
             msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error",
-                             "Credenciales no válidas");
+                    "Credenciales no válidas");
         }
-        
-         FacesContext.getCurrentInstance().addMessage(null, msg);
-            context.addCallbackParam("estaLogeado", loggedIn);
-            if (loggedIn)
-              context.addCallbackParam("view", "faces/inicio.xhtml");
-        
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        context.addCallbackParam("estaLogeado", loggedIn);
+        if (loggedIn) {
+
+            if (this.cliente.getTipo().equals("A")) {
+                context.addCallbackParam("view", "faces/inicio.xhtml");
+            }
+            else{
+                context.addCallbackParam("view", "faces/inicioRegular.xhtml");
+            }
+        }
+
         //return direccion;
     }
 
     public void logout() {
-       HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
-   
+
         loggedIn = false;
     }
 
