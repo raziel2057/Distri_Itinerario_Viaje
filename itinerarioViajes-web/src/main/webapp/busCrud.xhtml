@@ -43,26 +43,26 @@ and open the template in the editor.
                                     <p:inputText id="codigo" value="#{busBean.bus.codigo}"  requiredMessage="Ingrese el código"
                                                  required="true" label="codigo" > 
                                         <p:ajax event="keyup"
-                                                listener="#{lugarBean.validateNombre}"
+                                                listener="#{busBean.validateCodigo()}"
                                                 update="messageCodigo" />
                                     </p:inputText>
                                     <p:messages id="messageCodigo" showDetail="true" showSummary="true"/>
                                     
                                     
-                                    <p:outputLabel for="tipo" value="Tipo:" />
-                                    <p:selectOneMenu id="tipo" value="#{busBean.bus.codigoEmpresa}" style="width:125px" requiredMessage="Seleccione el Tipo de Cliente  "
+                                    <p:outputLabel for="empresa" value="Empresa:" />
+                                    <p:selectOneMenu id="empresa" value="#{busBean.bus.codigoEmpresa}" style="width:125px" requiredMessage="Seleccione una empresa  "
                                                  required="true" label="tipo">
                                         <f:selectItems value="#{empresaBean.empresas}" var="empresa" itemLabel="#{empresa.nombre}" itemValue="#{empresa.codigo}" />
                                        
                                         
                                     </p:selectOneMenu>
-                                    <p:message for="tipo" />
+                                    <p:message for="empresa" />
                                     
                                     <p:outputLabel for="marca" value="Marca del autobús:" />
                                     <p:inputText id="marca" value="#{busBean.bus.marca}"  requiredMessage="Ingrese la marca"
                                                  required="true" label="marca" > 
-                                        <p:ajax event="keyup"
-                                                listener="#{lugarBean.validateNombre}"
+                                       <p:ajax event="keyup"
+                                               listener="#{busBean.validateMarca()}"
                                                 update="messageMarca" />
                                     </p:inputText>
                                     <p:messages id="messageMarca" showDetail="true" showSummary="true"/>
@@ -71,28 +71,28 @@ and open the template in the editor.
                                     <p:inputText id="modelo" value="#{busBean.bus.modelo}"  requiredMessage="Ingrese el Modelo"
                                                  required="true" label="modelo" > 
                                         <p:ajax event="keyup"
-                                                listener="#{lugarBean.validateNombre}"
+                                                listener="#{busBean.validateModelo()}"
                                                 update="messageModelo" />
                                     </p:inputText>
                                     <p:messages id="messageModelo" showDetail="true" showSummary="true"/>
                                     
                                     <p:outputLabel for="anio" value="Año de fabricación:" />
-                                    <p:inputText id="anio" value="#{busBean.bus.anioFacbricacion}"  requiredMessage="Ingrese el Año"
-                                                 required="true" label="anio" > 
-                                        <p:ajax event="keyup"
-                                                listener="#{lugarBean.validateNombre}"
-                                                update="messageAnio" />
-                                    </p:inputText>
-                                    <p:messages id="messageAnio" showDetail="true" showSummary="true"/>
+                                    <p:selectOneMenu id="anio" value="#{busBean.bus.anioFacbricacion}" style="width:125px">
+                                        <f:selectItems value="#{busBean.anios}"/>
+                                        
+                                    </p:selectOneMenu>
+                                    <p:spacer />
                                     
-                                    <p:outputLabel for="estado" value="Estado del autobús:" />
-                                    <p:inputText id="estado" value="#{busBean.bus.estado}"  requiredMessage="Ingrese el código"
-                                                 required="true" label="estado" > 
-                                        <p:ajax event="keyup"
-                                                listener="#{lugarBean.validateNombre}"
-                                                update="messageEstado" />
-                                    </p:inputText>
-                                    <p:messages id="messageEstado" showDetail="true" showSummary="true"/>
+                                    
+                                    
+                                    <p:outputLabel for="estado" value="Estado:" />
+                                    <p:selectOneMenu id="estado" value="#{busBean.bus.estado}" style="width:125px">
+                                        <f:selectItem itemLabel="Activo" itemValue="A" />
+                                        <f:selectItem itemLabel="Mantenimiento" itemValue="M" />
+                                        <f:selectItem itemLabel="Reparación" itemValue="R" />
+                                        <f:selectItem itemLabel="Inactivo" itemValue="I" />
+                                    </p:selectOneMenu>
+                                    <p:spacer />
                                     
 
                                     <p:spacer />
