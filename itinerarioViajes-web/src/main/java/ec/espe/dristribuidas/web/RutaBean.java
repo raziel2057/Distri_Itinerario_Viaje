@@ -34,9 +34,12 @@ public class RutaBean extends BaseBean implements Serializable {
     private List<Ruta> rutas;
     private Ruta ruta;
     private Ruta rutaSelected;
+    @EJB
     private LugarServicio lugarServicio;
     private List<Lugar> lugares;
     private List<SelectItem> listaLugares;
+    
+    private LugarBean lugarbean;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
@@ -92,21 +95,11 @@ public class RutaBean extends BaseBean implements Serializable {
     public void inicializar() {
         rutas = rutaServicio.obtenerTodas();
         
-        //lugares = lugarServicio.obtenerTodas();
+        
 
-        // Comenta esto   /*
-         lugares = new ArrayList<Lugar>();
+       lugares = lugarServicio.obtenerTodas();
 
-         Lugar lugaraux2 = new Lugar();
-         lugaraux2.setCodigo(1);
-         lugaraux2.setNombre("Quito");
-         lugares.add(lugaraux2);
-
-         Lugar lugaraux = new Lugar();
-         lugaraux.setCodigo(2);
-         lugaraux.setNombre("Ambato");
-         lugares.add(lugaraux);
-        //   */
+        
         listaLugares = new ArrayList<SelectItem>();
 
         for (Lugar lugare : lugares) {

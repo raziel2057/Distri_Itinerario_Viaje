@@ -168,6 +168,10 @@ public class ClienteBean extends BaseBean implements Serializable {
                         "No se puede ingresar el cliente ya que contiene datos erroneos ", null));
             }
         }
+        else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No esta en nuevo", null));
+            }
     }
 
     public void cancelar() {
@@ -229,6 +233,16 @@ public class ClienteBean extends BaseBean implements Serializable {
     public void validateClave() {
 
         String resultado = validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32);
+
+        if (!resultado.equals("se")) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
+        }
+    }
+    
+    public void validateEmail() {
+
+        String resultado = validacion.validateEmail(cliente.getCorreoElectronico());
 
         if (!resultado.equals("se")) {
             FacesContext.getCurrentInstance().addMessage(null,

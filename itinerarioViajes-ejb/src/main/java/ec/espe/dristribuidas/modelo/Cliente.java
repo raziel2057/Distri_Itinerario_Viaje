@@ -43,6 +43,9 @@ public class Cliente implements Serializable{
     
     @Column(name = "TIPO", nullable = false)
     private String tipo;
+    
+    @Column(name = "CORREO_ELECTRONICO", nullable = false)
+    private String correoElectronico;
 
     public Integer getCodigo() {
         return codigo;
@@ -107,6 +110,16 @@ public class Cliente implements Serializable{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+    
+    
 
     @Override
     public int hashCode() {

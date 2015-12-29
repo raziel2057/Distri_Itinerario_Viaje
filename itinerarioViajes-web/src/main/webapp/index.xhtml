@@ -92,6 +92,16 @@
                                     </p:password>
                                     <p:messages id="messageClave" showDetail="true" showSummary="true"/>
                                     
+                                    <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                                    <p:inputText id="correoElectronico" value="#{clienteBean.cliente.correoElectronico}" requiredMessage="Ingrese el correo electronico"
+                                                 required="true" label="correoElectronico" >
+                                        <p:ajax event="keyup"
+                                                listener="#{clienteBean.validateEmail}"
+                                                update="messageCorreoElectronico" 
+                                                />
+                                    </p:inputText>
+                                    <p:messages id="messageCorreoElectronico" showDetail="true" showSummary="true"  style="width:300px;height: 20px "/>
+                                    
                                     <p:spacer />
                                     <p:commandButton value="Guardar" actionListener="#{clienteBean.resgistroCliente()}"  update="@form" disabled="#{clienteBean.cliente eq null}" action="index.xhtml?faces-redirect=true"/>
                                     <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />

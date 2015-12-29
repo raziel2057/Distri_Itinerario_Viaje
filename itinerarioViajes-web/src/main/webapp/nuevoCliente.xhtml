@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/plantillas/templateNoLoged.xhtml">
+            <ui:define name="contenidoHeader">
+
+                <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
+
+                    <p:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
+                                 required="true" label="nombre" >
+                        <p:ajax event="keyup"
+                                listener="#{clienteBean.validateNombre}"
+                                update="messageNombre" />
+                    </p:inputText>
+                    <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
+
+                    <p:outputLabel for="identificacion" value="Identificación:" />
+                    <p:inputText id="identificacion" value="#{clienteBean.cliente.identificacion}" requiredMessage="Ingrese la identificación"
+                                 required="true" label="identificacion" > 
+                        <p:ajax event="keyup"
+                                listener="#{clienteBean.validateIdentificacion}"
+                                update="messageIdentificacion" />
+                    </p:inputText>
+                    <p:messages id="messageIdentificacion" showDetail="true" showSummary="true"/>
+
+                    <p:outputLabel for="direccion" value="Dirección:" />
+                    <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" 
+                                 required="false" label="direccion" > 
+                        <p:ajax event="keyup"
+                                listener="#{clienteBean.validateDireccion()}"
+                                update="messageDireccion" />
+                    </p:inputText>
+                    <p:messages id="messageDireccion" showDetail="true" showSummary="true"/>
+
+                    <p:outputLabel for="telefono" value="Teléfono:" />
+                    <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" requiredMessage="Ingrese el teléfono"
+                                 required="true" label="telefono" >
+                        <p:ajax event="keyup"
+                                listener="#{clienteBean.validateTelefono}"
+                                update="messageTelefono" />
+                    </p:inputText>
+                    <p:messages id="messageTelefono" showDetail="true" showSummary="true"/>
+
+                    <p:outputLabel for="user" value="Usuario:" />
+                    <p:inputText id="user" placeholder="Usuario" value="#{clienteBean.cliente.usuario}" requiredMessage="Ingrese el Usuario"
+                                 required="true" label="user"> 
+                        <p:ajax event="keyup"
+                                listener="#{clienteBean.validateUsuario}"
+                                update="messageUsuario" />
+                    </p:inputText>
+                    <p:messages id="messageUsuario" showDetail="true" showSummary="true"/>
+
+                    <p:spacer />
+                    <p:commandButton value="Guardar" actionListener="#{clienteBean.resgistroCliente()}"  update="@form" disabled="#{clienteBean.cliente eq null}" action="index.xhtml?faces-redirect=true"/>
+                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form" />
+                </p:panelGrid>
+
+        </ui:composition>
+    </h:body>
+
+
+
+</html>
