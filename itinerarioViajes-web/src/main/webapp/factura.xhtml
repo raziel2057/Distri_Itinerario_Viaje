@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Inicio</title>
+            </f:facet>
+
+            <style type="text/css" media="all">
+                @import "images/style.css";
+            </style>
+        </h:head>
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedRegular.xhtml">
+
+                <ui:define name="contenido">
+
+                    <div id="box"> 
+                        <strong>Sus datos registrados en las facturas</strong>
+
+                        <p:spacer height="10px" />
+
+                        <p:panelGrid  columns="2" columnClasses="label,label">
+
+                            <p:outputLabel value="Nombre del cliente:" />
+                            <p:outputLabel value="#{ facturaBean.cliente.nombre}" />
+
+                            <p:outputLabel value="Identificación:" />
+                            <p:outputLabel value="#{ facturaBean.cliente.identificacion}" />
+
+                            <p:outputLabel value="Dirección:" />
+                            <p:outputLabel value="#{ facturaBean.cliente.direccion}" />
+
+                            <p:outputLabel value="Teléfono" />
+                            <p:outputLabel value="#{ facturaBean.cliente.telefono}" />
+                        </p:panelGrid>
+                    </div>
+
+                    <p:spacer height="10px" />
+
+                    <p:dataTable var="factura" value="#{facturaBean.facturasCliente}"  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
+                                 selectionMode="single" selection="#{facturaBean.facturaSelected}" rowKey="#{factura.codigo}" >
+                        <p:ajax event="rowSelect"  update="@form"/>
+
+                        <p:column headerText="Codigo Factura">
+                            <h:outputText value="#{factura.codigo}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha de emision">
+                            <h:outputText value="#{factura.fechaEmision}">
+                                <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Costo total">
+                            <h:outputText value="#{factura.costoTotal}" />
+                        </p:column>
+                    </p:dataTable>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+
+</html>

@@ -54,6 +54,16 @@ public class LoginBean implements Serializable {
         return loggedIn;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    
+
     /*public String login() {
      //RequestContext context = RequestContext.getCurrentInstance();
      FacesContext context = FacesContext.getCurrentInstance(); 
