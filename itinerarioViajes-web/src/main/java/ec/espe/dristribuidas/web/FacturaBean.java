@@ -6,7 +6,9 @@
 package ec.espe.dristribuidas.web;
 
 import ec.espe.dristribuidas.modelo.Cliente;
+import ec.espe.dristribuidas.modelo.DetalleFactura;
 import ec.espe.dristribuidas.modelo.Factura;
+import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
 import ec.espe.dristribuidas.servicios.FacturaServicio;
 import java.io.Serializable;
 import java.util.List;
@@ -29,15 +31,20 @@ public class FacturaBean extends BaseBean implements Serializable {
 
     @EJB
     private FacturaServicio facturaServicio;
-    private List<Factura> facturas;
-    private List<Factura> facturasCliente;
+    private List<Factura> facturas; //Todas las facturas de la table Facturas
+    private List<Factura> facturasCliente; //Todas las facturas asociadas a un cliente
     private Factura factura;
     private Factura facturaSelected;
 
+    @EJB
+    private DetalleFacturaServicio detalleFacturaServicio;
+    private List<DetalleFactura> detallesFactura; //Todos los detalles de una factura
+    
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
     @ManagedProperty(value = "#{loginBean}")
     private LoginBean datosLogin;
+    
     
     private Cliente cliente;
 
@@ -88,6 +95,14 @@ public class FacturaBean extends BaseBean implements Serializable {
     public void setFacturasCliente(List<Factura> facturasCliente) {
         this.facturasCliente = facturasCliente;
     }
+
+    public List<DetalleFactura> getDetallesFactura() {
+        return detallesFactura;
+    }
+
+    public void setDetallesFactura(List<DetalleFactura> detallesFactura) {
+        this.detallesFactura = detallesFactura;
+    }
     
     
 
@@ -111,7 +126,8 @@ public class FacturaBean extends BaseBean implements Serializable {
     @Override
     public void nuevo() {
         super.nuevo();
-        this.factura = new Factura();
+        this.factura = new Factura(); 
+        //Para la nueva factura aqui se deber[ia cargar el factura.cliente con this.cliente
     }
 
     @Override
@@ -187,6 +203,12 @@ public class FacturaBean extends BaseBean implements Serializable {
         this.factura = null;
         this.facturaSelected = null;
     }
+    
+    public void mostrarDetallesFactura(){
+        detallesFactura=detalleFacturaServicio.obtenerTodasPorIDFactura(this.facturaSelected.getCodigo());        
+        
+    }
+    
 
     public void validateCostoTotal() {
 
