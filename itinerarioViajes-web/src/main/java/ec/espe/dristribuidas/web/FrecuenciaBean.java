@@ -51,7 +51,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
     private BusServicio busServicio;
     private List<Bus> buses;
     private List<SelectItem> listaBuses;
-    
+
     @EJB
     private EmpresaServicio empresaServicio;
 
@@ -136,31 +136,29 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             listaRutas.add(new SelectItem(rut.getCodigo(), rut.getNombre()));
         }
 
-        
         Ruta rutaTemp;
-        for(int i=0; i< frecuencias.size();i++)
-        {
+        for (int i = 0; i < frecuencias.size(); i++) {
             rutaTemp = rutaServicio.obtenerPorID(frecuencias.get(i).getCodigoRuta());
-           
+
             try {
                 //BeanUtils.copyProperties(this.buses.get(i).getEmpresa(), empresaTmp);
                 this.frecuencias.get(i).setRuta(rutaTemp);
             } catch (Exception e) {
-                FacesContext context = FacesContext.getCurrentInstance(); 
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
             }
-            rutaTemp=null;
+            rutaTemp = null;
         }
         //Cargar buses
         buses = busServicio.obtenerTodas();
         listaBuses = new ArrayList<SelectItem>();
-        
+
         Empresa empresaTemp;
         for (Bus bu : buses) {
-            
+
             empresaTemp = empresaServicio.obtenerPorID(bu.getCodigoEmpresa());
             listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + empresaTemp.getNombre()));
-            empresaTemp=null;
+            empresaTemp = null;
         }
 
         fechaMinimaFrecuencia = new Date();
@@ -249,26 +247,29 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     public void validateFechaSalida() {
 
-        if(this.frecuencia.getFechaSalida().after(this.frecuencia.getFechaLlegada())){
+        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
+
+        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+
+        } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
-        }
-        else if (!this.frecuencia.getFechaSalida().equals(this.frecuencia.getFechaLlegada())) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
-        }
+       }
+        
+        
     }
 
     public void validateFechaLlegada() {
 
-        if (this.frecuencia.getFechaLlegada().before(this.frecuencia.getFechaSalida())) {
+        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
+
+        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+
+        } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
         }
-        else if (!this.frecuencia.getFechaSalida().equals(this.frecuencia.getFechaLlegada())) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
-        }
+
     }
 
     private boolean validarFrecuencia() {
