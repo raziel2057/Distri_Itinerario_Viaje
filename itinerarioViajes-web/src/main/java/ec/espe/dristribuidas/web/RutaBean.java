@@ -36,6 +36,7 @@ public class RutaBean extends BaseBean implements Serializable {
     private Ruta rutaSelected;
     @EJB
     private LugarServicio lugarServicio;
+
     private List<Lugar> lugares;
     private List<SelectItem> listaLugares;
 
@@ -89,6 +90,7 @@ public class RutaBean extends BaseBean implements Serializable {
         this.listaLugares = listaLugares;
     }
 
+
     @PostConstruct
     public void inicializar() {
         rutas = rutaServicio.obtenerTodas();
@@ -99,6 +101,25 @@ public class RutaBean extends BaseBean implements Serializable {
 
         for (Lugar lugare : lugares) {
             listaLugares.add(new SelectItem(lugare.getCodigo(), lugare.getNombre()));
+        }
+        
+        Lugar lugarTemp1;
+        Lugar lugarTemp2;
+        for(int i=0; i< rutas.size();i++)
+        {
+            lugarTemp1 = lugarServicio.obtenerPorID(rutas.get(i).getCodigoLugarSalida());
+            lugarTemp2 = lugarServicio.obtenerPorID(rutas.get(i).getCodigoLugarDestino());
+            
+            try {
+                //BeanUtils.copyProperties(this.buses.get(i).getEmpresa(), empresaTmp);
+                this.rutas.get(i).setLugarSalida(lugarTemp1);
+                this.rutas.get(i).setLugarDestino(lugarTemp2);
+            } catch (Exception e) {
+                FacesContext context = FacesContext.getCurrentInstance(); 
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            }
+            lugarTemp1=null;
+            lugarTemp2=null;
         }
 
     }
@@ -175,6 +196,7 @@ public class RutaBean extends BaseBean implements Serializable {
             }
         }
         this.cancelar();
+        inicializar();
     }
 
     public void cancelar() {

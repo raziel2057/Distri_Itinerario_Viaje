@@ -39,6 +39,14 @@ and open the template in the editor.
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{ruta.nombre}" />
                             </p:column>
+                            
+                            <p:column headerText="Lugar de salida">
+                                <h:outputText value="#{ruta.lugarSalida.nombre}" />
+                            </p:column>
+                            
+                            <p:column headerText="Lugar de destino">
+                                <h:outputText value="#{ruta.lugarDestino.nombre}" />
+                            </p:column>
 
                             <p:column headerText="Costo">
                                 <h:outputText value="#{ruta.costo}" />

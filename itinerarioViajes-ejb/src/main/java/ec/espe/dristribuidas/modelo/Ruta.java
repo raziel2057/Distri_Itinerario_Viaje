@@ -114,6 +114,22 @@ public class Ruta implements Serializable {
     public void setKilometros(BigDecimal kilometros) {
         this.kilometros = kilometros;
     }
+
+    public Lugar getLugarSalida() {
+        return lugarSalida;
+    }
+
+    public void setLugarSalida(Lugar lugarSalida) {
+        this.lugarSalida = lugarSalida;
+    }
+
+    public Lugar getLugarDestino() {
+        return lugarDestino;
+    }
+
+    public void setLugarDestino(Lugar lugarDestino) {
+        this.lugarDestino = lugarDestino;
+    }
     
     
 

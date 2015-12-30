@@ -34,6 +34,7 @@ public class RutaServicio {
 
     public void crearRuta(Ruta ruta) throws ValidacionException {
         this.rutaDAO.insert(ruta);
+        this.rutaDAO.flush();
     }
 
     public void actualiarRuta(Ruta ruta) {

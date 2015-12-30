@@ -7,10 +7,12 @@ package ec.espe.dristribuidas.web;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import ec.espe.dristribuidas.modelo.Bus;
+import ec.espe.dristribuidas.modelo.Empresa;
 import ec.espe.dristribuidas.modelo.Frecuencia;
 import ec.espe.dristribuidas.modelo.Lugar;
 import ec.espe.dristribuidas.modelo.Ruta;
 import ec.espe.dristribuidas.servicios.BusServicio;
+import ec.espe.dristribuidas.servicios.EmpresaServicio;
 import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.RutaServicio;
 import java.io.Serializable;
@@ -49,6 +51,9 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
     private BusServicio busServicio;
     private List<Bus> buses;
     private List<SelectItem> listaBuses;
+    
+    @EJB
+    private EmpresaServicio empresaServicio;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
@@ -131,16 +136,34 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             listaRutas.add(new SelectItem(rut.getCodigo(), rut.getNombre()));
         }
 
+        
+        Ruta rutaTemp;
+        for(int i=0; i< frecuencias.size();i++)
+        {
+            rutaTemp = rutaServicio.obtenerPorID(frecuencias.get(i).getCodigoRuta());
+           
+            try {
+                //BeanUtils.copyProperties(this.buses.get(i).getEmpresa(), empresaTmp);
+                this.frecuencias.get(i).setRuta(rutaTemp);
+            } catch (Exception e) {
+                FacesContext context = FacesContext.getCurrentInstance(); 
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado",  e.getMessage()));
+            }
+            rutaTemp=null;
+        }
         //Cargar buses
         buses = busServicio.obtenerTodas();
         listaBuses = new ArrayList<SelectItem>();
-
+        
+        Empresa empresaTemp;
         for (Bus bu : buses) {
-            listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + bu.getCodigoEmpresa()));
+            
+            empresaTemp = empresaServicio.obtenerPorID(bu.getCodigoEmpresa());
+            listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + empresaTemp.getNombre()));
+            empresaTemp=null;
         }
 
         fechaMinimaFrecuencia = new Date();
-
     }
 
     @Override
@@ -215,6 +238,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             }
         }
         this.cancelar();
+        inicializar();
     }
 
     public void cancelar() {

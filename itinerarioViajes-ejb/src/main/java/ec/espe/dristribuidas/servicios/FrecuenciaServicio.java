@@ -35,6 +35,7 @@ public class FrecuenciaServicio {
 
     public void crearFrencuencia(Frecuencia frecuencia) throws ValidacionException {
         this.frecuenciaDAO.insert(frecuencia);
+        this.frecuenciaDAO.flush();
     }
 
     public void actualiarFrecuencia(Frecuencia frecuencia) {

@@ -97,6 +97,24 @@ public class Frecuencia implements Serializable {
         this.fechaLlegada = fechaLlegada;
     }
 
+    public Bus getBus() {
+        return bus;
+    }
+
+    public void setBus(Bus bus) {
+        this.bus = bus;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 7;
