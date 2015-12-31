@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedRegular.xhtml">
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Mis datos </h2> </div>
+
+                        <p:panelGrid  columns="2" columnClasses="label,label" rendered="#{ empty clienteBean.cliente}">
+                            <p:outputLabel value="Nombre:" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.nombre}" />
+
+                            <p:outputLabel value="Identificación:" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.identificacion}" />
+
+                            <p:outputLabel value="Dirección:" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.direccion}" />
+
+                            <p:outputLabel value="Teléfono" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.telefono}" />
+
+                            <p:outputLabel value="Usuario" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.usuario}" />
+
+                            <p:outputLabel value="Correo electronico" />
+                            <p:outputLabel value="#{ clienteBean.clienteSesion.correoElectronico}" />
+
+                            <p:spacer/>
+                            <p:commandButton value="Actualizar datos" update="@form" 
+                                             oncomplete="PF('cliDialog2').show()" icon="ui-icon-search" 
+                                             title="View" />
+                        </p:panelGrid>
+
+
+                        <p:dialog  header="Confirme su actual clave" widgetVar="cliDialog2" modal="true" 
+                                   showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                            <p:outputPanel id="carDetail2" style="text-align:center;">
+                                <p:panelGrid  columns="3"  columnClasses="label,value">
+
+                                    <p:outputLabel for="claveVieja" value="Clave:" />
+                                    <p:inputText id="claveVieja" value="#{clienteBean.viejaClave}" >  
+                                    </p:inputText>
+                                    <p:spacer />
+
+                                    <p:spacer />
+                                    <p:commandButton value="Aceptar" actionListener="#{clienteBean.confirmarClaveModificarDatosClienteSesion()}" 
+                                                     immediate="false" update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cerrar()}"  update="@form" />
+
+
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+
+                        <p:panelGrid  columns="3" rendered="#{not empty clienteBean.cliente}" columnClasses="label,value">
+
+                            <p:outputLabel for="identificacion" value="Identificación:" />
+                            <p:inputText id="identificacion" value="#{clienteBean.cliente.identificacion}" 
+                                         label="identificacion" readonly="true"> 
+                            </p:inputText>
+                            <p:spacer />
+
+                            <p:outputLabel for="nombre" value="Nombre:" />
+                            <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}"  requiredMessage="Ingrese el nombre"
+                                         required="true" label="nombre" >
+                                <p:ajax event="keyup"
+                                        listener="#{clienteBean.validateNombre}"
+                                        update="messageNombre" />
+                            </p:inputText>
+                            <p:messages id="messageNombre" showDetail="true" showSummary="true"/>
+
+                            <p:outputLabel for="direccion" value="Dirección:" />
+                            <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" 
+                                         required="false" label="direccion" > 
+                                <p:ajax event="keyup"
+                                        listener="#{clienteBean.validateDireccion()}"
+                                        update="messageDireccion" />
+                            </p:inputText>
+                            <p:messages id="messageDireccion" showDetail="true" showSummary="true"/>
+
+                            <p:outputLabel for="telefono" value="Teléfono:" />
+                            <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" requiredMessage="Ingrese el teléfono"
+                                         required="true" label="telefono" >
+                                <p:ajax event="keyup"
+                                        listener="#{clienteBean.validateTelefono}"
+                                        update="messageTelefono" />
+                            </p:inputText>
+                            <p:messages id="messageTelefono" showDetail="true" showSummary="true"/>
+
+                            <p:outputLabel for="usuario" value="Usuario:" />
+                            <p:inputText id="usuario" value="#{clienteBean.cliente.usuario}" 
+                                         label="usuario" readonly="true"> 
+                            </p:inputText>
+                            <p:messages id="messageUsuario" showDetail="true" showSummary="true"/>
+
+                            <p:outputLabel for="clave" value="Clave:" />
+                            <p:inputText id="clave" value="#{clienteBean.nuevaClave}" requiredMessage="Ingrese la Clave"
+                                         required="true" label="clave">  
+                                <p:ajax event="keyup"
+                                        listener="#{clienteBean.validateClave}"
+                                        update="messageClave" />
+                            </p:inputText>
+                            <p:messages id="messageClave" showDetail="true" showSummary="true"/>
+
+                            <p:outputLabel for="correoElectronico" value="Correo Electrónico:" />
+                            <p:inputText id="correoElectronico" value="#{clienteBean.cliente.correoElectronico}" requiredMessage="Ingrese el correo electronico"
+                                         required="true" label="correoElectronico" >
+                                <p:ajax event="keyup"
+                                        listener="#{clienteBean.validateEmail}"
+                                        update="messageCorreoElectronico" 
+                                        />
+                            </p:inputText>
+                            <p:messages id="messageCorreoElectronico" showDetail="true" showSummary="true"  style="width:300px;height: 20px "/>
+
+                            <p:spacer />
+                            <p:commandButton value="Guardar" actionListener="#{clienteBean.aceptarDatosClienteSesion()}" immediate="false" update="@form" disabled="#{clienteBean.cliente eq null}"/>
+                            <p:commandButton value="Cancelar" actionListener="#{clienteBean.cerrar()}"  update="@form" />
+                        </p:panelGrid>
+
+
+
+
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+
+</html>

@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
@@ -35,7 +36,13 @@ public class ClienteBean extends BaseBean implements Serializable {
     private Cliente clienteSelected;
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
-    
+
+    @ManagedProperty(value = "#{loginBean}")
+    private LoginBean datosLogin;
+
+    private Cliente clienteSesion;
+    private String viejaClave;
+    private String nuevaClave; //para cuando se actualizan los datos del cliente
     //Para el nuevocliente
     private boolean enRegistro;
 
@@ -78,14 +85,53 @@ public class ClienteBean extends BaseBean implements Serializable {
     public void setEnRegistro(boolean enRegistro) {
         this.enRegistro = enRegistro;
     }
-    
-    
+
+    public LoginBean getDatosLogin() {
+        return datosLogin;
+    }
+
+    public void setDatosLogin(LoginBean datosLogin) {
+        this.datosLogin = datosLogin;
+    }
+
+    public Cliente getClienteSesion() {
+        return clienteSesion;
+    }
+
+    public void setClienteSesion(Cliente clienteSesion) {
+        this.clienteSesion = clienteSesion;
+    }
+
+    public String getNuevaClave() {
+        return nuevaClave;
+    }
+
+    public void setNuevaClave(String nuevaClave) {
+        this.nuevaClave = nuevaClave;
+    }
+
+    public String getViejaClave() {
+        return viejaClave;
+    }
+
+    public void setViejaClave(String viejaClave) {
+        this.viejaClave = viejaClave;
+    }
 
     @PostConstruct
     public void inicializar() {
         clientes = clienteServicio.obtenerTodas();
-        enRegistro=false;
+        enRegistro = false;
 
+        //Para tener los datos del cliente de la sesion.
+        clienteSesion = new Cliente();
+        try {
+            BeanUtils.copyProperties(this.clienteSesion, this.getDatosLogin().getCliente());
+
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
+        }
     }
 
     @Override
@@ -130,7 +176,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                     this.cliente.setClave(claveEncriptada);
                     this.clienteServicio.crearCliente(this.cliente);
                     this.clientes.add(0, this.cliente);
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la empresa: " + this.cliente.getNombre(), null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el cliente: " + this.cliente.getNombre(), null));
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
@@ -144,7 +190,7 @@ public class ClienteBean extends BaseBean implements Serializable {
 
                     this.clienteServicio.actualiarCliente(this.cliente);
                     BeanUtils.copyProperties(this.clienteSelected, this.cliente);
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la empresa: " + this.cliente.getNombre(), null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el cliente: " + this.cliente.getNombre(), null));
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
@@ -156,7 +202,7 @@ public class ClienteBean extends BaseBean implements Serializable {
             try {
                 this.clienteServicio.eliminarCliente(this.cliente.getCodigo());
                 this.clientes.remove(this.cliente);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino la empresa: " + this.cliente.getNombre(), null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino el cliente: " + this.cliente.getNombre(), null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
             }
@@ -164,34 +210,33 @@ public class ClienteBean extends BaseBean implements Serializable {
         this.cancelar();
     }
 
-
     public void resgistroCliente() {
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         Correo correo = new Correo();
-        
+
         if (super.isEnNuevo()) {
             if (validarClienteSinClave()) {
                 try {
                     RandomString randomString = new RandomString(5); //Clave de 5 caracteres
-                    String claveTemporal=randomString.nextString();
+                    String claveTemporal = randomString.nextString();
                     String claveEncriptada = DigestUtils.md5Hex(claveTemporal);
                     this.cliente.setClave(claveEncriptada);
                     this.cliente.setTipo("R");
                     this.clienteServicio.crearCliente(this.cliente);
-                    
+
                     //Enviar el correo de comprobacion
-                    String subject="Activicación de cuenta SAIV";
-                    
-                    String cuerpo="<h2>Activicación de cuenta SAIV</h2>"+
-                            "<h4>Felicidades usuario "+this.cliente.getUsuario()+", su cuenta ha sido activada. Se le ha asignado la siguiente clave automaticamente: "+claveTemporal+" </h4>"+
-                            "<h4>Por favor ingrese con el usuario que registró  y esta clave. Posteriormente diríjase a la pestaña de "+
-                            "Actualizar datos y cambie su clave</h4>";
-                       
+                    String subject = "Activicación de cuenta SAIV";
+
+                    String cuerpo = "<h2>Activicación de cuenta SAIV</h2>"
+                            + "<h4>Felicidades usuario " + this.cliente.getUsuario() + ", su cuenta ha sido activada. Se le ha asignado la siguiente clave automaticamente: " + claveTemporal + " </h4>"
+                            + "<h4>Por favor ingrese con el usuario que registró  y esta clave. Posteriormente diríjase a la pestaña de "
+                            + "Actualizar datos y cambie su clave</h4>";
+
                     correo.EnviarCorreoSinArchivoAdjunto(this.cliente.getCorreoElectronico(), subject, cuerpo);
 
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro el cliente: " + this.cliente.getNombre(), null));
-                    enRegistro=true;
+                    enRegistro = true;
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
@@ -210,6 +255,68 @@ public class ClienteBean extends BaseBean implements Serializable {
         super.reset();
         this.cliente = null;
         this.clienteSelected = null;
+
+    }
+
+    public void confirmarClaveModificarDatosClienteSesion() {
+
+        String claveEncriptada = DigestUtils.md5Hex(this.viejaClave.trim());
+        if (claveEncriptada.equals(this.clienteSesion.getClave())) {
+            nuevaClave = viejaClave;
+            modificarDatosClienteSesion();
+            
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error",
+                            "Las claves no coinciden "));
+            this.cerrar();
+        }
+    }
+
+    public void cerrar() {
+        this.viejaClave = "";
+        super.reset();
+        this.cliente = null;
+    }
+
+    public void modificarDatosClienteSesion() {
+
+        super.modificar();
+
+        this.cliente = new Cliente();
+        try {
+            BeanUtils.copyProperties(this.cliente, this.clienteSesion);
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
+        }
+
+    }
+
+    public void aceptarDatosClienteSesion() {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (super.isEnModificar()) {
+            if (validarCliente()) {
+                try {
+                    String claveEncriptada = DigestUtils.md5Hex(nuevaClave);
+                    this.cliente.setClave(claveEncriptada);
+                    this.clienteServicio.actualiarCliente(this.cliente);
+                    BeanUtils.copyProperties(this.clienteSesion, this.cliente);
+                    viejaClave = nuevaClave;
+                    nuevaClave = "";
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Su informacion ha sido actualizada", null));
+                } catch (Exception e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "No se puede actualizar su información ya que contiene datos erroneos ", null));
+            }
+        }
+        this.cerrar();
     }
 
     public void validateNombre() {
@@ -294,7 +401,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) == "se"
                 && validacion.validateEmail(cliente.getCorreoElectronico()) == "se"
-                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null){
+                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
             return true;
         } else {
             return false;
@@ -310,7 +417,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                 && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
                 && validacion.validateEmail(cliente.getCorreoElectronico()) == "se"
-                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) == null){
+                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) == null) {
             return true;
         } else {
             return false;
