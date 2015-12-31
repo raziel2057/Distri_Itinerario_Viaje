@@ -21,9 +21,16 @@ and open the template in the editor.
                     <div class="padding">
 
                         <div> <h2> Datos de Clientes registrados </h2> </div>
-
-                        <h:selectOneMenu id="buses" value="#{asientoBean.codigoBus}" required="true" label="Text 3">
-                            <f:selectItems value="#{asientoBean.buses}" var="bus" itemValue="#{bus.codigo}" itemLabel="#{bus.codigo.concat('-'.concat(bus.marca))}" />
+                        
+                        <h:selectOneMenu id="empresas" value="#{asientoBean.codigoEmpresa}" required="true" label="Text 3"  >
+                            <p:ajax event="change"
+                                                listener="#{asientoBean.cargarBuses()}"
+                                                update="buses" />
+                            <f:selectItems value="#{asientoBean.empresas}" var="empresa" itemValue="#{empresa.codigo}" itemLabel="#{empresa.nombre}" />
+                        </h:selectOneMenu>
+                        
+                        <h:selectOneMenu id="buses" value="#{asientoBean.codigoBus}" required="true" label="Text 3" >
+                            <f:selectItems value="#{asientoBean.busesPorEmpresa}" var="bus" itemValue="#{bus.codigo}" itemLabel="#{bus.codigo.concat('-'.concat(bus.marca))}" />
                         </h:selectOneMenu>
                             
 

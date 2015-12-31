@@ -5,17 +5,28 @@
  */
 package ec.espe.dristribuidas.web;
 
+
+import static ch.lambdaj.Lambda.having;
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.select;
 import ec.espe.dristribuidas.modelo.Asiento;
 import ec.espe.dristribuidas.modelo.Bus;
+import ec.espe.dristribuidas.modelo.Empresa;
 import ec.espe.dristribuidas.servicios.AsientoServicio;
 import ec.espe.dristribuidas.servicios.BusServicio;
+import ec.espe.dristribuidas.servicios.EmpresaServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import static org.hamcrest.Matchers.equalTo;
+
 
 /**
  *
@@ -37,7 +48,13 @@ public class AsientoBean extends BaseBean implements Serializable {
     @EJB
     private BusServicio busServicio;
     private List<Bus> buses;
+    private List<Bus> busesPorEmpresa;
     private String codigoBus;
+    
+    @EJB
+    private EmpresaServicio empresaServicio;
+    private List<Empresa> empresas;
+    private String codigoEmpresa;
     
 
     public List<Asiento> getAsientos() {
@@ -105,23 +122,77 @@ public class AsientoBean extends BaseBean implements Serializable {
     public void setBuses(List<Bus> buses) {
         this.buses = buses;
     }
+
+    public List<Bus> getBusesPorEmpresa() {
+        return busesPorEmpresa;
+    }
+
+    public void setBusesPorEmpresa(List<Bus> busesPorEmpresa) {
+        this.busesPorEmpresa = busesPorEmpresa;
+    }
+
+    public List<Empresa> getEmpresas() {
+        return empresas;
+    }
+
+    public void setEmpresas(List<Empresa> empresas) {
+        this.empresas = empresas;
+    }
+
+    public String getCodigoEmpresa() {
+        return codigoEmpresa;
+    }
+
+    public void setCodigoEmpresa(String codigoEmpresa) {
+        this.codigoEmpresa = codigoEmpresa;
+    }
     
     
     @PostConstruct
     public void inicializar()
     {
-        this.buses = this.busServicio.obtenerTodas();
+        this.empresas = this.empresaServicio.obtenerTodas();
+        
+        this.cargarBuses();
+        
+        /*this.busesPorEmpresa = Lambda.select(this.buses, having(on(Bus.class).getCodigoEmpresa(),
+                Matchers.equalTo("")));*/
 
         this.asientos=this.asientoServicio.obtenerTodas();
-        
+        /*this.asientosPorBus =  Lambda.select(this.asientos,having(on(Asiento.class).getCodigoBus(),
+                equalTo(this.codigoBus)));*/
+    }
+    
+    public void cargarBuses()
+    {
+        this.buses = this.busServicio.obtenerTodas();
+        System.out.println("Cosigo empresa: "+this.codigoEmpresa);
+        if(this.codigoEmpresa == null)
+        {
+            this.codigoEmpresa = this.empresas.get(0).getCodigo();
+            System.out.println("Cosigo empresa: "+this.codigoEmpresa);
+        }
+        this.busesPorEmpresa = new ArrayList<>();
+        for(Bus b : this.buses)
+            if (b.getCodigoEmpresa().equals(this.codigoEmpresa)) {
+             this.busesPorEmpresa.add(b);        
+        }
     }
     
     public void cargarAsientos()
     {
-        this.asiento = new Asiento();
-        this.asiento.setCodigoBus(this.codigoBus);
-        this.asientos = this.asientoServicio.obtenerTodas();
-        
+        this.buses = this.busServicio.obtenerTodas();
+        System.out.println("Cosigo empresa: "+this.codigoEmpresa);
+        if(this.codigoEmpresa == null)
+        {
+            this.codigoEmpresa = this.empresas.get(0).getCodigo();
+            System.out.println("Cosigo empresa: "+this.codigoEmpresa);
+        }
+        this.busesPorEmpresa = new ArrayList<>();
+        for(Bus b : this.buses)
+            if (b.getCodigoEmpresa().equals(this.codigoEmpresa)) {
+             this.busesPorEmpresa.add(b);        
+        }
         
     }
     
