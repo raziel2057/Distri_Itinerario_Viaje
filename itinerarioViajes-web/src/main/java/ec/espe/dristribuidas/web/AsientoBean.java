@@ -286,9 +286,27 @@ public class AsientoBean extends BaseBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance(); 
         if (super.isEnNuevo()) {
             try {
-                
-                this.cargarAsientosE();
-                Collections.reverse(this.buses);
+                Integer maxNum = 0;
+                if(this.asientosPorBus.size()>0)
+                    maxNum = Integer.parseInt(this.asientosPorBus.get(this.asientosPorBus.size()-1).getNombre());
+                maxNum++;
+                for(int i = maxNum;i < (maxNum+this.numeroAsientos);i++)
+                {
+                    String nombre ="";
+                    if(i<10)
+                        nombre = "0"+i;
+                    else
+                        nombre = ""+i;
+                    
+                    this.asiento = new Asiento();
+                    this.asiento.setCodigoBus(this.codigoBus);
+                    this.asiento.setNombre(nombre);
+                    this.asiento.setCosto(this.costo);
+                    this.asiento.setCantidad(i);
+                    this.asientoServicio.crearAsiento(this.asiento);
+                }
+                this.cargarAsientos();
+ 
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registraron los asientos correctamente", null));
             } catch (Exception e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));

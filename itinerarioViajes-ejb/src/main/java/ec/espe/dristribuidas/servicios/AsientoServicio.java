@@ -40,16 +40,14 @@ public class AsientoServicio {
 
 
     public void crearAsiento(Asiento asiento) throws ValidacionException {
-        ;
-        
-        Asiento asientoTmp=this.obtenerPorID(asiento.getCodigoAsiento());
-        if(asientoTmp==null){
+
             this.asientoDAO.insert(asiento);
-            this.asientoDAO.flush();
-        }
-        else{
-        throw new ValidacionException("El codigo es "+asiento.getCodigoAsiento()+" ya existe"); 
-        }
+               
+    }
+    
+    public void liberar()
+    {
+        this.asientoDAO.flush(); 
     }
 
     public void actualiarAsiento(Asiento asiento){

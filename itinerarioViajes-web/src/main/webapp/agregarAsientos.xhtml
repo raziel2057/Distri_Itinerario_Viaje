@@ -55,7 +55,7 @@ and open the template in the editor.
                         </p:dataTable>
                         
                         <p:spacer height="10px" />
-                        <p:commandButton id="nuevo" value="Agregar asientos" actionListener="#{asientoBean.nuevo()}" immediate="false" update="@form" oncomplete="PF('asignarDialog').show()"  disabled="#{asientoBean.numeroMaxAsientos eq 0}"/>
+                        <p:commandButton id="nuevo" value="Agregar asientos" actionListener="#{asientoBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('asignarDialog').show()"  disabled="#{asientoBean.numeroMaxAsientos eq 0}"/>
                         
                         <p:dialog  header="Asignar Asientos" widgetVar="asignarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
                             <p:outputPanel id="asientoDetail" style="text-align:center;">
@@ -68,9 +68,15 @@ and open the template in the editor.
                                     </p:selectOneMenu>
                                     <p:spacer />
                                     
+                                    <p:outputLabel for="costo" value="Costo extra:" />
+                                    <p:inputText id="costo" value="#{asientoBean.costo}"  requiredMessage="Ingrese el costo"
+                                                 required="true" label="modelo" > 
+                                        
+                                    </p:inputText>
+                                    <p:messages id="messageCosto" showDetail="true" showSummary="true"/>
 
                                     <p:spacer />
-                                    <p:commandButton value="Guardar" actionListener="#{asientoBean.aceptar()}"  immediate="false" update="@form" disabled="#{asientoBean.asiento eq null}"/>
+                                    <p:commandButton value="Guardar" actionListener="#{asientoBean.aceptar()}"  immediate="false" update="asientos" oncomplete="PF('asignarDialog').hide()" disabled="#{asientoBean.asiento eq null}"/>
                                     <p:commandButton value="Cancelar" actionListener="#{asientoBean.cancelar()}" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
