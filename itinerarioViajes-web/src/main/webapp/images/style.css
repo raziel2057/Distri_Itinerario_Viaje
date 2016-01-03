@@ -467,3 +467,27 @@ table.main_sub tr.title {
 	font-weight: bold;
 	text-align: center;
 }
+
+
+
+.Closed 
+{
+    background-color: #6CE26C !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.Disponible 
+{
+    
+    background-color: #6CE26C !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.Ocupado 
+{
+    background-color: #FA5858 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
