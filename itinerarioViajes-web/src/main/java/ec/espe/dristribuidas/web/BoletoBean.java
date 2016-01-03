@@ -189,6 +189,11 @@ public class BoletoBean implements Serializable {
                 this.boletosPorFrecuencia.add(this.boletos.get(i));
             }
         }
+        for(int i=0;i<this.boletosPorFrecuencia.size();i++)
+        {
+            this.boletosPorFrecuencia.get(i).setAsiento(this.asientoServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getCodigoAsiento()));
+            this.boletosPorFrecuencia.get(i).setFrecuencia(this.frecuenciaServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getCodigoFrecuencia()));
+        }
     }
     
     public void crearBoletos()
@@ -203,9 +208,20 @@ public class BoletoBean implements Serializable {
             {
                 if(this.asientos.get(i).getCodigoBus().equals(frecuenciaTmp.getCodigoBus()))
                 {
-                    this.asientosPorBus.add(this.asientos.get(i));
+                    boolean aux = true;
+                    for(Boleto b:this.boletosPorFrecuencia)
+                    {
+                        if(this.asientos.get(i).getCodigoAsiento().equals(b.getCodigoAsiento()))
+                        {
+                            aux=false;
+                            break;
+                        }
+                    }
+                    if(aux)
+                        this.asientosPorBus.add(this.asientos.get(i));
                 }
             }
+            int cont = 0;
             for(Asiento a:asientosPorBus)
             {
                 this.boleto=new Boleto();
@@ -214,9 +230,10 @@ public class BoletoBean implements Serializable {
                 this.boleto.setCosto(a.getCosto().add(frecuenciaTmp.getRuta().getCosto()));
                 this.boleto.setEstado("D");
                 this.boletoServicio.crearBoleto(this.boleto);
+                cont++;
             }
             this.cargarBoletos();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Los boletos se crearon correctamente", null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se crearon correctamente "+cont+" boletos", null));
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
         } 
