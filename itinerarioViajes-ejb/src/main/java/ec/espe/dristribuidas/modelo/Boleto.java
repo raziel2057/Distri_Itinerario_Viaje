@@ -46,10 +46,12 @@ public class Boleto implements Serializable {
     @JoinColumn(name = "CODIGO_FRECUENCIA", referencedColumnName = "CODIGO_FRECUENCIA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Frecuencia frecuencia;
-    
-    
+       
     @Column(name = "COSTO", nullable = false)
     private BigDecimal costo;
+    
+    @Column(name = "ESTADO", nullable = true)
+    private String estado;
 
     public Integer getCodigo() {
         return codigo;
@@ -83,6 +85,16 @@ public class Boleto implements Serializable {
         this.costo = costo;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
+
     public Asiento getAsiento() {
         return asiento;
     }
@@ -98,6 +110,8 @@ public class Boleto implements Serializable {
     public void setFrecuencia(Frecuencia frecuencia) {
         this.frecuencia = frecuencia;
     }
+    
+    
     
 
     @Override
