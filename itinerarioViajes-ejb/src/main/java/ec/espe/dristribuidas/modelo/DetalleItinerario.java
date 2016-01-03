@@ -35,6 +35,9 @@ public class DetalleItinerario implements Serializable {
     
     @Column(name = "TIEMPO_ESTADIA_HORAS", nullable = false)
     private Integer tiempoEstadiaHoras;
+    
+    @Column(name = "SECUENCIAL", nullable = false)
+    private Integer secuencial;
 
     public Integer getCodigoItinerario() {
         return codigoItinerario;
@@ -60,6 +63,16 @@ public class DetalleItinerario implements Serializable {
         this.tiempoEstadiaHoras = tiempoEstadiaHoras;
     }
 
+    public Integer getSecuencial() {
+        return secuencial;
+    }
+
+    public void setSecuencial(Integer secuencial) {
+        this.secuencial = secuencial;
+    }
+
+    
+    
     public Itinerario getItinerario() {
         return itinerario;
     }
@@ -75,6 +88,7 @@ public class DetalleItinerario implements Serializable {
     public void setBoleto(Boleto boleto) {
         this.boleto = boleto;
     }
+    
     
 
     @Override

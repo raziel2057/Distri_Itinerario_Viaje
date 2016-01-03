@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+
+        <h:body>
+            <ui:composition template="/plantillas/templateLogedRegular.xhtml">
+
+
+
+                <ui:define name="contenido">
+                    <div class="padding">
+
+                        <div> <h2> Crear itinerario </h2> </div>
+                        
+                        <h:selectOneMenu id="lugaresSalida" value="#{itinerarioBean.codigoLugarSalida}" required="true" label="Lugares Salida"  >
+                            <p:ajax 
+                                listener="#{itinerarioBean.cargarLugaresLlegada()}"
+                                                update="lugaresLlegada" />
+                            <f:selectItems value="#{boletoBean.lugares}" var="lugarSalida" itemValue="#{lugarSalida.codigo}" itemLabel="#{lugarSalida.nombre}" />
+                        </h:selectOneMenu>
+                        
+                        <h:selectOneMenu id="lugaresLlegada" value="#{itinerarioBean.codigoLugarLlegada}" required="true" label="Lugares Llegada" >
+                            
+                            <f:selectItems value="#{itinerarioBean.lugaresLlegada}" var="lugarLlegada" itemValue="#{lugarLlegada.codigo}" itemLabel="#{lugarLlegada.nombre}" />
+                        </h:selectOneMenu>
+                        
+                        <h:outputScript library="js" name="calendar_es.js" />
+                        <p:outputLabel for="fechaSalida" value="Fecha salida:" />
+                        <p:calendar id="fechaSalida" value="#{itinerarioBean.fechaSalida}" pattern="dd/MM/yyyy HH:mm" mindate="#{itinerarioBean.fechaActual}" maxdate="#{itinerarioBean.fechaMaxima}" locale="es" >
+                            
+                        </p:calendar>
+                        
+                    </div>
+
+                </ui:define>        
+            </ui:composition>
+
+        </h:body>       
+    </f:view>
+
+
+</html>
