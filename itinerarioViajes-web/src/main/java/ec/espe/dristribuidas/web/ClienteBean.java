@@ -188,6 +188,8 @@ public class ClienteBean extends BaseBean implements Serializable {
             if (validarCliente()) {
                 try {
 
+                    String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave());
+                    this.cliente.setClave(claveEncriptada);
                     this.clienteServicio.actualiarCliente(this.cliente);
                     BeanUtils.copyProperties(this.clienteSelected, this.cliente);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo el cliente: " + this.cliente.getNombre(), null));
