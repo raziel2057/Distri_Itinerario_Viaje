@@ -170,7 +170,31 @@ public class ClienteBean extends BaseBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (super.isEnNuevo()) {
-            if (validarCliente()) {
+            if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre no valido ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getIdentificacion(), 13) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Identificacion no valida ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Direccion no valida ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getTelefono(), 10) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Telefono no valido ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Usuario no valido ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Calve no valida ", null));
+            } else if (validacion.validateEmail(cliente.getCorreoElectronico()) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Correo electronico no valido ", null));
+            } else if (clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre de usuario ya utilizado ", null));
+            } else {
                 try {
                     String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave());
                     this.cliente.setClave(claveEncriptada);
@@ -180,12 +204,35 @@ public class ClienteBean extends BaseBean implements Serializable {
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
-            } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "No se puede ingresar el cliente ya que contiene datos erroneos ", null));
             }
         } else if (super.isEnModificar()) {
-            if (validarCliente()) {
+            
+            
+            if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre no valido ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getIdentificacion(), 13) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Identificacion no valida ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Direccion no valida ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getTelefono(), 10) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Telefono no valido ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Usuario no valido ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getClave(), 32) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Calve no valida ", null));
+            } else if (validacion.validateEmail(cliente.getCorreoElectronico()) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Correo electronico no valido ", null));
+            } else if (clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre de usuario ya utilizado ", null));
+            } else {
                 try {
 
                     String claveEncriptada = DigestUtils.md5Hex(this.cliente.getClave());
@@ -196,10 +243,8 @@ public class ClienteBean extends BaseBean implements Serializable {
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
-            } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "No se puede actualizar el cliente ya que contiene datos erroneos ", null));
             }
+            
         } else if (super.isEnEliminar()) {
             try {
                 this.clienteServicio.eliminarCliente(this.cliente.getCodigo());
@@ -266,7 +311,7 @@ public class ClienteBean extends BaseBean implements Serializable {
         if (claveEncriptada.equals(this.clienteSesion.getClave())) {
             nuevaClave = viejaClave;
             modificarDatosClienteSesion();
-            
+
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null,
@@ -419,7 +464,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                 && validacion.validateNumeroEntero(cliente.getTelefono(), 10) == "se"
                 && validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) == "se"
                 && validacion.validateEmail(cliente.getCorreoElectronico()) == "se"
-                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) == null) {
+                && clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
             return true;
         } else {
             return false;

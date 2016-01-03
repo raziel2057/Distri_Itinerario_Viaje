@@ -147,7 +147,7 @@ and open the template in the editor.
 
 
                         <p:spacer height="10px" />
-                        <p:commandButton value="Nuevo Cliente" actionListener="#{clienteBean.nuevo()}" immediate="true" update="@form" oncomplete="PF('cliDialog').show()" />
+                        <p:commandButton value="Nuevo Cliente" actionListener="#{clienteBean.nuevo()}" immediate="false" update="@form" oncomplete="PF('cliDialog').show()" />
                         <p:commandButton value="Actualizar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.modificar()}" disabled="#{clienteBean.clienteSelected eq null}" />
                         <p:commandButton value="Eliminar Cliente" update="@form" oncomplete="PF('cliDialog').show()" icon="ui-icon-search" title="View" actionListener="#{clienteBean.eliminar()}" disabled="#{clienteBean.clienteSelected eq null}" />
 
