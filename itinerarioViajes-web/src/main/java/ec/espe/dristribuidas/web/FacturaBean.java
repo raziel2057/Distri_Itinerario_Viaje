@@ -10,7 +10,15 @@ import ec.espe.dristribuidas.modelo.DetalleFactura;
 import ec.espe.dristribuidas.modelo.Factura;
 import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
 import ec.espe.dristribuidas.servicios.FacturaServicio;
+import ec.espe.dristribuidas.utils.Correo;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,6 +27,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import org.apache.commons.beanutils.BeanUtils;
 
 /**
@@ -39,13 +54,12 @@ public class FacturaBean extends BaseBean implements Serializable {
     @EJB
     private DetalleFacturaServicio detalleFacturaServicio;
     private List<DetalleFactura> detallesFactura; //Todos los detalles de una factura
-    
+
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
     @ManagedProperty(value = "#{loginBean}")
     private LoginBean datosLogin;
-    
-    
+
     private Cliente cliente;
 
     public LoginBean getDatosLogin() {
@@ -103,13 +117,11 @@ public class FacturaBean extends BaseBean implements Serializable {
     public void setDetallesFactura(List<DetalleFactura> detallesFactura) {
         this.detallesFactura = detallesFactura;
     }
-    
-    
 
     @PostConstruct
     public void inicializar() {
-        
-        cliente= new Cliente();
+
+        cliente = new Cliente();
         try {
             BeanUtils.copyProperties(this.cliente, this.getDatosLogin().getCliente());
 
@@ -117,16 +129,16 @@ public class FacturaBean extends BaseBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
-        
+
         facturas = facturaServicio.obtenerTodas();
-        facturasCliente=facturaServicio.obtenerTodasPorIDCliente(this.cliente.getCodigo());
-  
+        facturasCliente = facturaServicio.obtenerTodasPorIDCliente(this.cliente.getCodigo());
+
     }
 
     @Override
     public void nuevo() {
         super.nuevo();
-        this.factura = new Factura(); 
+        this.factura = new Factura();
         //Para la nueva factura aqui se deber[ia cargar el factura.cliente con this.cliente
     }
 
@@ -203,12 +215,11 @@ public class FacturaBean extends BaseBean implements Serializable {
         this.factura = null;
         this.facturaSelected = null;
     }
-    
-    public void mostrarDetallesFactura(){
-        detallesFactura=detalleFacturaServicio.obtenerTodasPorIDFactura(this.facturaSelected.getCodigo());        
-        
+
+    public void mostrarDetallesFactura() {
+        detallesFactura = detalleFacturaServicio.obtenerTodasPorIDFactura(this.facturaSelected.getCodigo());
+
     }
-    
 
     public void validateCostoTotal() {
 
@@ -227,6 +238,56 @@ public class FacturaBean extends BaseBean implements Serializable {
         } else {
             return false;
         }
+
+    }
+
+    public void facturaPDF() throws JRException, IOException {
+
+        List<Cliente> clientes;
+        List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+        String nombreReporte = cliente.getCodigo().toString() + this.facturaSelected.getCodigo().toString() + ".pdf";
+        String urlDestinoReporte = "D:\\reporte" + nombreReporte;
+
+        clientes = new ArrayList<Cliente>();
+        clientes.add(this.cliente);
+        //detallesFactura=detalleFacturaServicio.obtenerTodasPorIDFactura(1); esto ya debe estar lleno con facturaSelected
+
+        JasperPrint jasperPrint;
+        JasperPrint jasperPrint2;
+
+        try {
+            JRBeanCollectionDataSource beanCollectionDataSource2 = new JRBeanCollectionDataSource(clientes);
+            String reportPath2 = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteCliente.jasper");
+            jasperPrint2 = JasperFillManager.fillReport(reportPath2, new HashMap(), beanCollectionDataSource2);
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(detallesFactura);
+            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteDetalleFactura.jasper");
+            jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
+
+            jprintlist.add(jasperPrint2);
+            jprintlist.add(jasperPrint);
+
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+
+            OutputStream output = new FileOutputStream(new File(urlDestinoReporte));
+
+            exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, output);
+            exporter.exportReport();
+
+            Correo correo = new Correo();
+
+            correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
+                    "Factura SAIV", "Detalle de la factura " + this.facturaSelected.getCodigo(),
+                    urlDestinoReporte, nombreReporte);
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado factura", null));
+            
+        } catch (JRException | FileNotFoundException e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se pudo enviar factura", e.getMessage()));
+        }
+        this.cancelar();
 
     }
 
