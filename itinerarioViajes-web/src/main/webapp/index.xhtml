@@ -13,12 +13,12 @@
                 <p:panel header="Inicio de Sesión">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="usuario" value="Usuario:" />
-                        <p:inputText id="usuario" value="#{loginBean.username}" required="true" requiredMessage="Ingrese el nombre de usuario" />
+                        <p:inputText tabindex="1" id="usuario" value="#{loginBean.username}" required="true" requiredMessage="Ingrese el nombre de usuario" />
                         <p:outputLabel for="clave" value="Clave:" />
-                        <p:password id="clave" value="#{loginBean.password}" required="true" />
+                        <p:password tabindex="2" id="clave" value="#{loginBean.password}" required="true" />
                     </h:panelGrid>
-                    <p:commandButton value="Registrarse"  immediate="true" update="@form" action="nuevoCliente.xhtml?faces-redirect=true" />
-                    <p:commandButton id="loginButton" value="Aceptar" actionListener="#{loginBean.login()}" update="@form"
+                    <p:commandButton tabindex="4" value="Registrarse"  immediate="true" update="@form" action="nuevoCliente.xhtml?faces-redirect=true" />
+                    <p:commandButton tabindex="3" id="loginButton" value="Aceptar" actionListener="#{loginBean.login()}" update="@form"
              oncomplete="manejarLogin(xhr, status, args)"/>
                 </p:panel>
                 
