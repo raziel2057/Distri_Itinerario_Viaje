@@ -43,7 +43,7 @@ public class ValidacionesInputBean {
         // Reqular expression pattern to validate the format submitted
 
         //String validator = "^\\p{L}+(?: \\p{L}+)*$";
-        String validator = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ_-\\s]*$";
+        String validator = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ_\\s-]*$";
 
         String retorno;
         if (texto.matches(validator)) {
@@ -62,7 +62,7 @@ public class ValidacionesInputBean {
     public String validateTextoLetrasNumerosCaracteresEspeciales(String texto, int longitudMaxima) { 
         // Reqular expression pattern to validate the format submitted
 
-        String validator = "^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ.,;#_-\\s]*$";
+        String validator = "^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ.,;#_\\s-]*$";
 
         String retorno;
         if (texto.matches(validator)) {
@@ -81,7 +81,7 @@ public class ValidacionesInputBean {
     public String validateTextoLetrasNumeros(String texto, int longitudMaxima) { 
         // Reqular expression pattern to validate the format submitted
 
-        String validator = "^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ_-\\s]*$";
+        String validator = "^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ_\\s-]*$";
 
         String retorno;
         if (texto.matches(validator)) {
