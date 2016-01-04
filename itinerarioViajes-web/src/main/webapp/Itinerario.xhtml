@@ -40,6 +40,9 @@ and open the template in the editor.
                             
                         </p:calendar>
                         
+                        <p:spacer height="10px" />
+                        <p:commandButton id="buscar" value="Buscar Itinerarios" actionListener="#{itinerarioBean.buscarItinerarios()}" immediate="false" update="@form"   disabled="false"/>
+                        
                     </div>
 
                 </ui:define>        
