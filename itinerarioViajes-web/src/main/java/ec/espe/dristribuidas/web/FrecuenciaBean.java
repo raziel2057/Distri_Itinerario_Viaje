@@ -55,7 +55,9 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     ValidacionesInputBean validacion = new ValidacionesInputBean();
 
+    private Date fechaActual;
     private Date fechaMinimaFrecuencia;
+    private Date fechaMaximaFrecuencia;
 
     public List<Frecuencia> getFrecuencias() {
         return frecuencias;
@@ -117,8 +119,8 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         return fechaMinimaFrecuencia;
     }
 
-    public void setFechaMinimaFrecuencia(Date fechaMinimaFrecuencia) {
-        this.fechaMinimaFrecuencia = fechaMinimaFrecuencia;
+    public Date getFechaMaximaFrecuencia() {
+        return fechaMaximaFrecuencia;
     }
 
     @PostConstruct
@@ -159,7 +161,11 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
             empresaTemp = null;
         }
 
-        fechaMinimaFrecuencia = new Date();
+        fechaActual=new Date();
+        fechaMinimaFrecuencia=new Date();
+        fechaMinimaFrecuencia.setHours(fechaActual.getHours()+2);
+        fechaMaximaFrecuencia=new Date();
+        fechaMaximaFrecuencia.setMonth(fechaMinimaFrecuencia.getMonth()+3);
     }
 
     @Override
@@ -245,27 +251,30 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     public void validateFechaSalida() {
 
-        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
+        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada()!=null) {
+            if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
 
-        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+            } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
 
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
-       }
-        
-        
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de salida no puede ser mayor que la de llegada"));
+            }
+        }
+
     }
 
     public void validateFechaLlegada() {
 
-        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
+        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada()!=null) {
+            if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
 
-        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+            } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
 
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de llegada no puede ser menor que la de salida"));
+            }
         }
 
     }
