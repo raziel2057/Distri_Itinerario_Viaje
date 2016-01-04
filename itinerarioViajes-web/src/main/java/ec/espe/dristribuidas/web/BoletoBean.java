@@ -141,7 +141,12 @@ public class BoletoBean implements Serializable {
     {
         this.lugares = lugarServicio.obtenerTodas();
         if(this.codigoLugar==null)
-            this.codigoLugar=this.lugares.get(0).getCodigo();
+        {
+            if(lugares.size()>0)
+                this.codigoLugar=this.lugares.get(0).getCodigo();
+            else
+                this.codigoLugar=null;
+        }
     }
     
     public void cargarFrecuencias()
@@ -157,7 +162,10 @@ public class BoletoBean implements Serializable {
         }
         if(this.codigoFrecuencia==null)
         {
-            this.codigoFrecuencia=this.frecuenciasPorLugar.get(0).getCodigo();
+           if(this.frecuenciasPorLugar.size()>0)
+                this.codigoFrecuencia=this.frecuenciasPorLugar.get(0).getCodigo();
+           else
+                this.codigoFrecuencia=null;
         }
     }
     
@@ -172,8 +180,10 @@ public class BoletoBean implements Serializable {
                 this.frecuenciasPorLugar.add(this.frecuencias.get(i));
             }
         }
-       
+       if(this.frecuenciasPorLugar.size()>0)
         this.codigoFrecuencia=this.frecuenciasPorLugar.get(0).getCodigo();
+       else
+          this.codigoFrecuencia=null; 
        
         this.cargarBoletos();
     }

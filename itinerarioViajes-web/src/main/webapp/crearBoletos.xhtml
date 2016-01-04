@@ -37,8 +37,8 @@ and open the template in the editor.
                         </h:selectOneMenu>
                         
                         <p:dataTable id="boletos" var="boleto" value="#{boletoBean.boletosPorFrecuencia}" scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  
-                                     selectionMode="single" selection="#{boletoBean.boletoSelected}" rowKey="#{boleto.codigo}">
-                            <p:ajax event="rowSelect"  update="@form"/>
+                                     selectionMode="single" selection="#{boletoBean.boletoSelected}" rowKey="#{boleto.codigo}" rowIndexVar="rowIndex" rowStyleClass="#{boleto.estado eq 'D'?'Disponible':'Ocupado'}" disabledSelection="#{boleto.estado eq 'O'}" >
+                            
                             
                             <p:column headerText="Ruta">
                                 <h:outputText value="#{boleto.frecuencia.ruta.nombre}" />
