@@ -17,7 +17,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -254,6 +256,7 @@ public class FacturaBean extends BaseBean implements Serializable {
 
         JasperPrint jasperPrint;
         JasperPrint jasperPrint2;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
             JRBeanCollectionDataSource beanCollectionDataSource2 = new JRBeanCollectionDataSource(clientes);
@@ -264,6 +267,7 @@ public class FacturaBean extends BaseBean implements Serializable {
             String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteDetalleFactura.jasper");
             jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
 
+            jasperPrint2.setPageHeight(150);
             jprintlist.add(jasperPrint2);
             jprintlist.add(jasperPrint);
 
@@ -278,7 +282,8 @@ public class FacturaBean extends BaseBean implements Serializable {
             Correo correo = new Correo();
 
             correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
-                    "Factura SAIV", "Detalle de la factura " + this.facturaSelected.getCodigo(),
+                    "Factura SAIV", "Detalle de la factura " + this.facturaSelected.getCodigo()
+                    + " emitida el " + dateFormat.format(this.facturaSelected.getFechaEmision()),
                     urlDestinoReporte, nombreReporte);
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado factura", null));
