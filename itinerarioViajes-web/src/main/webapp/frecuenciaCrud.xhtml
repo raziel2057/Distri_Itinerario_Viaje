@@ -79,21 +79,10 @@ and open the template in the editor.
 
                                     <p:outputLabel for="fechaSalida" value="Fecha salida:" />
                                     <p:calendar id="fechaSalida" value="#{frecuenciaBean.frecuencia.fechaSalida}" pattern="dd/MM/yyyy HH:mm" 
-                                                mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="#{frecuenciaBean.fechaMaximaFrecuencia}">
-                                        <p:ajax event="dateSelect"
-                                                listener="#{frecuenciaBean.validateFechaSalida()}"
-                                                update="messageFechaSalida" />
+                                                mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="#{frecuenciaBean.fechaMaximaFrecuencia}"
+                                                requiredMessage="Seleccione la fecha de salida" required="true">
                                     </p:calendar>
-                                    <p:messages id="messageFechaSalida" showDetail="true" showSummary="true"/>
-
-                                    <p:outputLabel for="fechaLlegada" value="Fecha llegada" />
-                                    <p:calendar id="fechaLlegada" value="#{frecuenciaBean.frecuencia.fechaLlegada}" pattern="dd/MM/yyyy HH:mm" 
-                                                mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="#{frecuenciaBean.fechaMaximaFrecuencia}">
-                                        <p:ajax event="dateSelect"
-                                                listener="#{frecuenciaBean.validateFechaLlegada()}"
-                                                update="messageFechaLlegada" />
-                                    </p:calendar>
-                                    <p:messages id="messageFechaLlegada" showDetail="true" showSummary="true"/>
+                                    <p:messages for="fechaSalida"/>
 
                                     <p:spacer />
                                     <p:commandButton value="Aceptar" actionListener="#{frecuenciaBean.aceptar()}"  immediate="false" update="@form" disabled="#{frecuenciaBean.frecuencia eq null}"/>

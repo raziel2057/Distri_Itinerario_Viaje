@@ -226,6 +226,8 @@ public class RutaBean extends BaseBean implements Serializable {
     }
 
     public void validateTiempoHoras() {
+        //Se estima que el viaje mas largo es de 20 dias
+        //Eso son 480 horas. Mas los 2 decimales, el rango pemitido de horas sera 480.99 (481 horas)
 
         String resultado = validacion.validateNumeroDecimal(this.ruta.getTiempoHoras().toString(), 5);
 
@@ -233,6 +235,12 @@ public class RutaBean extends BaseBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", resultado));
         }
+        if(this.ruta.getTiempoHoras().doubleValue()>480.99)
+        {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El numero de horas supera el máximo de 480.99"));
+        }
+        
     }
 
     public void validateKilometros() {

@@ -131,10 +131,11 @@ public class ValidacionesInputBean {
         return retorno;
     }
     
-    public String validateNumeroDecimal(String numero, int longitudMaxima) { // La longitud: Ejemplo 10. 7 para enteros, 1 punto, 2 decimales
+    public String validateNumeroDecimal(String numero, int longitudMaxima) { // La longitud: Ejemplo 10. 7 para enteros, 3 decimales
         // Reqular expression pattern to validate the format submitted
 
         String validator = "[0-9]+(\\.[0-9][0-9]?)?";
+        longitudMaxima=longitudMaxima+1;
 
         String retorno;
         if (numero.matches(validator)) {

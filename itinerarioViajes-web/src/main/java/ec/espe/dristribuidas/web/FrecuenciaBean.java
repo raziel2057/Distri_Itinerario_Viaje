@@ -15,6 +15,7 @@ import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.RutaServicio;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -156,16 +157,18 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         Empresa empresaTemp;
         for (Bus bu : buses) {
 
-            empresaTemp = empresaServicio.obtenerPorID(bu.getCodigoEmpresa());
-            listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + empresaTemp.getNombre()));
-            empresaTemp = null;
+            if (bu.getEstado().equals("A")) {
+                empresaTemp = empresaServicio.obtenerPorID(bu.getCodigoEmpresa());
+                listaBuses.add(new SelectItem(bu.getCodigo(), bu.getCodigo() + " - " + empresaTemp.getNombre()));
+                empresaTemp = null;
+            }
         }
 
-        fechaActual=new Date();
-        fechaMinimaFrecuencia=new Date();
-        fechaMinimaFrecuencia.setHours(fechaActual.getHours()+2);
-        fechaMaximaFrecuencia=new Date();
-        fechaMaximaFrecuencia.setMonth(fechaMinimaFrecuencia.getMonth()+3);
+        fechaActual = new Date();
+        fechaMinimaFrecuencia = new Date();
+        fechaMinimaFrecuencia.setHours(fechaActual.getHours() + 2);
+        fechaMaximaFrecuencia = new Date();
+        fechaMaximaFrecuencia.setMonth(fechaMinimaFrecuencia.getMonth() + 3);
     }
 
     @Override
@@ -200,13 +203,57 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         }
     }
 
+    public Date calcularFechaLlegada() {
+
+        Date fecha = new Date();
+        double tiempoHoras = 0;
+        double aux;
+        int dias;
+        int horas;
+        int minutos;
+
+        dias = 0;
+        horas = 0;
+        minutos = 0;
+        tiempoHoras = rutaServicio.obtenerPorID(this.frecuencia.getCodigoRuta()).getTiempoHoras().doubleValue();
+        horas = (int) tiempoHoras;
+        aux = tiempoHoras - horas;
+        if (aux >= 0 && aux <= 0.25) {
+            minutos = 15;
+        } else if (aux > 0.25 && aux <= 0.5) {
+            minutos = 30;
+        } else if (aux > 0.5 && aux <= 0.75) {
+            minutos = 45;
+        } else {
+            minutos = 0;
+            horas = horas + 1;
+        }
+
+        if (horas >= 24) {
+            dias = horas / 24;
+            horas = horas % 24;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.frecuencia.getFechaSalida());
+        c.add(Calendar.DATE, dias);
+        c.add(Calendar.HOUR_OF_DAY, horas);
+        c.add(Calendar.MINUTE, minutos);
+        fecha = c.getTime();
+
+        return fecha;
+    }
+
     public void aceptar() {
         FacesContext context = FacesContext.getCurrentInstance();
+
+        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getCodigoRuta() != null) {
+            calcularFechaLlegada();
+        }
+
         if (super.isEnNuevo()) {
             if (validarFrecuencia()) {
                 try {
-                    //Usuario usuario = (Usuario)((HttpServletRequest)context.getExternalContext().getRequest()).getSession().getAttribute("usuario");
-
                     this.frecuenciaServicio.crearFrencuencia(this.frecuencia);
                     this.frecuencias.add(0, this.frecuencia);
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la frecuencia", null));
@@ -251,7 +298,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     public void validateFechaSalida() {
 
-        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada()!=null) {
+        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada() != null) {
             if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
 
             } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
@@ -266,7 +313,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     public void validateFechaLlegada() {
 
-        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada()!=null) {
+        if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getFechaLlegada() != null) {
             if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
 
             } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
@@ -281,9 +328,9 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
 
     private boolean validarFrecuencia() {
 
-        if (this.frecuencia.getFechaLlegada().after(this.frecuencia.getFechaSalida())) {
-            return true;
-        } else if (this.frecuencia.getFechaLlegada().equals(this.frecuencia.getFechaSalida())) {
+        if (this.frecuencia.getCodigoBus() != null
+                && this.frecuencia.getCodigoRuta() != null
+                && this.frecuencia.getFechaSalida() != null) {
             return true;
         } else {
             return false;
