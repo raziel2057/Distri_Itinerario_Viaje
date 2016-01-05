@@ -33,6 +33,7 @@ public class LoginBean implements Serializable {
     private String username;
     private String password;
     private boolean loggedIn = false;
+    private boolean enNuuevoCliente = false;
 
     public String getUsername() {
         return username;
@@ -61,8 +62,14 @@ public class LoginBean implements Serializable {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    
-    
+
+    public boolean isEnNuuevoCliente() {
+        return enNuuevoCliente;
+    }
+
+    public void setEnNuuevoCliente(boolean enNuuevoCliente) {
+        this.enNuuevoCliente = enNuuevoCliente;
+    }
 
     /*public String login() {
      //RequestContext context = RequestContext.getCurrentInstance();
@@ -91,7 +98,18 @@ public class LoginBean implements Serializable {
      if (loggedIn)
      context.addCallbackParam("view", "faces/empresaCrud.xhtml");
      }*/
+    public void registroCliente() {
+        //FacesContext context = FacesContext.getCurrentInstance();
+        RequestContext context = RequestContext.getCurrentInstance();
+
+        enNuuevoCliente = true;
+
+        //context.addCallbackParam("view", "faces/nuevoCliente.xhtml.xhtml");
+
+    }
+
     public void login() {
+        enNuuevoCliente=false;
         //FacesContext context = FacesContext.getCurrentInstance();
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage msg = null;
@@ -119,8 +137,7 @@ public class LoginBean implements Serializable {
 
             if (this.cliente.getTipo().equals("A")) {
                 context.addCallbackParam("view", "faces/inicio.xhtml");
-            }
-            else{
+            } else {
                 context.addCallbackParam("view", "faces/inicioRegular.xhtml");
             }
         }
@@ -129,6 +146,7 @@ public class LoginBean implements Serializable {
     }
 
     public void logout() {
+        enNuuevoCliente=false;
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.invalidate();
 

@@ -123,14 +123,18 @@ public class ClienteBean extends BaseBean implements Serializable {
         clientes = clienteServicio.obtenerTodas();
         enRegistro = false;
 
-        //Para tener los datos del cliente de la sesion.
-        clienteSesion = new Cliente();
-        try {
-            BeanUtils.copyProperties(this.clienteSesion, this.getDatosLogin().getCliente());
+        if (this.getDatosLogin().isEnNuuevoCliente()) {
 
-        } catch (Exception e) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
+        } else {
+            //Para tener los datos del cliente de la sesion.
+            clienteSesion = new Cliente();
+            try {
+                BeanUtils.copyProperties(this.clienteSesion, this.getDatosLogin().getCliente());
+
+            } catch (Exception e) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
+            }
         }
     }
 
@@ -206,8 +210,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                 }
             }
         } else if (super.isEnModificar()) {
-            
-            
+
             if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) != "se") {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Nombre no valido ", null));
@@ -244,7 +247,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
             }
-            
+
         } else if (super.isEnEliminar()) {
             try {
                 this.clienteServicio.eliminarCliente(this.cliente.getCodigo());
@@ -263,7 +266,29 @@ public class ClienteBean extends BaseBean implements Serializable {
         Correo correo = new Correo();
 
         if (super.isEnNuevo()) {
-            if (validarClienteSinClave()) {
+
+            if (validacion.validateTextoSoloLetras(cliente.getNombre(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre no valido ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getIdentificacion(), 13) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Identificacion no valida ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getDireccion(), 100) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Direccion no valida ", null));
+            } else if (validacion.validateNumeroEntero(cliente.getTelefono(), 10) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Telefono no valido ", null));
+            } else if (validacion.validateTextoLetrasNumerosCaracteresEspeciales(cliente.getUsuario(), 20) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Usuario no valido ", null));
+            } else if (validacion.validateEmail(cliente.getCorreoElectronico()) != "se") {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Correo electronico no valido ", null));
+            } else if (clienteServicio.buscarClientePorUsuario(cliente.getUsuario()) != null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Nombre de usuario ya utilizado ", null));
+            } else {
                 try {
                     RandomString randomString = new RandomString(5); //Clave de 5 caracteres
                     String claveTemporal = randomString.nextString();
@@ -278,7 +303,7 @@ public class ClienteBean extends BaseBean implements Serializable {
                     String cuerpo = "<h2>Activicación de cuenta SAIV</h2>"
                             + "<h4>Felicidades usuario " + this.cliente.getUsuario() + ", su cuenta ha sido activada. Se le ha asignado la siguiente clave automaticamente: " + claveTemporal + " </h4>"
                             + "<h4>Por favor ingrese con el usuario que registró  y esta clave. Posteriormente diríjase a la pestaña de "
-                            + "Actualizar datos y cambie su clave</h4>";
+                            + "Información personal y cambie su clave</h4>";
 
                     correo.EnviarCorreoSinArchivoAdjunto(this.cliente.getCorreoElectronico(), subject, cuerpo);
 
@@ -287,10 +312,8 @@ public class ClienteBean extends BaseBean implements Serializable {
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
                 }
-            } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "No se puede registrar el cliente ya que contiene datos erroneos ", null));
             }
+
         } else {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "No esta en nuevo", null));
