@@ -59,6 +59,7 @@ and open the template in the editor.
 
                         </p:dataTable>
 
+                        <h:outputScript library="js" name="calendar_es.js" />
                         <p:dialog  header="Frecuencia" widgetVar="cliDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false">
                             <p:outputPanel id="carDetail" style="text-align:center;">
                                 <p:panelGrid  columns="3" rendered="#{not empty frecuenciaBean.frecuencia}" columnClasses="label,value">
@@ -77,8 +78,9 @@ and open the template in the editor.
                                     </p:selectOneMenu>
                                     <p:messages for="codigoRuta"/>
 
+                                    
                                     <p:outputLabel for="fechaSalida" value="Fecha salida:" />
-                                    <p:calendar id="fechaSalida" value="#{frecuenciaBean.frecuencia.fechaSalida}" pattern="dd/MM/yyyy HH:mm" 
+                                    <p:calendar locale="es" id="fechaSalida" value="#{frecuenciaBean.frecuencia.fechaSalida}" pattern="dd/MM/yyyy HH:mm" 
                                                 mindate="#{frecuenciaBean.fechaMinimaFrecuencia}" maxdate="#{frecuenciaBean.fechaMaximaFrecuencia}"
                                                 requiredMessage="Seleccione la fecha de salida" required="true">
                                     </p:calendar>

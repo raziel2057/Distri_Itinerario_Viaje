@@ -248,7 +248,7 @@ public class FrecuenciaBean extends BaseBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (this.frecuencia.getFechaSalida() != null && this.frecuencia.getCodigoRuta() != null) {
-            calcularFechaLlegada();
+            this.frecuencia.setFechaLlegada(calcularFechaLlegada());
         }
 
         if (super.isEnNuevo()) {
