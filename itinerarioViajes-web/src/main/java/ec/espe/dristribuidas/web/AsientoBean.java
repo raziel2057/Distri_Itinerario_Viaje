@@ -6,9 +6,7 @@
 package ec.espe.dristribuidas.web;
 
 
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.select;
+
 import ec.espe.dristribuidas.modelo.Asiento;
 import ec.espe.dristribuidas.modelo.Bus;
 import ec.espe.dristribuidas.modelo.Empresa;
@@ -18,7 +16,6 @@ import ec.espe.dristribuidas.servicios.EmpresaServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,9 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import static org.hamcrest.Matchers.equalTo;
+
 
 
 /**
