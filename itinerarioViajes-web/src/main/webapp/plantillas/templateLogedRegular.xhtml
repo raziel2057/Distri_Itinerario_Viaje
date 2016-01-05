@@ -48,14 +48,36 @@ and open the template in the editor.
 
                     <div class="padding">
                         <h:form>
+                            <style type="text/css">
+                                .ui-menubar   {
+                                    background-color: #143d52 !important; 
+                                    background: blue;
+                                    text-align: center;
+                                    width: 758px;
+                                    top:-7px;
+                                    left: 18px}
+                                .ui-menuitem   {
+                                    background-color: #143d52 !important; 
+                                    background: blue;
+                                    text-align: center;}
+
+                            </style>
                             <p:growl id="growl" showDetail="true" life="3000"  />    
                             <ui:insert name="contenidoMenu">
                                 <div class="padding"> 
-                                    <a href="inicioRegular.xhtml" >Inicio</a> | 
-                                    <a href="Itinerario.xhtml">Itinerario</a> | 
-                                    <a href="factura.xhtml">Factura</a> | 
-                                    <a href="datosCliente.xhtml">Información personal</a> |  
-                                    <a href="contactos.xhtml">Contactos</a> | 
+                                     <p:menubar styleClass="ui-menubar">
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="Inicio" url="inicioRegular.xhtml"/>
+                                        <p:menuitem value="Itinerario" url="Itinerario.xhtml"/>
+                                        <p:menuitem value="Factura" url="factura.xhtml"/>
+                                        <p:menuitem value="Información personal" url="datosCliente.xhtml"/>
+                                        <p:menuitem value="Contactos" url="contactos.xhtml"/>                                      
+                                    </p:menubar>
                                 </div>
 
                             </ui:insert>

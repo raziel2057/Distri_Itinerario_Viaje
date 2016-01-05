@@ -25,22 +25,22 @@ and open the template in the editor.
                     <div class="padding">
                         <h:form>
                             <p:growl id="growl" showDetail="true" life="3000"  />    
-                           
-                                
-                                <p:commandLink id="logout" actionListener="#{loginBean.logout}"
-                                               style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
-                                    <h:outputText value="#{ loginBean.estaLogeado() ? loginBean.username.concat(', logout'):'logout'}" />
-                                </p:commandLink>
-                                <script type="text/javascript">
-                                    //<![CDATA[
-                                    function logout(xhr, status, args) {
-                                        setTimeout(function () {
-                                            window.location = 'faces/index.xhtml';
-                                        }, 500);
-                                    }
-                                    //]]>
-                                </script>
-                          
+
+
+                            <p:commandLink id="logout" actionListener="#{loginBean.logout}"
+                                           style="margin-right:20px;" oncomplete="logout(xhr, status, args)">
+                                <h:outputText value="#{ loginBean.estaLogeado() ? loginBean.username.concat(', logout'):'logout'}" />
+                            </p:commandLink>
+                            <script type="text/javascript">
+                                //<![CDATA[
+                                function logout(xhr, status, args) {
+                                    setTimeout(function () {
+                                        window.location = 'faces/index.xhtml';
+                                    }, 500);
+                                }
+                                //]]>
+                            </script>
+
                         </h:form>
                     </div>   
                 </div>
@@ -48,18 +48,42 @@ and open the template in the editor.
 
                     <div class="padding">
                         <h:form>
+                            <style type="text/css">
+                                .ui-menubar   {
+                                    background-color: #143d52 !important; 
+                                    background: blue;
+                                    text-align: center;
+                                    width: 758px;
+                                    top:-7px;
+                                    left: 18px}
+                                .ui-menuitem   {
+                                    background-color: #143d52 !important; 
+                                    background: blue;
+                                    text-align: center;}
+
+                            </style>
                             <p:growl id="growl" showDetail="true" life="3000"  />    
                             <ui:insert name="contenidoMenu">
                                 <div class="padding"> 
-                                    <a href="inicio.xhtml" >Inicio</a> | 
-                                    <a href="agregarAsientos.xhtml">Asientos</a>  |
-                                    <a href="busCrud.xhtml">Buses</a> | 
-                                    <a href="clienteCrud.xhtml">Clientes</a> |
-                                    <a href="empresaCrud.xhtml">Empresas</a> |
-                                    <a href="frecuenciaCrud.xhtml">Frecuencias</a> | 
-                                    <a href="empresaCrud.xhtml">Itinerario</a> |  
-                                    <a href="lugarCrud.xhtml">Lugares</a> | 
-                                    <a href="rutaCrud.xhtml">Rutas</a> | 
+                                    <p:menubar styleClass="ui-menubar">
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        <p:menuitem value="" url="#"/>
+                                        
+                                        <p:menuitem value="Inicio" url="inicio.xhtml"/>
+                                        <p:submenu label="Transporte">
+                                            <p:menuitem value="Buses" url="busCrud.xhtml"/>
+                                            <p:menuitem value="Asientos" url="agregarAsientos.xhtml"/>
+                                        </p:submenu>
+                                        <p:menuitem value="Clientes" url="clienteCrud.xhtml"/>
+                                        <p:menuitem value="Empresas" url="empresaCrud.xhtml"/>
+                                        <p:menuitem value="Frecuencias" url="frecuenciaCrud.xhtml"/>
+                                        <p:menuitem value="Lugares" url="lugarCrud.xhtml"/>
+                                        <p:menuitem value="Rutas" url="rutaCrud.xhtml"/>                                        
+                                    </p:menubar>
+
                                 </div>
 
                             </ui:insert>
