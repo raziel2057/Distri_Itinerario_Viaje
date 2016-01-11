@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreporteFactura" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1ae0875b-f7fd-41ef-838c-1efed007f42c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="descripcionServicio" class="java.lang.String"/>
+	<field name="precioUnitario" class="java.math.BigDecimal"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precioTotal" class="java.math.BigDecimal"/>
+	<columnHeader>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="6" width="178" height="20" uuid="b5052d69-efd0-4e91-b8cb-f2671e4bff1a"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción del servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="6" width="77" height="20" uuid="9fb60fd2-9960-437b-8d85-18fe57b58c95"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="6" width="49" height="20" uuid="9d21a017-9ca2-4470-8f8c-8cb0bc708db5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="465" y="6" width="65" height="20" uuid="ff16d1a7-e7ae-4ed5-af01-281f14a45028"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="33" width="541" height="4" uuid="07408ad9-32d4-4679-810f-29641e3efade"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="15" width="262" height="20" uuid="01a673f5-2c15-475d-aa3a-05e7efb22a23"/>
+				<textFieldExpression><![CDATA[$F{descripcionServicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="15" width="100" height="20" uuid="7400b99a-f056-4170-acdb-8cb941d8b2ae"/>
+				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="396" y="15" width="49" height="20" uuid="757ce032-3ca7-4de5-863c-8e88fa2cb81a"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="15" width="90" height="20" uuid="f7ac97c7-fc2b-4d88-ad30-ab5bd9f55c32"/>
+				<textFieldExpression><![CDATA[$F{precioTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="50"/>
+	</columnFooter>
+</jasperReport>

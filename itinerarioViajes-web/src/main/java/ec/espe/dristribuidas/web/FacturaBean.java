@@ -8,6 +8,8 @@ package ec.espe.dristribuidas.web;
 import ec.espe.dristribuidas.modelo.Cliente;
 import ec.espe.dristribuidas.modelo.DetalleFactura;
 import ec.espe.dristribuidas.modelo.Factura;
+import ec.espe.dristribuidas.reportes.ModeloDetalleFactura;
+import ec.espe.dristribuidas.reportes.ModeloFactura;
 import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
 import ec.espe.dristribuidas.servicios.FacturaServicio;
 import ec.espe.dristribuidas.utils.Correo;
@@ -29,8 +31,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -287,10 +292,65 @@ public class FacturaBean extends BaseBean implements Serializable {
                     urlDestinoReporte, nombreReporte);
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado factura", null));
-            
+
         } catch (JRException | FileNotFoundException e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se pudo enviar factura", e.getMessage()));
+        }
+        this.cancelar();
+
+    }
+
+    public void facturaPDF2() throws JRException, IOException {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String nombreReporte = cliente.getCodigo().toString() + this.facturaSelected.getCodigo().toString() + ".pdf";
+        String urlDestinoReporte = "D:\\reporte" + nombreReporte;
+
+        List<ModeloFactura> facturaPDF = new ArrayList<ModeloFactura>();
+        List<ModeloDetalleFactura> detalleFacturaPDF = new ArrayList<ModeloDetalleFactura>();
+
+        //Cargar los datos de detalle factura
+        //detallesFactura=detalleFacturaServicio.obtenerTodasPorIDFactura(1); esto ya debe estar lleno con facturaSelected
+        for (DetalleFactura detallesFactura1 : detallesFactura) {
+            detalleFacturaPDF.add(new ModeloDetalleFactura(detallesFactura1.getDescripcionServicio(),
+                    detallesFactura1.getPrecioUnitario(),
+                    detallesFactura1.getCantidad(),
+                    detallesFactura1.getPrecioTotal()));
+        }
+
+        //Cargar los datos de clientes, factura y detalles de factura en el 
+        facturaPDF.add(new ModeloFactura(this.cliente.getNombre(),
+                this.cliente.getIdentificacion(),
+                this.cliente.getDireccion(), this.cliente.getTelefono(),
+                this.facturaSelected.getCodigo(),
+                this.facturaSelected.getFechaEmision(),
+                this.facturaSelected.getCostoTotal(),
+                detalleFacturaPDF));
+
+        //detallesFactura=detalleFacturaServicio.obtenerTodasPorIDFactura(1); esto ya debe estar lleno con facturaSelected
+        JasperPrint jasperPrint;
+
+        try {
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturaPDF);
+            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteFactura.jasper");
+            jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
+            
+            Correo correo = new Correo();
+
+            correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
+                    "Factura SAIV", "Detalle de la factura " + this.facturaSelected.getCodigo()
+                    + " emitida el " + dateFormat.format(this.facturaSelected.getFechaEmision()),
+                    urlDestinoReporte, nombreReporte);
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado factura", null));
+
+        } catch (JRException e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se exportar factura", e.getMessage()));
         }
         this.cancelar();
 
