@@ -9,7 +9,7 @@
 	<field name="codigoBoleto" class="java.lang.Integer"/>
 	<field name="codigoBus" class="java.lang.String"/>
 	<field name="nombreEmpresa" class="java.lang.String"/>
-	<field name="codigoAsiento" class="java.lang.Integer"/>
+	<field name="nombreAsiento" class="java.lang.String"/>
 	<field name="costo" class="java.math.BigDecimal"/>
 	<columnHeader>
 		<band height="42" splitType="Stretch"/>
@@ -91,7 +91,7 @@
 				<textElement>
 					<font size="48"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{codigoAsiento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreAsiento}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="14" y="137" width="70" height="20" uuid="d5dcf480-736e-400c-bdc7-c8803b33dace"/>

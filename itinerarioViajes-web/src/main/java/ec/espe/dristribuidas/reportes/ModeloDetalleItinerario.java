@@ -34,7 +34,7 @@ public class ModeloDetalleItinerario {
     private Integer codigoBoleto;
     private String codigoBus;
     private String nombreEmpresa;
-    private Integer codigoAsiento;
+    private String nombreAsiento;
     private BigDecimal costo;
 
     public String getNombreRuta() {
@@ -44,10 +44,6 @@ public class ModeloDetalleItinerario {
     public void setNombreRuta(String nombreRuta) {
         this.nombreRuta = nombreRuta;
     }
-
-    
-
-   
 
     public Date getFechaSalida() {
         return fechaSalida;
@@ -89,12 +85,12 @@ public class ModeloDetalleItinerario {
         this.nombreEmpresa = nombreEmpresa;
     }
 
-    public Integer getCodigoAsiento() {
-        return codigoAsiento;
+    public String getNombreAsiento() {
+        return nombreAsiento;
     }
 
-    public void setCodigoAsiento(Integer codigoAsiento) {
-        this.codigoAsiento = codigoAsiento;
+    public void setNombreAsiento(String nombreAsiento) {
+        this.nombreAsiento = nombreAsiento;
     }
 
     public BigDecimal getCosto() {
@@ -105,14 +101,14 @@ public class ModeloDetalleItinerario {
         this.costo = costo;
     }
 
-    public ModeloDetalleItinerario(String nombreRuta, Date fechaSalida, Date fechaLlegada, Integer codigoBoleto, String codigoBus, String nombreEmpresa, Integer codigoAsiento, BigDecimal costo) {
+    public ModeloDetalleItinerario(String nombreRuta, Date fechaSalida, Date fechaLlegada, Integer codigoBoleto, String codigoBus, String nombreEmpresa, String nombreAsiento, BigDecimal costo) {
         this.nombreRuta = nombreRuta;
         this.fechaSalida = fechaSalida;
         this.fechaLlegada = fechaLlegada;
         this.codigoBoleto = codigoBoleto;
         this.codigoBus = codigoBus;
         this.nombreEmpresa = nombreEmpresa;
-        this.codigoAsiento = codigoAsiento;
+        this.nombreAsiento = nombreAsiento;
         this.costo = costo;
     }
 

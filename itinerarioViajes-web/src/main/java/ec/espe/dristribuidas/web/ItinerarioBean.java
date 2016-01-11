@@ -13,7 +13,9 @@ import ec.espe.dristribuidas.modelo.Factura;
 import ec.espe.dristribuidas.modelo.Frecuencia;
 import ec.espe.dristribuidas.modelo.Itinerario;
 import ec.espe.dristribuidas.modelo.Lugar;
+import ec.espe.dristribuidas.reportes.ModeloDetalleFactura;
 import ec.espe.dristribuidas.reportes.ModeloDetalleItinerario;
+import ec.espe.dristribuidas.reportes.ModeloFactura;
 import ec.espe.dristribuidas.reportes.ModeloItinerario;
 import ec.espe.dristribuidas.servicios.BoletoServicio;
 import ec.espe.dristribuidas.servicios.BusServicio;
@@ -115,8 +117,13 @@ public class ItinerarioBean implements Serializable {
 
     private Cliente cliente;
 
+    private boolean enMostrarFactura;
+    private String urlDestinoReporte;
+
     List<ModeloItinerario> itinerarioPDF;
     List<ModeloDetalleItinerario> detalleItinerarioPDF;
+    List<ModeloFactura> facturaPDF;
+    List<ModeloDetalleFactura> detalleFacturaPDF;
 
     public List<Itinerario> getItinearios() {
         return itinearios;
@@ -350,6 +357,22 @@ public class ItinerarioBean implements Serializable {
         this.detalleFactura = detalleFactura;
     }
 
+    public boolean isEnMostrarFactura() {
+        return enMostrarFactura;
+    }
+
+    public void setEnMostrarFactura(boolean enMostrarFactura) {
+        this.enMostrarFactura = enMostrarFactura;
+    }
+
+    public String getUrlDestinoReporte() {
+        return urlDestinoReporte;
+    }
+
+    public void setUrlDestinoReporte(String urlDestinoReporte) {
+        this.urlDestinoReporte = urlDestinoReporte;
+    }
+
     @PostConstruct
     public void inicializar() {
         cliente = new Cliente();
@@ -467,6 +490,9 @@ public class ItinerarioBean implements Serializable {
             this.facturas = this.facturaServicio.obtenerTodas();
             this.factura = this.facturas.get(this.facturas.size() - 1);
             int sec = 0;
+
+            detalleFacturaPDF = new ArrayList<ModeloDetalleFactura>();
+
             for (Boleto b : this.boletosComprados) {
                 sec++;
                 DetalleItinerario detalleItinerarioTmp = new DetalleItinerario();
@@ -490,38 +516,52 @@ public class ItinerarioBean implements Serializable {
 
                 this.detalleItinerarioServicio.crearDetalleItinerario(detalleItinerarioTmp);
                 this.detalleFacturaServicio.crearDetalleFactura(detalleFacturaTmp);
+                detalleFacturaPDF.add(new ModeloDetalleFactura(detalleFacturaTmp.getDescripcionServicio(),
+                        detalleFacturaTmp.getPrecioUnitario(),
+                        detalleFacturaTmp.getCantidad(),
+                        detalleFacturaTmp.getPrecioTotal()));
 
             }
 
             //Crear el reporte con los boletos, cargar datos en una lista
             itinerarioPDF = new ArrayList<ModeloItinerario>();
             detalleItinerarioPDF = new ArrayList<ModeloDetalleItinerario>();
+            facturaPDF = new ArrayList<ModeloFactura>();
 
             //Cargar los datos de los boletos
             for (Boleto b : this.boletosComprados) {
                 detalleItinerarioPDF.add(new ModeloDetalleItinerario(b.getFrecuencia().getRuta().getNombre(),
-                b.getFrecuencia().getFechaSalida(),
-                b.getFrecuencia().getFechaLlegada(),
-                b.getCodigo(),
-                b.getFrecuencia().getCodigoBus(),
-                b.getFrecuencia().getBus().getEmpresa().getNombre(),
-                b.getAsiento().getCodigoAsiento(),
-                b.getCosto()));
+                        b.getFrecuencia().getFechaSalida(),
+                        b.getFrecuencia().getFechaLlegada(),
+                        b.getCodigo(),
+                        b.getFrecuencia().getCodigoBus(),
+                        b.getFrecuencia().getBus().getEmpresa().getNombre(),
+                        b.getAsiento().getNombre(),
+                        b.getCosto()));
             }
 
+            //----------------------Crear datos boletos y factura
             //Cargar los datos de clientes, y boletos 
             itinerarioPDF.add(new ModeloItinerario(this.cliente.getNombre(),
                     this.cliente.getIdentificacion(),
-                    this.cliente.getDireccion(), 
+                    this.cliente.getDireccion(),
                     this.cliente.getTelefono(),
                     this.itinerario.getCodigo(),
-            detalleItinerarioPDF));
-            
+                    detalleItinerarioPDF));
+
+            //crear datos cliente y factura
+            facturaPDF.add(new ModeloFactura(this.cliente.getNombre(),
+                    this.cliente.getIdentificacion(),
+                    this.cliente.getDireccion(), this.cliente.getTelefono(),
+                    this.factura.getCodigo(),
+                    this.factura.getFechaEmision(),
+                    this.factura.getCostoTotal(),
+                    detalleFacturaPDF));
             crearReporteBoletos();
+            enMostrarFactura = true;
 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Se copraron " + this.boletosComprados.size() + " boletos. "
-                    , "Los tickets de los boletos comprados fueron enviados a su correo."));
+                    "Se copraron " + this.boletosComprados.size() + " boletos. ", "Los tickets de los boletos comprados fueron enviados a su correo."));
 
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -534,30 +574,46 @@ public class ItinerarioBean implements Serializable {
     public void crearReporteBoletos() {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaActual = new Date();
 
-        String nombreReporte = "reporte"+cliente.getCodigo().toString() +"itinerario"+ this.itinerario.getCodigo()+".pdf";
-        String urlDestinoReporte = "D:\\" + nombreReporte;
-        JasperPrint jasperPrint;
+        String nombreReporte2 = "reporte" + cliente.getCodigo().toString() + "itinerario" + this.itinerario.getCodigo() + ".pdf";
+        String urlDestinoReporte2 = "D:\\" + nombreReporte2;
+        JasperPrint jasperPrint2;
 
         try {
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(itinerarioPDF);
-            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteItinerario.jasper");
-            jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
+            JRBeanCollectionDataSource beanCollectionDataSource2 = new JRBeanCollectionDataSource(itinerarioPDF);
+            String reportPath2 = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteItinerario.jasper");
+            jasperPrint2 = JasperFillManager.fillReport(reportPath2, new HashMap(), beanCollectionDataSource2);
 
-            JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
+            JasperExportManager.exportReportToPdfFile(jasperPrint2, urlDestinoReporte2);
 
             Correo correo = new Correo();
-            Date fechaActual= new Date();
-
             correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
                     "Itinerario SAIV", "Detalle del itinerario " + this.itinerario.getCodigo()
                     + " emitido el " + dateFormat.format(fechaActual),
-                    urlDestinoReporte, nombreReporte);
+                    urlDestinoReporte2, nombreReporte2);
 
         } catch (JRException e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha podido enviar itinerario", e.getMessage()));
         }
+
+        String nombreReporte = "reporte" + cliente.getCodigo().toString() + "factura" + this.factura.getCodigo().toString() + ".pdf";
+        urlDestinoReporte = "D:\\" + nombreReporte;
+        JasperPrint jasperPrint;
+
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(itinerarioPDF);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteItinerario.jasper");
+
+        try {
+            jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
+        } catch (Exception e) {
+
+        }
+        urlDestinoReporte+="?pfdrid_c=true";
+
     }
 
     public void buscarItinerarios() {
@@ -664,6 +720,8 @@ public class ItinerarioBean implements Serializable {
         this.boletos = null;
         this.indexBoletoFrec = 0;
         this.boletosComprados = null;
+        this.enMostrarFactura = false;
+        this.urlDestinoReporte = "";
     }
 
     public void resetCompraBoletos() {
