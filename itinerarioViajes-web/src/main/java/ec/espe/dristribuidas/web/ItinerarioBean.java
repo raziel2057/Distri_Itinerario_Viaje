@@ -118,7 +118,7 @@ public class ItinerarioBean implements Serializable {
     private Cliente cliente;
 
     private boolean enMostrarFactura;
-    private String urlDestinoReporte;
+    private String urlFactura;
 
     List<ModeloItinerario> itinerarioPDF;
     List<ModeloDetalleItinerario> detalleItinerarioPDF;
@@ -365,12 +365,12 @@ public class ItinerarioBean implements Serializable {
         this.enMostrarFactura = enMostrarFactura;
     }
 
-    public String getUrlDestinoReporte() {
-        return urlDestinoReporte;
+    public String geturlFactura() {
+        return urlFactura;
     }
 
-    public void setUrlDestinoReporte(String urlDestinoReporte) {
-        this.urlDestinoReporte = urlDestinoReporte;
+    public void seturlFactura(String urlFactura) {
+        this.urlFactura = urlFactura;
     }
 
     @PostConstruct
@@ -599,11 +599,11 @@ public class ItinerarioBean implements Serializable {
         }
 
         String nombreReporte = "reporte" + cliente.getCodigo().toString() + "factura" + this.factura.getCodigo().toString() + ".pdf";
-        urlDestinoReporte = "D:\\" + nombreReporte;
+        String urlDestinoReporte = "D:\\" + nombreReporte;
         JasperPrint jasperPrint;
 
-        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(itinerarioPDF);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteItinerario.jasper");
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturaPDF);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteFactura.jasper");
 
         try {
             jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
@@ -612,7 +612,8 @@ public class ItinerarioBean implements Serializable {
         } catch (Exception e) {
 
         }
-        urlDestinoReporte+="?pfdrid_c=true";
+        
+        urlFactura=urlDestinoReporte;
 
     }
 
@@ -721,7 +722,7 @@ public class ItinerarioBean implements Serializable {
         this.indexBoletoFrec = 0;
         this.boletosComprados = null;
         this.enMostrarFactura = false;
-        this.urlDestinoReporte = "";
+        this.urlFactura = "";
     }
 
     public void resetCompraBoletos() {

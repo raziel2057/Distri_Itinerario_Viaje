@@ -160,11 +160,11 @@ and open the template in the editor.
                         </p:dialog>
 
                         <p:dialog  header="Factura de boletos comprados" widgetVar="boletosCompradosDialog" modal="true" 
-                                   showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="350">
+                                   showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="400">
                             <p:outputPanel id="itisBolDetail" style="text-align:center;">
                                 <h3>Comprobante factura</h3>
                                 <object type="application/pdf" 
-                                        data="#{itinerarioBean.urlDestinoReporte}" 
+                                        data="reporte31.pdf?pfdrid_c=true" 
                                         height="300px" width="100%" internalinstanceid="3">
                                     </object>
                                 <p:spacer />
