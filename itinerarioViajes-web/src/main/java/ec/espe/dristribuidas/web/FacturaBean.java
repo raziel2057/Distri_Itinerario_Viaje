@@ -248,7 +248,7 @@ public class FacturaBean extends BaseBean implements Serializable {
 
     }
 
-    public void facturaPDF() throws JRException, IOException {
+    public void facturaPDF2() throws JRException, IOException {
 
         List<Cliente> clientes;
         List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
@@ -301,7 +301,7 @@ public class FacturaBean extends BaseBean implements Serializable {
 
     }
 
-    public void facturaPDF2() throws JRException, IOException {
+    public void facturaPDFPorCorreo() throws JRException, IOException {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
