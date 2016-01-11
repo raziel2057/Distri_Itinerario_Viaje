@@ -13,6 +13,8 @@ import ec.espe.dristribuidas.modelo.Factura;
 import ec.espe.dristribuidas.modelo.Frecuencia;
 import ec.espe.dristribuidas.modelo.Itinerario;
 import ec.espe.dristribuidas.modelo.Lugar;
+import ec.espe.dristribuidas.reportes.ModeloDetalleItinerario;
+import ec.espe.dristribuidas.reportes.ModeloItinerario;
 import ec.espe.dristribuidas.servicios.BoletoServicio;
 import ec.espe.dristribuidas.servicios.BusServicio;
 import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
@@ -22,6 +24,7 @@ import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.ItinerarioServicio;
 import ec.espe.dristribuidas.servicios.LugarServicio;
 import ec.espe.dristribuidas.servicios.RutaServicio;
+import ec.espe.dristribuidas.utils.Correo;
 import ec.espe.dristribuidas.utils.ItineararioString;
 import ec.espe.dristribuidas.utils.ItinerarioUtil;
 import java.io.Serializable;
@@ -29,6 +32,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -37,6 +41,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.beanutils.BeanUtils;
 
 /**
@@ -46,6 +55,7 @@ import org.apache.commons.beanutils.BeanUtils;
 @ViewScoped
 @ManagedBean
 public class ItinerarioBean implements Serializable {
+
     @EJB
     private ItinerarioServicio itinerarioServicio;
     private List<Itinerario> itinearios;
@@ -55,34 +65,32 @@ public class ItinerarioBean implements Serializable {
     private Date fechaActual;
     private Date fechaMaxima;
     private List<ItinerarioUtil> posiblesItinerarios;
-    private List<ItineararioString> posiblesItinerariosString;   
+    private List<ItineararioString> posiblesItinerariosString;
     private ItineararioString posibleItinerarioString;
-   
-    
+
     @EJB
     private DetalleItinerarioServicio detalleItinerarioServicio;
-    
-    
+
     @EJB
     private LugarServicio lugarServicio;
     private List<Lugar> lugaresSalida;
     private List<Lugar> lugaresLlegada;
     private Integer codigoLugarSalida;
     private Integer codigoLugarLlegada;
-    
+
     @EJB
     private FrecuenciaServicio frecuenciaServicio;
     private List<Frecuencia> posibleItinerario;
     private List<Frecuencia> frecuencias;
     private List<Frecuencia> rutaFrecuancias;
     private Frecuencia rutaFrecuenciaSelected;
-    
+
     @EJB
     private BusServicio busServicio;
-    
+
     @EJB
     private RutaServicio rutaServicio;
-    
+
     @EJB
     private BoletoServicio boletoServicio;
     private List<Boleto> boletos;
@@ -91,21 +99,24 @@ public class ItinerarioBean implements Serializable {
     private Boleto boletoSelected;
     private List<Boleto> boletosComprados;
     private int indexBoletoFrec;
-    
+
     @EJB
     private FacturaServicio facturaServicio;
     private List<Factura> facturas;
     private Factura factura;
-    
+
     @EJB
     private DetalleFacturaServicio detalleFacturaServicio;
     private List<DetalleFactura> detalleFacturas;
     private DetalleFactura detalleFactura;
-    
+
     @ManagedProperty(value = "#{loginBean}")
     private LoginBean datosLogin;
 
     private Cliente cliente;
+
+    List<ModeloItinerario> itinerarioPDF;
+    List<ModeloDetalleItinerario> detalleItinerarioPDF;
 
     public List<Itinerario> getItinearios() {
         return itinearios;
@@ -190,14 +201,10 @@ public class ItinerarioBean implements Serializable {
     public void setRutaFrecuenciaSelected(Frecuencia rutaFrecuenciaSelected) {
         this.rutaFrecuenciaSelected = rutaFrecuenciaSelected;
     }
-    
-    
 
     public void setFechaMaxima(Date fechaMaxima) {
         this.fechaMaxima = fechaMaxima;
     }
-    
-    
 
     public List<Lugar> getLugaresSalida() {
         return lugaresSalida;
@@ -342,13 +349,9 @@ public class ItinerarioBean implements Serializable {
     public void setDetalleFactura(DetalleFactura detalleFactura) {
         this.detalleFactura = detalleFactura;
     }
-    
-    
-    
-    
+
     @PostConstruct
-    public void inicializar()
-    {
+    public void inicializar() {
         cliente = new Cliente();
         try {
             BeanUtils.copyProperties(this.cliente, this.getDatosLogin().getCliente());
@@ -358,109 +361,91 @@ public class ItinerarioBean implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error no controlado", e.getMessage()));
         }
 
-        
-        
         this.definirFechas();
         this.cargarLugaresSalida();
         this.cargarLugaresLlegada();
         this.posiblesItinerarios = new ArrayList<>();
-        this.posiblesItinerariosString=new ArrayList<>();
-        this.comprandoBoleto=false;
-        this.indexBoletoFrec=0;
+        this.posiblesItinerariosString = new ArrayList<>();
+        this.comprandoBoleto = false;
+        this.indexBoletoFrec = 0;
     }
-    
-    public void definirFechas()
-    {
+
+    public void definirFechas() {
         this.fechaActual = new Date();
-        this.fechaActual.setHours(this.fechaActual.getHours()+2);
+        this.fechaActual.setHours(this.fechaActual.getHours() + 2);
         this.fechaMaxima = new Date();
-        this.fechaMaxima.setHours(this.fechaMaxima.getHours()+2);
-        this.fechaMaxima.setMonth(this.fechaMaxima.getMonth()+3);
+        this.fechaMaxima.setHours(this.fechaMaxima.getHours() + 2);
+        this.fechaMaxima.setMonth(this.fechaMaxima.getMonth() + 3);
         this.fechaSalida = new Date();
-        this.fechaSalida.setHours(this.fechaSalida.getHours()+2);
+        this.fechaSalida.setHours(this.fechaSalida.getHours() + 2);
     }
-    
-    public void cargarLugaresSalida()
-    {
+
+    public void cargarLugaresSalida() {
         this.lugaresSalida = this.lugarServicio.obtenerTodas();
-        if(this.lugaresSalida.size()>0)
+        if (this.lugaresSalida.size() > 0) {
             this.codigoLugarSalida = this.lugaresSalida.get(0).getCodigo();
+        }
     }
-    
-    public void cargarLugaresLlegada()
-    {
+
+    public void cargarLugaresLlegada() {
         this.lugaresLlegada = this.lugarServicio.obtenerTodas();
-        for(int i=0;i<this.lugaresLlegada.size();i++)
-        {
-            if(this.lugaresLlegada.get(i).getCodigo().equals(this.codigoLugarSalida))
-            {
+        for (int i = 0; i < this.lugaresLlegada.size(); i++) {
+            if (this.lugaresLlegada.get(i).getCodigo().equals(this.codigoLugarSalida)) {
                 this.lugaresLlegada.remove(i);
             }
         }
-        if(this.lugaresLlegada.size()>0)
-            this.codigoLugarLlegada=this.lugaresLlegada.get(0).getCodigo();
+        if (this.lugaresLlegada.size() > 0) {
+            this.codigoLugarLlegada = this.lugaresLlegada.get(0).getCodigo();
+        }
     }
-    
-    public void cargarFrecuencias()
-    {
-        this.frecuencias=this.frecuenciaServicio.obtenerTodas();
-        for(int i=0;i<this.frecuencias.size();i++)
-        {
+
+    public void cargarFrecuencias() {
+        this.frecuencias = this.frecuenciaServicio.obtenerTodas();
+        for (int i = 0; i < this.frecuencias.size(); i++) {
             this.frecuencias.get(i).setBus(this.busServicio.obtenerPorID(this.frecuencias.get(i).getCodigoBus()));
             this.frecuencias.get(i).setRuta(this.rutaServicio.obtenerPorID(this.frecuencias.get(i).getCodigoRuta()));
         }
     }
-    
-    public void cargarFrecuenciasSeleccionadas()
-    {
+
+    public void cargarFrecuenciasSeleccionadas() {
         this.rutaFrecuancias = new ArrayList<>();
-        for(int i=0;i<this.posiblesItinerarios.get(this.posibleItinerarioString.getCodigo()).getFrecuencias().size();i++)
-        {
+        for (int i = 0; i < this.posiblesItinerarios.get(this.posibleItinerarioString.getCodigo()).getFrecuencias().size(); i++) {
             Frecuencia frecuenciaTmp = new Frecuencia();
             Frecuencia frecuenciAux = this.posiblesItinerarios.get(this.posibleItinerarioString.getCodigo()).getFrecuencias().get(i);
-            try
-            {
-                 BeanUtils.copyProperties(frecuenciaTmp, frecuenciAux);
-            }catch(Exception e)
-            {e.printStackTrace();}
-            
+            try {
+                BeanUtils.copyProperties(frecuenciaTmp, frecuenciAux);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             this.rutaFrecuancias.add(frecuenciaTmp);
         }
-        
-        this.boletosComprados=new ArrayList<>();
+
+        this.boletosComprados = new ArrayList<>();
     }
-    
-    public void cargarBoletos()
-    {
-        
-        this.boletos=this.boletoServicio.obtenerTodas();
-        this.boletosPorBusFrec=new ArrayList<>();
-        for(int i=0;i<this.boletos.size();i++)
-        {
-            if(this.boletos.get(i).getCodigoFrecuencia().equals(this.rutaFrecuenciaSelected.getCodigo())
-                    && this.boletos.get(i).getAsiento().getCodigoBus().equals((this.rutaFrecuenciaSelected.getCodigoBus())))
-            {
+
+    public void cargarBoletos() {
+
+        this.boletos = this.boletoServicio.obtenerTodas();
+        this.boletosPorBusFrec = new ArrayList<>();
+        for (int i = 0; i < this.boletos.size(); i++) {
+            if (this.boletos.get(i).getCodigoFrecuencia().equals(this.rutaFrecuenciaSelected.getCodigo())
+                    && this.boletos.get(i).getAsiento().getCodigoBus().equals((this.rutaFrecuenciaSelected.getCodigoBus()))) {
                 this.boletosPorBusFrec.add(this.boletos.get(i));
             }
         }
-        
-        
-        
-    }
-    
-    public void comprar()
-    {
-        FacesContext context = FacesContext.getCurrentInstance(); 
-        try
-        {
-            double costoTotal=0;
-            for(Boleto b: this.boletosComprados)
-            {
 
+    }
+
+    public void comprar() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            double costoTotal = 0;
+            for (Boleto b : this.boletosComprados) {
 
                 b.setEstado("O");
                 this.boletoServicio.actualiarBoleto(b);
-                costoTotal+=b.getCosto().doubleValue();
+                costoTotal += b.getCosto().doubleValue();
 
             }
 
@@ -475,16 +460,14 @@ public class ItinerarioBean implements Serializable {
             facturaTmp.setFechaEmision(new Date());
             facturaTmp.setCostoTotal(BigDecimal.valueOf(costoTotal));
 
-
             this.itinerarioServicio.crearItinerario(itinerarioTmp);
             this.facturaServicio.crearFactura(facturaTmp);
-            this.itinearios=itinerarioServicio.obtenerTodas();
-            this.itinerario=this.itinearios.get(this.itinearios.size()-1);
-            this.facturas=this.facturaServicio.obtenerTodas();
-            this.factura=this.facturas.get(this.facturas.size()-1);
-            int sec=0;
-            for(Boleto b: this.boletosComprados)
-            {
+            this.itinearios = itinerarioServicio.obtenerTodas();
+            this.itinerario = this.itinearios.get(this.itinearios.size() - 1);
+            this.facturas = this.facturaServicio.obtenerTodas();
+            this.factura = this.facturas.get(this.facturas.size() - 1);
+            int sec = 0;
+            for (Boleto b : this.boletosComprados) {
                 sec++;
                 DetalleItinerario detalleItinerarioTmp = new DetalleItinerario();
                 detalleItinerarioTmp.setCodigoBoleto(b.getCodigo());
@@ -493,12 +476,10 @@ public class ItinerarioBean implements Serializable {
                 detalleItinerarioTmp.setSecuencial(sec);
 
                 SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-                String desc = "Boleto No: "+b.getCodigo()
-                        +" Bus: " + b.getFrecuencia().getBus().getEmpresa().getNombre()
-                        +"-"+b.getFrecuencia().getCodigoBus()
-                        +" Fecha S: "+dt.format(b.getFrecuencia().getFechaSalida())
-                        +" Precio: "+b.getCosto();
-
+                String desc = "Boleto No: " + b.getCodigo()
+                        + " Bus: " + b.getFrecuencia().getBus().getEmpresa().getNombre()
+                        + "-" + b.getFrecuencia().getCodigoBus()
+                        + " Fecha S: " + dt.format(b.getFrecuencia().getFechaSalida());
 
                 DetalleFactura detalleFacturaTmp = new DetalleFactura();
                 detalleFacturaTmp.setCodigoFactura(this.factura.getCodigo());
@@ -511,28 +492,80 @@ public class ItinerarioBean implements Serializable {
                 this.detalleFacturaServicio.crearDetalleFactura(detalleFacturaTmp);
 
             }
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se copraron "+this.boletosComprados.size()+" boletos", null));
+
+            //Crear el reporte con los boletos, cargar datos en una lista
+            itinerarioPDF = new ArrayList<ModeloItinerario>();
+            detalleItinerarioPDF = new ArrayList<ModeloDetalleItinerario>();
+
+            //Cargar los datos de los boletos
+            for (Boleto b : this.boletosComprados) {
+                detalleItinerarioPDF.add(new ModeloDetalleItinerario(b.getFrecuencia().getRuta().getNombre(),
+                b.getFrecuencia().getFechaSalida(),
+                b.getFrecuencia().getFechaLlegada(),
+                b.getCodigo(),
+                b.getFrecuencia().getCodigoBus(),
+                b.getFrecuencia().getBus().getEmpresa().getNombre(),
+                b.getAsiento().getCodigoAsiento(),
+                b.getCosto()));
+            }
+
+            //Cargar los datos de clientes, y boletos 
+            itinerarioPDF.add(new ModeloItinerario(this.cliente.getNombre(),
+                    this.cliente.getIdentificacion(),
+                    this.cliente.getDireccion(), 
+                    this.cliente.getTelefono(),
+                    this.itinerario.getCodigo(),
+            detalleItinerarioPDF));
+            
+            crearReporteBoletos();
+
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Se copraron " + this.boletosComprados.size() + " boletos. "
+                    , "Los tickets de los boletos comprados fueron enviados a su correo."));
+
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-            
-        }
-        finally
-        {
+
+        } finally {
             this.reset();
         }
-        
-        
-        
     }
-    
-    public void buscarItinerarios()
-    {
+
+    public void crearReporteBoletos() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String nombreReporte = "reporte"+cliente.getCodigo().toString() +"itinerario"+ this.itinerario.getCodigo()+".pdf";
+        String urlDestinoReporte = "D:\\" + nombreReporte;
+        JasperPrint jasperPrint;
+
+        try {
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(itinerarioPDF);
+            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteItinerario.jasper");
+            jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap(), beanCollectionDataSource);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
+
+            Correo correo = new Correo();
+            Date fechaActual= new Date();
+
+            correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
+                    "Itinerario SAIV", "Detalle del itinerario " + this.itinerario.getCodigo()
+                    + " emitido el " + dateFormat.format(fechaActual),
+                    urlDestinoReporte, nombreReporte);
+
+        } catch (JRException e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha podido enviar itinerario", e.getMessage()));
+        }
+    }
+
+    public void buscarItinerarios() {
         this.posiblesItinerarios = new ArrayList<>();
         this.cargarFrecuencias();
         this.bi(this.codigoLugarSalida, this.posibleItinerario);
-        this.posiblesItinerariosString=new ArrayList<>();
-        for(int i=0;i<this.posiblesItinerarios.size();i++)
-        {
+        this.posiblesItinerariosString = new ArrayList<>();
+        for (int i = 0; i < this.posiblesItinerarios.size(); i++) {
             ItineararioString itiStringTmp = new ItineararioString();
             itiStringTmp.setCodigo(i);
             itiStringTmp.setDescripcion(this.posiblesItinerarios.get(i).toString());
@@ -540,136 +573,111 @@ public class ItinerarioBean implements Serializable {
             itiStringTmp.setDistancia(this.posiblesItinerarios.get(i).distanciaTotal());
             itiStringTmp.setTiempo(this.posiblesItinerarios.get(i).tiempoTotal());
             itiStringTmp.setNumeroConexiones(this.posiblesItinerarios.get(i).getFrecuencias().size());
-            
+
             this.posiblesItinerariosString.add(itiStringTmp);
-            
-            System.out.println(this.posiblesItinerarios.get(i).toString()+"Horas"+this.posiblesItinerarios.get(i).tiempoTotal());
+
+            System.out.println(this.posiblesItinerarios.get(i).toString() + "Horas" + this.posiblesItinerarios.get(i).tiempoTotal());
         }
     }
-    
-    public void bi(Integer codigoLugarSalida,List<Frecuencia> posibleItinerario)
-    {
-        for(int i=0;i<this.frecuencias.size();i++)
-        {
-            
-            if(this.frecuencias.get(i).getRuta().getCodigoLugarSalida().equals(codigoLugarSalida))
-            {
 
-                if(codigoLugarSalida.equals(this.codigoLugarSalida))
-                {
-                    posibleItinerario =  new ArrayList<>();
+    public void bi(Integer codigoLugarSalida, List<Frecuencia> posibleItinerario) {
+        for (int i = 0; i < this.frecuencias.size(); i++) {
+
+            if (this.frecuencias.get(i).getRuta().getCodigoLugarSalida().equals(codigoLugarSalida)) {
+
+                if (codigoLugarSalida.equals(this.codigoLugarSalida)) {
+                    posibleItinerario = new ArrayList<>();
                 }
-                
-                if(posibleItinerario.size()>0)
-                {
-                    int flag=0;
-                    for(int j=0;j<posibleItinerario.size();j++)
-                    {
-                        if(flag==1)
-                        {
+
+                if (posibleItinerario.size() > 0) {
+                    int flag = 0;
+                    for (int j = 0; j < posibleItinerario.size(); j++) {
+                        if (flag == 1) {
                             posibleItinerario.remove(j);
                             j--;
                         }
-                        if(posibleItinerario.get(j).getRuta().getCodigoLugarDestino().equals(codigoLugarSalida))
-                        {
-                            flag=1;
+                        if (posibleItinerario.get(j).getRuta().getCodigoLugarDestino().equals(codigoLugarSalida)) {
+                            flag = 1;
                         }
                     }
                 }
-                
+
                 boolean flagBP = true;
-                
-                if(posibleItinerario.size()>0)
-                {
-                    for(int j=0;j<posibleItinerario.size();j++)
-                    {
-                        
-                        if((posibleItinerario.get(j).getRuta().getCodigoLugarSalida().equals(this.frecuencias.get(i).getRuta().getCodigoLugarDestino())) || (posibleItinerario.get(j).getRuta().getCodigoLugarDestino().equals(this.frecuencias.get(i).getRuta().getCodigoLugarDestino())))                   
-                        {
-                            flagBP=false;
+
+                if (posibleItinerario.size() > 0) {
+                    for (int j = 0; j < posibleItinerario.size(); j++) {
+
+                        if ((posibleItinerario.get(j).getRuta().getCodigoLugarSalida().equals(this.frecuencias.get(i).getRuta().getCodigoLugarDestino())) || (posibleItinerario.get(j).getRuta().getCodigoLugarDestino().equals(this.frecuencias.get(i).getRuta().getCodigoLugarDestino()))) {
+                            flagBP = false;
                         }
-                        
+
                     }
                 }
-                
-                if(flagBP)
-                {
+
+                if (flagBP) {
                     posibleItinerario.add(this.frecuencias.get(i));
-                    if(this.frecuencias.get(i).getRuta().getCodigoLugarDestino().equals(this.codigoLugarLlegada))
-                    {
-                        List<Frecuencia> lTmp= new ArrayList<>();
-                        for(int l=0;l<posibleItinerario.size();l++)
-                        {
+                    if (this.frecuencias.get(i).getRuta().getCodigoLugarDestino().equals(this.codigoLugarLlegada)) {
+                        List<Frecuencia> lTmp = new ArrayList<>();
+                        for (int l = 0; l < posibleItinerario.size(); l++) {
                             Frecuencia fd = new Frecuencia();
                             Frecuencia fo = posibleItinerario.get(l);
-                            try
-                            {
+                            try {
                                 BeanUtils.copyProperties(fd, fo);
                                 lTmp.add(fd);
-                            }catch(Exception e)
-                            {
+                            } catch (Exception e) {
                                 System.out.println(e.getMessage());
                             }
                         }
-                        
-                        
-                        
-                        
+
                         ItinerarioUtil tmp = new ItinerarioUtil();
-                        
+
                         tmp.setFrecuencias(lTmp);
                         this.posiblesItinerarios.add(tmp);
-                    }
-                    else
-                    {
+                    } else {
                         this.bi(this.frecuencias.get(i).getRuta().getCodigoLugarDestino(), posibleItinerario);
                     }
                 }
             }
         }
     }
-    public void comprando()
-    {
-        this.comprandoBoleto=true;
-        for(int i=0;i<this.boletosComprados.size();i++)
-        {
-            if(this.boletosComprados.get(i).getCodigoFrecuencia().equals(this.boletoSelected.getCodigoFrecuencia()))
-            {
+
+    public void comprando() {
+        this.comprandoBoleto = true;
+        for (int i = 0; i < this.boletosComprados.size(); i++) {
+            if (this.boletosComprados.get(i).getCodigoFrecuencia().equals(this.boletoSelected.getCodigoFrecuencia())) {
                 this.boletosComprados.remove(i);
                 i--;
             }
         }
-        Boleto boletoTmp= new Boleto();
-        try
-        {
+        Boleto boletoTmp = new Boleto();
+        try {
             BeanUtils.copyProperties(boletoTmp, this.boletoSelected);
             this.boletosComprados.add(boletoTmp);
-        }catch(Exception e)
-        {e.printStackTrace();}
-  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
-    public void reset()
-    {
-        this.comprandoBoleto=false;
-        this.boletos=null;
-        this.indexBoletoFrec=0;
-        this.boletosComprados=null;
+
+    public void reset() {
+        this.comprandoBoleto = false;
+        this.boletos = null;
+        this.indexBoletoFrec = 0;
+        this.boletosComprados = null;
     }
-    
-    public void resetCompraBoletos()
-    {
+
+    public void resetCompraBoletos() {
         this.boletosComprados.removeAll(this.boletosComprados);
     }
-    public boolean estaComprado(Integer codigoBoleto)
-    {
-        boolean flag=false;
-        if(this.boletosComprados!=null)
-        for(Boleto b:this.boletosComprados)
-        {
-            if(b.getCodigo().equals(codigoBoleto))
-            {
-                flag=true;
-                break;
+
+    public boolean estaComprado(Integer codigoBoleto) {
+        boolean flag = false;
+        if (this.boletosComprados != null) {
+            for (Boleto b : this.boletosComprados) {
+                if (b.getCodigo().equals(codigoBoleto)) {
+                    flag = true;
+                    break;
+                }
             }
         }
         return flag;

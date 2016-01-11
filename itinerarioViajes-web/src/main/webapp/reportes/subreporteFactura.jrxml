@@ -43,9 +43,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="42" splitType="Stretch">
+		<band height="104" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="15" width="262" height="20" uuid="01a673f5-2c15-475d-aa3a-05e7efb22a23"/>
+				<reportElement x="0" y="15" width="258" height="54" uuid="01a673f5-2c15-475d-aa3a-05e7efb22a23"/>
 				<textFieldExpression><![CDATA[$F{descripcionServicio}]]></textFieldExpression>
 			</textField>
 			<textField>

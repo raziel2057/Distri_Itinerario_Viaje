@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreporteItinerario" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="db0d152c-9034-48ea-9ad8-5b7099f871a2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="nombreRuta" class="java.lang.String"/>
+	<field name="fechaSalida" class="java.util.Date"/>
+	<field name="fechaLlegada" class="java.util.Date"/>
+	<field name="codigoBoleto" class="java.lang.Integer"/>
+	<field name="codigoBus" class="java.lang.String"/>
+	<field name="nombreEmpresa" class="java.lang.String"/>
+	<field name="codigoAsiento" class="java.lang.Integer"/>
+	<field name="costo" class="java.math.BigDecimal"/>
+	<columnHeader>
+		<band height="42" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="234" splitType="Stretch">
+			<textField>
+				<reportElement x="114" y="31" width="416" height="20" uuid="02dcd98e-1242-4014-a11b-e6b40c174234"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreRuta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="31" width="100" height="20" uuid="5307fc3a-84fa-49e5-af05-f5667199d902"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ruta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="114" y="62" width="159" height="20" uuid="45371dc1-3421-4cbc-8fd0-d348f87e009b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaSalida}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="62" width="100" height="20" uuid="29e089d9-5a7c-401b-8c53-8bccb2e583c4"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de salida:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="389" y="62" width="141" height="20" uuid="8020413c-bc86-4349-b651-ea62e505d886"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaLlegada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="273" y="62" width="105" height="20" uuid="24f02273-f9fd-47ff-a13f-91a5236f0b13"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de llegada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="97" width="55" height="20" uuid="3c56780e-956e-41be-be4b-478de2ea450e"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigoBoleto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="97" width="51" height="20" uuid="0bb7b707-6e6d-42e6-8c4c-eaa666239b1f"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Boleto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="229" y="97" width="301" height="20" uuid="9fc6b7cc-7ad1-4c45-919e-c9e333db0e88"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreEmpresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="151" y="97" width="67" height="20" uuid="82febf5c-a286-41d6-a710-4df4bddc6f62"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empresa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="137" width="127" height="69" uuid="24ceb7e0-9b04-46f5-858a-8765b6f931b5"/>
+				<textElement>
+					<font size="48"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigoAsiento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="137" width="70" height="20" uuid="d5dcf480-736e-400c-bdc7-c8803b33dace"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ASIENTO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="348" y="122" width="182" height="84" uuid="3c12dad3-eae9-49d8-87e1-4ccc094858cb"/>
+				<textElement>
+					<font size="48"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="229" y="137" width="59" height="20" uuid="0bd068a0-e962-464a-9f3e-89858723f280"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COSTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="319" y="122" width="29" height="84" uuid="4074fe97-3382-46e5-9283-86d90fb19769"/>
+				<textElement>
+					<font size="48"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<line>
+				<reportElement x="14" y="15" width="516" height="1" forecolor="#000066" uuid="e89b8d01-71ca-4ef5-b7d3-7237d2d6b636"/>
+			</line>
+			<line>
+				<reportElement x="14" y="220" width="516" height="1" forecolor="#0066CC" uuid="3d7f36bd-eee7-4c1d-8840-d9af16ee3590"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

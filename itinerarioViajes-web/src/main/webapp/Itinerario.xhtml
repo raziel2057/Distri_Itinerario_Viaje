@@ -22,6 +22,18 @@ and open the template in the editor.
 
                         <div> <h2> Crear itinerario </h2> </div>
                         
+                        <div> <h3> Pasos para crear el itinerario:</h3>
+                        
+                            <h:outputLabel value="1. Seleccione el lugar de donde va a partir y el lugar a donde desea llegar."/>                            
+                            <h:outputLabel value="2. Seleccione su posible fecha de salida."/>                            
+                            <h:outputLabel value="3. En la tabla se le desplieguan todas las opciones que tiene para viajar con la información ingresada."/>                            
+                            <h:outputLabel value="4. Seleccione en la tabla el itinerario que mas se acomode a sus necesidades."/>                            
+                            <h:outputLabel value="5. De cada ruta debe comprar un boleto. Para esto de clic en la ruta y seleccione el número de asiento."/>                            
+                            <h:outputLabel value="6. Cuando este seguro de haber seleccionado los boletos de las rutas de clic en comprar."/>
+                            <h:outputLabel value="7. Los tickets de los boletos se enviarán a su correo electrónico."/>                            
+                          
+                        </div>
+                        
                         <h:selectOneMenu id="lugaresSalida" value="#{itinerarioBean.codigoLugarSalida}" required="true" label="Lugares Salida"  >
                             <p:ajax 
                                 listener="#{itinerarioBean.cargarLugaresLlegada()}"
