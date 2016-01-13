@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="132"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\ale\\Documents\\NetBeansProjects\\Distri_Itinerario_Viaje\\itinerarioViajes-web\\src\\main\\webapp\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="detalle" class="java.util.List"/>
