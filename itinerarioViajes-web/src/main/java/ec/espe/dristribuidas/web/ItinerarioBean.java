@@ -670,8 +670,26 @@ public class ItinerarioBean implements Serializable {
 
                     }
                 }
+                
+                boolean flagFecha = true;
+                
+                if(posibleItinerario.size() > 0)
+                {
+                    if(this.frecuencias.get(i).getFechaSalida().before(posibleItinerario.get(posibleItinerario.size()-1).getFechaLlegada()))
+                    {
+                        flagFecha = false;
+                    }
+                }
+                else
+                {
+                    if(this.frecuencias.get(i).getFechaSalida().before(this.fechaSalida))
+                    {
+                        flagFecha = false;
+                    }
+                }
+                
 
-                if (flagBP) {
+                if (flagBP && flagFecha) {
                     posibleItinerario.add(this.frecuencias.get(i));
                     if (this.frecuencias.get(i).getRuta().getCodigoLugarDestino().equals(this.codigoLugarLlegada)) {
                         List<Frecuencia> lTmp = new ArrayList<>();
