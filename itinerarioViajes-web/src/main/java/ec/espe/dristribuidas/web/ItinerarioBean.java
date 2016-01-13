@@ -611,9 +611,8 @@ public class ItinerarioBean implements Serializable {
             JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
         } catch (Exception e) {
 
-        }
-        
-        urlFactura=urlDestinoReporte;
+        }  
+        //urlFactura=urlDestinoReporte;
 
     }
 
@@ -717,6 +716,15 @@ public class ItinerarioBean implements Serializable {
     }
 
     public void reset() {
+        this.comprandoBoleto = false;
+        this.boletos = null;
+        this.indexBoletoFrec = 0;
+        this.boletosComprados = null;
+        this.enMostrarFactura = false;
+        this.urlFactura = "";
+    }
+    
+    public void resetUltimoAceptar() {
         this.comprandoBoleto = false;
         this.boletos = null;
         this.indexBoletoFrec = 0;
