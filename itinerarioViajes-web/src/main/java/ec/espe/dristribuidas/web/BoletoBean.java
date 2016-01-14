@@ -11,8 +11,10 @@ import ec.espe.dristribuidas.modelo.Frecuencia;
 import ec.espe.dristribuidas.modelo.Lugar;
 import ec.espe.dristribuidas.servicios.AsientoServicio;
 import ec.espe.dristribuidas.servicios.BoletoServicio;
+import ec.espe.dristribuidas.servicios.BusServicio;
 import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.LugarServicio;
+import ec.espe.dristribuidas.servicios.RutaServicio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +57,12 @@ public class BoletoBean implements Serializable {
     private List<Lugar> lugares;
     private Integer codigoLugar;
 
+    @EJB
+    private RutaServicio rutaServicio;
+    
+    @EJB
+    private BusServicio busServicio;
+    
     public Boleto getBoleto() {
         return boleto;
     }
@@ -154,8 +162,14 @@ public class BoletoBean implements Serializable {
     {
         this.frecuencias=frecuenciaServicio.obtenerTodas();
         this.frecuenciasPorLugar = new ArrayList<>();
+        if(this.frecuencias!=null)
         for(int i = 0; i<this.frecuencias.size();i++)
         {
+            if(this.frecuencias.get(i).getRuta()==null)
+            {
+                this.frecuencias.get(i).setRuta(this.rutaServicio.obtenerPorID(this.frecuencias.get(i).getCodigoRuta()));
+                this.frecuencias.get(i).setBus(this.busServicio.obtenerPorID(this.frecuencias.get(i).getCodigoBus()));
+            }
             if(this.frecuencias.get(i).getRuta().getCodigoLugarSalida().equals(this.codigoLugar))
             {
                 this.frecuenciasPorLugar.add(this.frecuencias.get(i));
@@ -176,6 +190,12 @@ public class BoletoBean implements Serializable {
         this.frecuenciasPorLugar = new ArrayList<>();
         for(int i = 0; i<this.frecuencias.size();i++)
         {
+            if(this.frecuencias.get(i).getRuta()==null)
+            {
+                this.frecuencias.get(i).setRuta(this.rutaServicio.obtenerPorID(this.frecuencias.get(i).getCodigoRuta()));
+                this.frecuencias.get(i).setBus(this.busServicio.obtenerPorID(this.frecuencias.get(i).getCodigoBus()));
+                
+            }
             if(this.frecuencias.get(i).getRuta().getCodigoLugarSalida().equals(this.codigoLugar))
             {
                 this.frecuenciasPorLugar.add(this.frecuencias.get(i));
@@ -193,6 +213,7 @@ public class BoletoBean implements Serializable {
     {
         this.boletos = this.boletoServicio.obtenerTodas();
         this.boletosPorFrecuencia=new ArrayList<>();
+        if(this.boletos!=null)
         for(int i=0;i<this.boletos.size();i++)
         {
             if(this.boletos.get(i).getCodigoFrecuencia().equals(this.codigoFrecuencia))
@@ -204,6 +225,9 @@ public class BoletoBean implements Serializable {
         {
             this.boletosPorFrecuencia.get(i).setAsiento(this.asientoServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getCodigoAsiento()));
             this.boletosPorFrecuencia.get(i).setFrecuencia(this.frecuenciaServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getCodigoFrecuencia()));
+            this.boletosPorFrecuencia.get(i).getFrecuencia().setBus(this.busServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getFrecuencia().getCodigoBus()));
+            this.boletosPorFrecuencia.get(i).getFrecuencia().setRuta(this.rutaServicio.obtenerPorID(this.boletosPorFrecuencia.get(i).getFrecuencia().getCodigoRuta()));
+        
         }
     }
     
@@ -215,6 +239,7 @@ public class BoletoBean implements Serializable {
             this.asientos = this.asientoServicio.obtenerTodas();
             Frecuencia frecuenciaTmp = this.frecuenciaServicio.obtenerPorID(codigoFrecuencia);
             this.asientosPorBus=new ArrayList<>();
+            if(this.asientos!=null)
             for(int i=0; i<this.asientos.size();i++)
             {
                 if(this.asientos.get(i).getCodigoBus().equals(frecuenciaTmp.getCodigoBus()))
@@ -238,6 +263,7 @@ public class BoletoBean implements Serializable {
                 this.boleto=new Boleto();
                 this.boleto.setCodigoAsiento(a.getCodigoAsiento());
                 this.boleto.setCodigoFrecuencia(this.codigoFrecuencia);
+                frecuenciaTmp.setRuta(this.rutaServicio.obtenerPorID(frecuenciaTmp.getCodigoRuta()));
                 this.boleto.setCosto(a.getCosto().add(frecuenciaTmp.getRuta().getCosto()));
                 this.boleto.setEstado("D");
                 this.boletoServicio.crearBoleto(this.boleto);

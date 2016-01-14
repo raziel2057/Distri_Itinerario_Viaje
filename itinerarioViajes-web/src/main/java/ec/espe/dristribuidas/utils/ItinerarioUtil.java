@@ -8,6 +8,7 @@ package ec.espe.dristribuidas.utils;
 import ec.espe.dristribuidas.modelo.Frecuencia;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -98,8 +99,9 @@ public class ItinerarioUtil {
             tiempoDias+=(tiempoHoras-tiempoHorasAux)/24;
             tiempoHoras=tiempoHorasAux;
         }
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         
-        return "Días: "+tiempoDias+" Horas: "+tiempoHoras;
+        return "F.S: "+dt.format(this.frecuencias.get(0).getFechaSalida())+" Días: "+tiempoDias+" Horas: "+tiempoHoras;
     }
 
     @Override

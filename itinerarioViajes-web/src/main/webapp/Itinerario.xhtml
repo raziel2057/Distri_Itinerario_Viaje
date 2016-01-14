@@ -70,19 +70,19 @@ and open the template in the editor.
                                 <h:outputText value="#{itinerarioS.descripcion}" />
                             </p:column>
 
-                            <p:column headerText="Distancia" sortBy="#{itinerarioS.distancia}">
+                            <p:column headerText="Distancia" sortBy="#{itinerarioS.distancia}" width="80">
                                 <h:outputText value="#{itinerarioS.distancia}"  />
                             </p:column>
 
-                            <p:column headerText="Tiempo" sortBy="#{itinerarioS.tiempo}">
+                            <p:column headerText="Tiempo" sortBy="#{itinerarioS.tiempo}" width="150">
                                 <h:outputText value="#{itinerarioS.tiempo}" />
                             </p:column>
 
-                            <p:column headerText="Costo" sortBy="#{itinerarioS.costo}">
+                            <p:column headerText="Costo" sortBy="#{itinerarioS.costo}" width="50">
                                 <h:outputText value="#{itinerarioS.costo}" />
                             </p:column>
 
-                            <p:column headerText="N Conexiones" sortBy="#{itinerarioS.numeroConexiones}">
+                            <p:column headerText="N Conexiones" sortBy="#{itinerarioS.numeroConexiones}" width="40">
                                 <h:outputText value="#{itinerarioS.numeroConexiones}" />
                             </p:column>
 
@@ -174,20 +174,20 @@ and open the template in the editor.
                                 <div align="left">
                                     <h:outputText value="Cliente: " style="font-weight:bold; " />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
-                                    <br/>
+                                    
                                     <h:outputText value="               Identificación: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
                                     <br/>
                                     <h:outputText value="Dirección: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.direccion}" />
-                                    <br/>
+                                    
                                     <h:outputText value="               Teléfono: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.telefono}" />
                                     <br/><br/>
 
                                     <h:outputText value="Factura No: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.codigoFactura}" />
-                                    <br/>
+                                    
                                     <h:outputText value="               Fecha de emisión: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.fechaEmision}" >
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
@@ -213,18 +213,13 @@ and open the template in the editor.
                                     </p:column>
                                 </p:dataTable>
                                 <p:messages id="message" for="cmd2" showDetail="true" showSummary="true"/>
-
-                                <br/>
-                                <h:outputText value="Total de la factura: " style="font-weight:bold" />
-                                <h:outputText value="#{itinerarioBean.modeloFactura.costoTotal}" >
-                                </h:outputText>
-                                <br/>
+                                
                                 <p:commandButton value="Descargar factura" actionListener="#{itinerarioBean.descargarFactura()}" ajax="false"/>
                                 <p:commandButton value="Enviar factura a mi correo" actionListener="#{itinerarioBean.enviarFacturaACorreo()}" 
                                                  id="cmd2" update="message"/>
-
+                                
                                 <p:commandButton value="Cerrar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form"/>
-
+                                
                             </p:outputPanel>
                         </p:dialog>
                     </div>

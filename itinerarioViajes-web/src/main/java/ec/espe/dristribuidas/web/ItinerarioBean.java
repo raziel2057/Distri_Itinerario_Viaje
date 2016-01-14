@@ -17,6 +17,7 @@ import ec.espe.dristribuidas.reportes.ModeloDetalleFactura;
 import ec.espe.dristribuidas.reportes.ModeloDetalleItinerario;
 import ec.espe.dristribuidas.reportes.ModeloFactura;
 import ec.espe.dristribuidas.reportes.ModeloItinerario;
+import ec.espe.dristribuidas.servicios.AsientoServicio;
 import ec.espe.dristribuidas.servicios.BoletoServicio;
 import ec.espe.dristribuidas.servicios.BusServicio;
 import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
@@ -95,6 +96,9 @@ public class ItinerarioBean implements Serializable {
 
     @EJB
     private RutaServicio rutaServicio;
+    
+    @EJB
+    private AsientoServicio asientoServicio;
 
     @EJB
     private BoletoServicio boletoServicio;
@@ -435,6 +439,7 @@ public class ItinerarioBean implements Serializable {
         for (int i = 0; i < this.frecuencias.size(); i++) {
             this.frecuencias.get(i).setBus(this.busServicio.obtenerPorID(this.frecuencias.get(i).getCodigoBus()));
             this.frecuencias.get(i).setRuta(this.rutaServicio.obtenerPorID(this.frecuencias.get(i).getCodigoRuta()));
+            
         }
     }
 
@@ -460,6 +465,7 @@ public class ItinerarioBean implements Serializable {
         this.boletos = this.boletoServicio.obtenerTodas();
         this.boletosPorBusFrec = new ArrayList<>();
         for (int i = 0; i < this.boletos.size(); i++) {
+            this.boletos.get(i).setAsiento(this.asientoServicio.obtenerPorID(this.boletos.get(i).getCodigoAsiento()));
             if (this.boletos.get(i).getCodigoFrecuencia().equals(this.rutaFrecuenciaSelected.getCodigo())
                     && this.boletos.get(i).getAsiento().getCodigoBus().equals((this.rutaFrecuenciaSelected.getCodigoBus()))) {
                 this.boletosPorBusFrec.add(this.boletos.get(i));
