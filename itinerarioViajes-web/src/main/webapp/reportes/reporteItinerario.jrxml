@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fef756a-7066-46df-935b-ad4a7261752c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="9"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -13,7 +13,7 @@
 	<field name="telefono" class="java.lang.String"/>
 	<field name="codigoItinerario" class="java.lang.Integer"/>
 	<title>
-		<band height="62" splitType="Stretch">
+		<band height="59" splitType="Stretch">
 			<staticText>
 				<reportElement x="54" y="0" width="462" height="29" forecolor="#000099" uuid="7f6fe9ec-d0a2-41dd-851a-1800b27d1ba8"/>
 				<textElement>
@@ -30,94 +30,98 @@
 			</staticText>
 		</band>
 	</title>
-	<columnHeader>
-		<band height="316" splitType="Stretch">
+	<pageHeader>
+		<band height="172">
 			<rectangle radius="0">
-				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="42f9ae38-1e7d-4765-a74b-76ddaea2bf72"/>
+				<reportElement mode="Opaque" x="0" y="18" width="555" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="42f9ae38-1e7d-4765-a74b-76ddaea2bf72"/>
 				<graphicElement fill="Solid"/>
 			</rectangle>
+			<staticText>
+				<reportElement x="0" y="18" width="212" height="20" uuid="501f3fe2-8aff-4f29-a4e2-02dda1f3f1aa"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos del cliente]]></text>
+			</staticText>
 			<rectangle>
-				<reportElement x="0" y="131" width="555" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="769f219e-8965-4cdd-bf4b-d09cbf6ac320"/>
+				<reportElement x="0" y="148" width="555" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="769f219e-8965-4cdd-bf4b-d09cbf6ac320"/>
 			</rectangle>
 			<textField>
-				<reportElement x="115" y="33" width="440" height="20" uuid="42662829-3b82-44e0-90f0-385b1056cc14"/>
+				<reportElement x="115" y="50" width="440" height="20" uuid="42662829-3b82-44e0-90f0-385b1056cc14"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="17" y="33" width="82" height="20" uuid="b114489d-8baf-405b-a78f-61cbd9decf2e"/>
+				<reportElement x="17" y="50" width="82" height="20" uuid="b114489d-8baf-405b-a78f-61cbd9decf2e"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="212" height="20" uuid="501f3fe2-8aff-4f29-a4e2-02dda1f3f1aa"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Datos del cliente]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="17" y="64" width="82" height="20" uuid="88694102-db0d-449f-ad74-d7816042f4de"/>
+				<reportElement x="17" y="81" width="82" height="20" uuid="88694102-db0d-449f-ad74-d7816042f4de"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="115" y="64" width="208" height="20" uuid="46b63263-f851-4432-9aed-41378878dc11"/>
+				<reportElement x="115" y="81" width="208" height="20" uuid="46b63263-f851-4432-9aed-41378878dc11"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="335" y="64" width="56" height="20" uuid="24d3771f-4d9c-4dc6-a7d1-c904fbb8b383"/>
+				<reportElement x="335" y="81" width="56" height="20" uuid="24d3771f-4d9c-4dc6-a7d1-c904fbb8b383"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Teléfono:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="402" y="64" width="153" height="20" uuid="76f21a7b-64c8-441e-be7b-f54cdb50b1af"/>
+				<reportElement x="402" y="81" width="153" height="20" uuid="76f21a7b-64c8-441e-be7b-f54cdb50b1af"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="17" y="94" width="82" height="20" uuid="1f0da3f7-b887-4294-8d72-fed996349703"/>
+				<reportElement x="17" y="111" width="82" height="20" uuid="1f0da3f7-b887-4294-8d72-fed996349703"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="115" y="94" width="440" height="20" uuid="51aefc54-7fff-4bcf-9960-94368d4e3ea6"/>
+				<reportElement x="115" y="111" width="440" height="20" uuid="51aefc54-7fff-4bcf-9960-94368d4e3ea6"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="131" width="212" height="20" uuid="667304ce-79aa-46ef-a7dc-0637620104e3"/>
+				<reportElement x="0" y="148" width="212" height="20" uuid="667304ce-79aa-46ef-a7dc-0637620104e3"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Boletos del itinerario]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="152" y="131" width="164" height="20" uuid="3f8024f6-4f02-4f7f-9b5f-55725c06687f"/>
+				<reportElement x="152" y="148" width="164" height="20" uuid="3f8024f6-4f02-4f7f-9b5f-55725c06687f"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigoItinerario}]]></textFieldExpression>
 			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="158" splitType="Stretch">
 			<subreport>
-				<reportElement x="17" y="177" width="538" height="127" uuid="3868560e-5124-43b4-8796-b3ab230b5fae"/>
+				<reportElement x="13" y="14" width="538" height="127" uuid="3868560e-5124-43b4-8796-b3ab230b5fae"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{boletos})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreporteItinerario.jasper"]]></subreportExpression>
 			</subreport>
