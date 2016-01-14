@@ -596,13 +596,12 @@ public class ItinerarioBean implements Serializable {
 
             JasperExportManager.exportReportToPdfFile(jasperPrint2, urlDestinoReporte2);
 
-            /*
             Correo correo = new Correo();
             correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
                     "Itinerario SAIV", "Detalle del itinerario " + this.itinerario.getCodigo()
                     + " emitido el " + dateFormat.format(fechaActual),
                     urlDestinoReporte2, nombreReporte2);
-*/
+
         } catch (JRException e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha podido enviar itinerario", e.getMessage()));
