@@ -93,7 +93,8 @@ and open the template in the editor.
                             <p:outputPanel id="itisDetail" style="text-align:center;">
                                 <p:panelGrid  columns="2" rendered="#{not empty itinerarioBean.rutaFrecuancias}" columnClasses="label,value">
                                     <p:dataTable id="ruta" var="rFrecuencia" value="#{itinerarioBean.rutaFrecuancias}" scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="250"  
-                                                 selectionMode="single" selection="#{itinerarioBean.rutaFrecuenciaSelected}" rowKey="#{rFrecuencia.codigo}" >
+                                                 selectionMode="single" selection="#{itinerarioBean.rutaFrecuenciaSelected}" rowKey="#{rFrecuencia.codigo}" 
+                                                 rowStyleClass="#{itinerarioBean.estaElegido(rFrecuencia.codigo)?'Comprado':null}">
 
                                         <p:ajax event="rowSelect" listener="#{itinerarioBean.cargarBoletos()}"  update="@form" oncomplete="PF('boletoDialog').show()"/>
                                         <p:column headerText="Ruta" width="300">
@@ -150,7 +151,7 @@ and open the template in the editor.
                                         <p:column headerText="Asiento" >
                                             <h:outputText value="#{boleto.asiento.nombre}" />
                                         </p:column>
-                                        <p:column headerText="Costo" >
+                                        <p:column headerText="Costo Total" >
                                             <h:outputText value="#{boleto.costo}" />
                                         </p:column>
 

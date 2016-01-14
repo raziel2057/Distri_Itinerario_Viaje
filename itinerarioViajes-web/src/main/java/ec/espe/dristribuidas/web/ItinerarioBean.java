@@ -802,4 +802,16 @@ public class ItinerarioBean implements Serializable {
         }
         return flag;
     }
+    public boolean estaElegido(Integer codigoFrecuencia) {
+        boolean flag = false;
+        if (this.boletosComprados != null) {
+            for (Boleto b : this.boletosComprados) {
+                if (b.getCodigoFrecuencia().equals(codigoFrecuencia)) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        return flag;
+    }
 }
