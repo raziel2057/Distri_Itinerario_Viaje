@@ -15,6 +15,7 @@ import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.LugarServicio;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -247,5 +248,9 @@ public class BoletoBean implements Serializable {
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
         } 
+    }
+    public String obtenerFecha(Date date)
+    {
+        return date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900)+"-"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     }
 }

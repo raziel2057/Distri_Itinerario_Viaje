@@ -172,12 +172,6 @@ public class AsientoBean extends BaseBean implements Serializable {
         
         this.cargarBuses();
         
-        /*this.busesPorEmpresa = Lambda.select(this.buses, having(on(Bus.class).getCodigoEmpresa(),
-                Matchers.equalTo("")));*/
-
-        /*this.asientos=this.asientoServicio.obtenerTodas();
-        /*this.asientosPorBus =  Lambda.select(this.asientos,having(on(Asiento.class).getCodigoBus(),
-                equalTo(this.codigoBus)));*/
     }
     
     public void cargarBuses()
@@ -300,6 +294,7 @@ public class AsientoBean extends BaseBean implements Serializable {
                     this.asiento.setCantidad(i);
                     this.asientoServicio.crearAsiento(this.asiento);
                 }
+                
                 this.cargarAsientos();
  
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registraron los asientos correctamente", null));

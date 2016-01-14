@@ -88,7 +88,7 @@ and open the template in the editor.
 
                                     <p:spacer />
                                     <p:commandButton value="Aceptar" actionListener="#{frecuenciaBean.aceptar()}"  immediate="false" update="@form" disabled="#{frecuenciaBean.frecuencia eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{frecuenciaBean.cancelar()}" update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{frecuenciaBean.cancelar()}" immediate="true" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

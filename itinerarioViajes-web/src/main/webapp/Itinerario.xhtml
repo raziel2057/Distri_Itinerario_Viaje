@@ -89,7 +89,7 @@ and open the template in the editor.
                         </p:dataTable>
 
 
-                        <p:dialog  header="Itinerario Seleccionado" widgetVar="itiSelectDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="350">
+                        <p:dialog  header="Seleccione un asiento por cada ruta del itinerario seleccionado" widgetVar="itiSelectDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="350">
                             <p:outputPanel id="itisDetail" style="text-align:center;">
                                 <p:panelGrid  columns="2" rendered="#{not empty itinerarioBean.rutaFrecuancias}" columnClasses="label,value">
                                     <p:dataTable id="ruta" var="rFrecuencia" value="#{itinerarioBean.rutaFrecuancias}" scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="250"  

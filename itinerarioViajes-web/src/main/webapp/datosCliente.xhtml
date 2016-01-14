@@ -59,7 +59,7 @@ and open the template in the editor.
                                     <p:spacer />
                                     <p:commandButton value="Aceptar" actionListener="#{clienteBean.confirmarClaveModificarDatosClienteSesion()}" 
                                                      immediate="false" update="@form" />
-                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cerrar()}"  update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cerrar()}" immediate="true"  update="@form" />
 
 
                                 </p:panelGrid>

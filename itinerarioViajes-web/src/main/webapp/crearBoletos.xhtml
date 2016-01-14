@@ -33,7 +33,7 @@ and open the template in the editor.
                             <p:ajax event="change"
                                     listener="#{boletoBean.cargarBoletos()}"
                                                 update="boletos" />
-                            <f:selectItems value="#{boletoBean.frecuenciasPorLugar}" var="frec" itemValue="#{frec.codigo}" itemLabel="#{frec.ruta.lugarSalida.nombre.concat('-'.concat(frec.ruta.lugarDestino.nombre.concat('-'.concat(frec.bus.codigo.concat(frec.bus.empresa.nombre)))))}" />
+                            <f:selectItems value="#{boletoBean.frecuenciasPorLugar}" var="frec" itemValue="#{frec.codigo}" itemLabel="#{frec.ruta.lugarSalida.nombre.concat('-'.concat(frec.ruta.lugarDestino.nombre.concat('-'.concat(frec.bus.codigo.concat(frec.bus.empresa.nombre.concat('-'.concat(boletoBean.obtenerFecha(frec.fechaSalida))))))))}" />
                         </h:selectOneMenu>
                         
                         <p:dataTable id="boletos" var="boleto" value="#{boletoBean.boletosPorFrecuencia}" scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150"  

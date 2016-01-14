@@ -77,7 +77,7 @@ and open the template in the editor.
 
                                     <p:spacer />
                                     <p:commandButton value="Guardar" actionListener="#{asientoBean.aceptar()}"  immediate="false" update="asientos" oncomplete="PF('asignarDialog').hide()" disabled="#{asientoBean.asiento eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{asientoBean.cancelar()}" update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{asientoBean.cancelar()}" immediate="true" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

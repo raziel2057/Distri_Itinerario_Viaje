@@ -50,7 +50,7 @@ and open the template in the editor.
 
                                     <p:spacer />
                                     <p:commandButton value="Guardar" actionListener="#{lugarBean.aceptar()}"  immediate="false" update="@form" disabled="#{lugarBean.lugar eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{lugarBean.cancelar()}" update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{lugarBean.cancelar()}" immediate="true" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

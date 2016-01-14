@@ -124,7 +124,7 @@ and open the template in the editor.
 
                                     <p:spacer />
                                     <p:commandButton value="Guardar" actionListener="#{rutaBean.aceptar()}"  immediate="false" update="@form" disabled="#{rutaBean.ruta eq null}"/>
-                                    <p:commandButton value="Cancelar" actionListener="#{rutaBean.cancelar()}" update="@form" />
+                                    <p:commandButton value="Cancelar" actionListener="#{rutaBean.cancelar()}" immediate="true" update="@form" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>
