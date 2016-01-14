@@ -71,7 +71,11 @@ and open the template in the editor.
                             </p:column>
 
                             <p:column headerText="Distancia" sortBy="#{itinerarioS.distancia}" width="80">
-                                <h:outputText value="#{itinerarioS.distancia}"  />
+                                <h:outputText value="#{itinerarioS.distancia}"  >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
+                                
+                                
                             </p:column>
 
                             <p:column headerText="Tiempo" sortBy="#{itinerarioS.tiempo}" width="150">
@@ -79,7 +83,9 @@ and open the template in the editor.
                             </p:column>
 
                             <p:column headerText="Costo" sortBy="#{itinerarioS.costo}" width="50">
-                                <h:outputText value="#{itinerarioS.costo}" />
+                                <h:outputText value="#{itinerarioS.costo}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
                             </p:column>
 
                             <p:column headerText="N Conexiones" sortBy="#{itinerarioS.numeroConexiones}" width="40">
