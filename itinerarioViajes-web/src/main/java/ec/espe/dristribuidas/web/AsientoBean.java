@@ -228,6 +228,7 @@ public class AsientoBean extends BaseBean implements Serializable {
              this.asientosPorBus.add(a);        
         }
         
+        
         this.numeroMaxAsientos=50-this.asientosPorBus.size();
         this.listadoNumeroAsientos = new ArrayList<>();
         for(int i = 1; i<=this.numeroMaxAsientos;i++)

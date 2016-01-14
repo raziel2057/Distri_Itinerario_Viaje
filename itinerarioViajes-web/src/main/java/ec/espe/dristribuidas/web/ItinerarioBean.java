@@ -20,8 +20,10 @@ import ec.espe.dristribuidas.reportes.ModeloItinerario;
 import ec.espe.dristribuidas.servicios.AsientoServicio;
 import ec.espe.dristribuidas.servicios.BoletoServicio;
 import ec.espe.dristribuidas.servicios.BusServicio;
+import ec.espe.dristribuidas.servicios.ClienteServicio;
 import ec.espe.dristribuidas.servicios.DetalleFacturaServicio;
 import ec.espe.dristribuidas.servicios.DetalleItinerarioServicio;
+import ec.espe.dristribuidas.servicios.EmpresaServicio;
 import ec.espe.dristribuidas.servicios.FacturaServicio;
 import ec.espe.dristribuidas.servicios.FrecuenciaServicio;
 import ec.espe.dristribuidas.servicios.ItinerarioServicio;
@@ -99,6 +101,12 @@ public class ItinerarioBean implements Serializable {
     
     @EJB
     private AsientoServicio asientoServicio;
+    
+    @EJB
+    private EmpresaServicio empresaServicio;
+    
+    @EJB
+    private ClienteServicio clienteServicio;
 
     @EJB
     private BoletoServicio boletoServicio;
@@ -438,6 +446,7 @@ public class ItinerarioBean implements Serializable {
         this.frecuencias = this.frecuenciaServicio.obtenerTodas();
         for (int i = 0; i < this.frecuencias.size(); i++) {
             this.frecuencias.get(i).setBus(this.busServicio.obtenerPorID(this.frecuencias.get(i).getCodigoBus()));
+            this.frecuencias.get(i).getBus().setEmpresa(this.empresaServicio.obtenerPorID(this.frecuencias.get(i).getBus().getCodigoEmpresa()));
             this.frecuencias.get(i).setRuta(this.rutaServicio.obtenerPorID(this.frecuencias.get(i).getCodigoRuta()));
             
         }
@@ -478,6 +487,16 @@ public class ItinerarioBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             double costoTotal = 0;
+            
+            for(int i =0; i<this.boletosComprados.size();i++)
+            {
+               this.boletosComprados.get(i).setAsiento(this.asientoServicio.obtenerPorID(this.boletosComprados.get(i).getCodigoAsiento()));
+               this.boletosComprados.get(i).setFrecuencia(this.frecuenciaServicio.obtenerPorID(this.boletosComprados.get(i).getCodigoFrecuencia()));
+      
+               this.boletosComprados.get(i).getFrecuencia().setBus(this.busServicio.obtenerPorID(this.boletosComprados.get(i).getFrecuencia().getCodigoBus()));
+               this.boletosComprados.get(i).getFrecuencia().getBus().setEmpresa(this.empresaServicio.obtenerPorID(this.boletosComprados.get(i).getFrecuencia().getBus().getCodigoEmpresa()));
+               this.boletosComprados.get(i).getFrecuencia().setRuta(this.rutaServicio.obtenerPorID(this.boletosComprados.get(i).getFrecuencia().getCodigoRuta()));
+            }
             for (Boleto b : this.boletosComprados) {
 
                 b.setEstado("O");
@@ -501,11 +520,15 @@ public class ItinerarioBean implements Serializable {
             this.facturaServicio.crearFactura(facturaTmp);
             this.itinearios = itinerarioServicio.obtenerTodas();
             this.itinerario = this.itinearios.get(this.itinearios.size() - 1);
+            this.itinerario.setCliente(this.clienteServicio.obtenerPorID(this.itinerario.getCodigoCliente()));
             this.facturas = this.facturaServicio.obtenerTodas();
             this.factura = this.facturas.get(this.facturas.size() - 1);
+            this.factura.setCliente(this.clienteServicio.obtenerPorID(this.factura.getCodigoCliente()));
             int sec = 0;
 
             detalleFacturaPDF = new ArrayList<ModeloDetalleFactura>();
+            
+            
 
             for (Boleto b : this.boletosComprados) {
                 sec++;
