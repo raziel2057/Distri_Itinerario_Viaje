@@ -29,6 +29,7 @@ import ec.espe.dristribuidas.servicios.RutaServicio;
 import ec.espe.dristribuidas.utils.Correo;
 import ec.espe.dristribuidas.utils.ItineararioString;
 import ec.espe.dristribuidas.utils.ItinerarioUtil;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -118,13 +121,18 @@ public class ItinerarioBean implements Serializable {
     private Cliente cliente;
 
     private boolean enMostrarFactura;
-    private String urlFactura;
+    private ModeloFactura modeloFactura;
 
     List<ModeloItinerario> itinerarioPDF;
     List<ModeloDetalleItinerario> detalleItinerarioPDF;
     List<ModeloFactura> facturaPDF;
     List<ModeloDetalleFactura> detalleFacturaPDF;
 
+    private String nombreReporte;
+    private String urlDestinoReporte;
+
+    private JasperPrint jasperPrint;
+    
     public List<Itinerario> getItinearios() {
         return itinearios;
     }
@@ -365,12 +373,12 @@ public class ItinerarioBean implements Serializable {
         this.enMostrarFactura = enMostrarFactura;
     }
 
-    public String geturlFactura() {
-        return urlFactura;
+    public List<ModeloDetalleFactura> getDetalleFacturaPDF() {
+        return detalleFacturaPDF;
     }
 
-    public void seturlFactura(String urlFactura) {
-        this.urlFactura = urlFactura;
+    public ModeloFactura getModeloFactura() {
+        return modeloFactura;
     }
 
     @PostConstruct
@@ -550,13 +558,14 @@ public class ItinerarioBean implements Serializable {
                     detalleItinerarioPDF));
 
             //crear datos cliente y factura
-            facturaPDF.add(new ModeloFactura(this.cliente.getNombre(),
+            modeloFactura = new ModeloFactura(this.cliente.getNombre(),
                     this.cliente.getIdentificacion(),
                     this.cliente.getDireccion(), this.cliente.getTelefono(),
                     this.factura.getCodigo(),
                     this.factura.getFechaEmision(),
                     this.factura.getCostoTotal(),
-                    detalleFacturaPDF));
+                    detalleFacturaPDF);
+            facturaPDF.add(modeloFactura);
             crearReporteBoletos();
             enMostrarFactura = true;
 
@@ -598,9 +607,8 @@ public class ItinerarioBean implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha podido enviar itinerario", e.getMessage()));
         }
 
-        String nombreReporte = "reporte" + cliente.getCodigo().toString() + "factura" + this.factura.getCodigo().toString() + ".pdf";
-        String urlDestinoReporte = "D:\\" + nombreReporte;
-        JasperPrint jasperPrint;
+        nombreReporte = "reporte" + cliente.getCodigo().toString() + "factura" + this.factura.getCodigo().toString() + ".pdf";
+        urlDestinoReporte = "D:\\" + nombreReporte;
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturaPDF);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteFactura.jasper");
@@ -611,10 +619,42 @@ public class ItinerarioBean implements Serializable {
             JasperExportManager.exportReportToPdfFile(jasperPrint, urlDestinoReporte);
         } catch (Exception e) {
 
-        }  
-        //urlFactura=urlDestinoReporte;
+        }
 
     }
+
+    public void enviarFacturaACorreo() {
+
+        Correo correo = new Correo();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
+                "Factura SAIV", "Factura por compra de boletos de Itinerario. "
+                + " Fecha de compra: " + dateFormat.format(new Date()),
+                urlDestinoReporte, nombreReporte);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado la factura", null));
+        
+        this.resetUltimoAceptar();
+
+    }
+    
+    public void descargarFactura() throws IOException, JRException{
+        
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", "attachment; filename=reporte1.pdf");
+
+        FacesContext.getCurrentInstance().responseComplete();
+
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+        servletOutputStream.flush();
+        servletOutputStream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+        this.resetUltimoAceptar();
+
+    }
+        
 
     public void buscarItinerarios() {
         this.posiblesItinerarios = new ArrayList<>();
@@ -669,24 +709,18 @@ public class ItinerarioBean implements Serializable {
 
                     }
                 }
-                
+
                 boolean flagFecha = true;
-                
-                if(posibleItinerario.size() > 0)
-                {
-                    if(this.frecuencias.get(i).getFechaSalida().before(posibleItinerario.get(posibleItinerario.size()-1).getFechaLlegada()))
-                    {
+
+                if (posibleItinerario.size() > 0) {
+                    if (this.frecuencias.get(i).getFechaSalida().before(posibleItinerario.get(posibleItinerario.size() - 1).getFechaLlegada())) {
+                        flagFecha = false;
+                    }
+                } else {
+                    if (this.frecuencias.get(i).getFechaSalida().before(this.fechaSalida)) {
                         flagFecha = false;
                     }
                 }
-                else
-                {
-                    if(this.frecuencias.get(i).getFechaSalida().before(this.fechaSalida))
-                    {
-                        flagFecha = false;
-                    }
-                }
-                
 
                 if (flagBP && flagFecha) {
                     posibleItinerario.add(this.frecuencias.get(i));
@@ -738,17 +772,17 @@ public class ItinerarioBean implements Serializable {
         this.boletos = null;
         this.indexBoletoFrec = 0;
         this.boletosComprados = null;
+        this.facturaPDF = null;
+        this.detalleFacturaPDF = null;
         this.enMostrarFactura = false;
-        this.urlFactura = "";
     }
-    
+
     public void resetUltimoAceptar() {
         this.comprandoBoleto = false;
         this.boletos = null;
         this.indexBoletoFrec = 0;
         this.boletosComprados = null;
         this.enMostrarFactura = false;
-        this.urlFactura = "";
     }
 
     public void resetCompraBoletos() {

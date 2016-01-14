@@ -165,24 +165,58 @@ and open the template in the editor.
                             </p:outputPanel>
                         </p:dialog>
 
-                        <p:dialog  header="Factura de boletos comprados" widgetVar="boletosCompradosDialog" modal="true" 
+                        <p:dialog  header="Vista previa de la factura de boletos comprados" widgetVar="boletosCompradosDialog" modal="true" 
                                    showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="400">
                             <p:outputPanel id="itisBolDetail" style="text-align:center;">
-                                <h3>Comprobante factura</h3>
-                                <object type="application/pdf" 
-                                        data="reporte31.pdf?pfdrid_c=true" 
-                                        height="300px" width="100%" internalinstanceid="3">
-                                    </object>
-                                <p:spacer />
-                                <p:commandButton value="Aceptar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form" />
 
+                                <h3>Factura</h3>
+                                <div align="left">
+                                    <h:outputText value="Cliente: " style="font-weight:bold; " />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
+                                    <br/>
+                                    <h:outputText value="Identificación: " style="font-weight:bold" />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
+                                    <br/>
+                                    <h:outputText value="Dirección: " style="font-weight:bold" />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.direccion}" />
+                                    <br/>
+                                    <h:outputText value="Teléfono: " style="font-weight:bold" />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.telefono}" />
+                                    <br/><br/>
+
+                                    <h:outputText value="Factura No: " style="font-weight:bold" />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.codigoFactura}" />
+                                    <br/>
+                                    <h:outputText value="Fecha de emisión: " style="font-weight:bold" />
+                                    <h:outputText value="#{itinerarioBean.modeloFactura.fechaEmision}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                    <br/><br/>
+                                </div>
+
+                                <h:outputText value="Detalle de boletos comprados" style="font-weight:bold" />
+
+                                <p:dataTable  id="fac" var="factura" value="#{itinerarioBean.modeloFactura.detalle}" 
+                                              scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="100" >
+                                    <p:column headerText="Cliente" >
+                                        <h:outputText value="#{factura.descripcionServicio}" />
+                                    </p:column>
+                                    <p:column headerText="Identificacion" >
+                                        <h:outputText value="#{factura.precioUnitario}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion" >
+                                        <h:outputText value="#{factura.cantidad}" />
+                                    </p:column>
+                                    <p:column headerText="Teléfono" >
+                                        <h:outputText value="#{factura.precioTotal}" />
+                                    </p:column>
+                                </p:dataTable>
+                                <p:commandButton value="Descargar factura" ajax="false" actionListener="#{itinerarioBean.descargarFactura()}" update="@form"/>
+                                <p:commandButton value="Enviar factura a mi correo" actionListener="#{itinerarioBean.enviarFacturaACorreo()}" update="@form"/>
+                                <p:commandButton value="Aceptar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form"/>
+                                
                             </p:outputPanel>
                         </p:dialog>
-
-
-
-
-
                     </div>
 
                 </ui:define>        

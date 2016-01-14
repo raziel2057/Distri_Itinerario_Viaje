@@ -14,20 +14,17 @@ and open the template in the editor.
 
         <h:body>
             <ui:composition template="/plantillas/templateLogedAdministrator.xhtml">
-
-
-
                 <ui:define name="contenido">
                     <div class="padding">
 
                         <p:outputPanel id="itisBolDetail" style="text-align:center;">
                             <h3>Comprobante factura</h3>
                             <object type="application/pdf" 
-                                    data="ISO38500.pdf" 
+                                    data="reportesPDF/reporte2.pdf" 
                                     height="300px" width="100%" internalinstanceid="3">
                             </object>
                             <p:spacer />
-                            <p:commandButton value="Aceptar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form" />
+                            <p:commandButton value="Aceptar" ajax="false" actionListener="#{pruebaBean.crearReporteBoletos()}" update="@form" />
 
                         </p:outputPanel>
 
