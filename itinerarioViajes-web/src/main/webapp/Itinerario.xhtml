@@ -166,28 +166,28 @@ and open the template in the editor.
                         </p:dialog>
 
                         <p:dialog  header="Vista previa de la factura de boletos comprados" widgetVar="boletosCompradosDialog" modal="true" 
-                                   showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="400">
+                                   showEffect="fade" hideEffect="fade" resizable="false" closable="false" width="900" height="500">
                             <p:outputPanel id="itisBolDetail" style="text-align:center;">
 
                                 <h3>Factura</h3>
                                 <div align="left">
                                     <h:outputText value="Cliente: " style="font-weight:bold; " />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
-                                    <br/>
-                                    <h:outputText value="Identificación: " style="font-weight:bold" />
+                                    
+                                    <h:outputText value="               Identificación: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.nombre}" />
                                     <br/>
                                     <h:outputText value="Dirección: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.direccion}" />
-                                    <br/>
-                                    <h:outputText value="Teléfono: " style="font-weight:bold" />
+                                    
+                                    <h:outputText value="               Teléfono: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.telefono}" />
                                     <br/><br/>
 
                                     <h:outputText value="Factura No: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.codigoFactura}" />
-                                    <br/>
-                                    <h:outputText value="Fecha de emisión: " style="font-weight:bold" />
+                                    
+                                    <h:outputText value="               Fecha de emisión: " style="font-weight:bold" />
                                     <h:outputText value="#{itinerarioBean.modeloFactura.fechaEmision}" >
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                     </h:outputText>
@@ -211,9 +211,13 @@ and open the template in the editor.
                                         <h:outputText value="#{factura.precioTotal}" />
                                     </p:column>
                                 </p:dataTable>
-                                <p:commandButton value="Descargar factura" ajax="false" actionListener="#{itinerarioBean.descargarFactura()}" update="@form"/>
-                                <p:commandButton value="Enviar factura a mi correo" actionListener="#{itinerarioBean.enviarFacturaACorreo()}" update="@form"/>
-                                <p:commandButton value="Aceptar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form"/>
+                                <p:messages id="message" for="cmd2" showDetail="true" showSummary="true"/>
+                                
+                                <p:commandButton value="Descargar factura" actionListener="#{itinerarioBean.descargarFactura()}" ajax="false"/>
+                                <p:commandButton value="Enviar factura a mi correo" actionListener="#{itinerarioBean.enviarFacturaACorreo()}" 
+                                                 id="cmd2" update="message"/>
+                                
+                                <p:commandButton value="Cerrar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form"/>
                                 
                             </p:outputPanel>
                         </p:dialog>

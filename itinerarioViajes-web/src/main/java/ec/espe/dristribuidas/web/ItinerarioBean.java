@@ -596,12 +596,13 @@ public class ItinerarioBean implements Serializable {
 
             JasperExportManager.exportReportToPdfFile(jasperPrint2, urlDestinoReporte2);
 
+            /*
             Correo correo = new Correo();
             correo.EnviarCorreoConArchivoAdjunto(cliente.getCorreoElectronico(),
                     "Itinerario SAIV", "Detalle del itinerario " + this.itinerario.getCodigo()
                     + " emitido el " + dateFormat.format(fechaActual),
                     urlDestinoReporte2, nombreReporte2);
-
+*/
         } catch (JRException e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha podido enviar itinerario", e.getMessage()));
@@ -632,10 +633,8 @@ public class ItinerarioBean implements Serializable {
                 "Factura SAIV", "Factura por compra de boletos de Itinerario. "
                 + " Fecha de compra: " + dateFormat.format(new Date()),
                 urlDestinoReporte, nombreReporte);
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado la factura", null));
-        
-        this.resetUltimoAceptar();
+        FacesContext.getCurrentInstance().addMessage("cmd2", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha enviado la factura", null));
+
 
     }
     
@@ -782,7 +781,10 @@ public class ItinerarioBean implements Serializable {
         this.boletos = null;
         this.indexBoletoFrec = 0;
         this.boletosComprados = null;
+        this.facturaPDF = null;
+        this.detalleFacturaPDF = null;
         this.enMostrarFactura = false;
+        this.posibleItinerario=null;
     }
 
     public void resetCompraBoletos() {
