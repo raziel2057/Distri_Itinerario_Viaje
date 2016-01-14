@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fef756a-7066-46df-935b-ad4a7261752c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="9"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -118,15 +118,15 @@
 			</textField>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="158" splitType="Stretch">
+	<detail>
+		<band height="131">
 			<subreport>
-				<reportElement x="13" y="14" width="538" height="127" uuid="3868560e-5124-43b4-8796-b3ab230b5fae"/>
+				<reportElement x="13" y="0" width="538" height="127" uuid="3868560e-5124-43b4-8796-b3ab230b5fae"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{boletos})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreporteItinerario.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-	</columnHeader>
+	</detail>
 	<pageFooter>
 		<band height="47">
 			<textField>

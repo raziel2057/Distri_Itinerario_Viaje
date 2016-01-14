@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fef756a-7066-46df-935b-ad4a7261752c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="141"/>
+	<property name="ireport.y" value="104"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -148,57 +148,61 @@
 			</staticText>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="112" splitType="Stretch">
+	<detail>
+		<band height="107">
 			<subreport>
 				<reportElement x="13" y="0" width="538" height="100" uuid="5c0029c5-7546-4caa-9290-8fd2d7118189"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreporteFactura.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-	</columnHeader>
-	<pageFooter>
-		<band height="62">
+	</detail>
+	<columnFooter>
+		<band height="39">
 			<textField>
-				<reportElement x="435" y="42" width="80" height="20" uuid="c204c191-58e7-48da-9485-3dc94d30ec93"/>
+				<reportElement x="472" y="13" width="84" height="20" uuid="6b91eaae-ef7c-4871-b2a9-1cc4cfffa59a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costoTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="13" width="108" height="20" uuid="c8046211-3a89-4571-9b07-fe2ef07dc737"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total de la factura:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="471" y="11" width="80" height="1" uuid="f50b5ab7-50db-4f1b-9e21-f9df1c03e11a"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="436" y="0" width="80" height="20" uuid="c204c191-58e7-48da-9485-3dc94d30ec93"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="515" y="42" width="40" height="20" uuid="1251c441-5194-4a3d-afdb-db3f1e8f7224"/>
+				<reportElement x="516" y="0" width="40" height="20" uuid="1251c441-5194-4a3d-afdb-db3f1e8f7224"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="28" y="42" width="172" height="20" uuid="bf09ab90-c4e0-4cee-9ccc-dfc5c568298d"/>
+				<reportElement x="29" y="0" width="172" height="20" uuid="bf09ab90-c4e0-4cee-9ccc-dfc5c568298d"/>
 				<textElement>
 					<font isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Comprobante de factura emitido el ]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="200" y="42" width="100" height="20" uuid="38dda556-f12d-41f0-aa57-09e569225c94"/>
+				<reportElement x="201" y="0" width="100" height="20" uuid="38dda556-f12d-41f0-aa57-09e569225c94"/>
 				<textElement>
 					<font isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="347" y="9" width="108" height="20" uuid="c8046211-3a89-4571-9b07-fe2ef07dc737"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total de la factura:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="471" y="8" width="84" height="20" uuid="6b91eaae-ef7c-4871-b2a9-1cc4cfffa59a"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{costoTotal}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="471" y="8" width="80" height="1" uuid="f50b5ab7-50db-4f1b-9e21-f9df1c03e11a"/>
-			</line>
 		</band>
 	</pageFooter>
 </jasperReport>
