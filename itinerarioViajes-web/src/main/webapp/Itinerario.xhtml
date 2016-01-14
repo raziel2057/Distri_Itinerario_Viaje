@@ -213,13 +213,18 @@ and open the template in the editor.
                                     </p:column>
                                 </p:dataTable>
                                 <p:messages id="message" for="cmd2" showDetail="true" showSummary="true"/>
-                                
+
+                                <br/>
+                                <h:outputText value="Total de la factura: " style="font-weight:bold" />
+                                <h:outputText value="#{itinerarioBean.modeloFactura.costoTotal}" >
+                                </h:outputText>
+                                <br/>
                                 <p:commandButton value="Descargar factura" actionListener="#{itinerarioBean.descargarFactura()}" ajax="false"/>
                                 <p:commandButton value="Enviar factura a mi correo" actionListener="#{itinerarioBean.enviarFacturaACorreo()}" 
                                                  id="cmd2" update="message"/>
-                                
+
                                 <p:commandButton value="Cerrar" actionListener="#{itinerarioBean.resetUltimoAceptar()}" update="@form"/>
-                                
+
                             </p:outputPanel>
                         </p:dialog>
                     </div>
