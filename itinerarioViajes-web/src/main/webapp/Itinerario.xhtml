@@ -70,19 +70,19 @@ and open the template in the editor.
                                 <h:outputText value="#{itinerarioS.descripcion}" />
                             </p:column>
 
-                            <p:column headerText="Distancia">
-                                <h:outputText value="#{itinerarioS.distancia}" />
+                            <p:column headerText="Distancia" sortBy="#{itinerarioS.distancia}">
+                                <h:outputText value="#{itinerarioS.distancia}"  />
                             </p:column>
 
-                            <p:column headerText="Tiempo">
+                            <p:column headerText="Tiempo" sortBy="#{itinerarioS.tiempo}">
                                 <h:outputText value="#{itinerarioS.tiempo}" />
                             </p:column>
 
-                            <p:column headerText="Costo">
+                            <p:column headerText="Costo" sortBy="#{itinerarioS.costo}">
                                 <h:outputText value="#{itinerarioS.costo}" />
                             </p:column>
 
-                            <p:column headerText="N Conexiones">
+                            <p:column headerText="N Conexiones" sortBy="#{itinerarioS.numeroConexiones}">
                                 <h:outputText value="#{itinerarioS.numeroConexiones}" />
                             </p:column>
 
